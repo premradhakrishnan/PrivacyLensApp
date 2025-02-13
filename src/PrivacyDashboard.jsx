@@ -42,8 +42,70 @@ const PrivacyDashboard = () => {
     const [expandedItems, setExpandedItems] = useState({});
     const theme = useTheme();
 
+    const exploitationStories = "Today, \na booming business of data brokers collect, analyze, and sell our private health information in ways that defy most Americans’ expectations and evade HIPAA restrictions. Everything these data brokers can access appears to be fair game: your online orders, social media updates, socioeconomic status, race, weight, magazine subscriptions, pet ownerships, hobbies, education, delinquent payments, media consumption, and more. If you’re a minority who belongs to a low-income family, it turns out that associations in these vast troves of digital footprints suggest that you may face heighted health risks. If you’re a woman who purchases plus-size clothing, you’re evidently at risk of depression [Source K]. In 2020 alone, 25 large data brokers in the US spent $29 million on lobbying the federal government [Source E]. This industry exists under the guise of improving health outcomes, but the evidence suggests this data is used for other purposes as well.\n" +
+        "\tRecent years have witnessed a number of high-profile cases in which Americans’ health information has been exploited. The online therapy platform Betterhelp collected sensitive mental health-related information from its patients and assured its users that “We never sell or rent any information you share with us.” The firm collected information on sensitive topics, including experience with depression, medication use, and self-harm tendencies. However, the firm actually shared data from over 7 million users with Facebook, Snapchat, Criteo, and Pinterest. The Federal Trade Commission fined Betterhelp $7.8 million in 2023, the same year it levied a $1.5 million civil penalty against GoodRx as part of an enforcement action for sharing consumers’ personal data with a number of large tech platforms [Source, Source]. GoodRx helped patients access discounted prices on prescription drugs. \n" +
+        "\tA February 2023 report published by Duke University researcher Joanne Kim found that people seeking mental health services online “often unknowingly [put] their sensitive mental health data at risk” and that the industry underlying this marketplace for sensitive data “appears to lack a set of best practices for handling individuals’ mental health data” [Source B]. In one case, the cost of 5,000 records of mental health-related information was just $275 – less than 6 cents per record. About a dozen data brokers were found to “sell mental health data for dirt cheap” with little effort to limit how the purchased data would be used by potential buyers [Source F]. In addition to the problems inherent in having one’s private information violated, the risks of selling such sensitive information includes identity theft, insurance fraud, blackmail, downstream sales on gray markets, and targeting at-risk groups [Source F]. A related investigation into health data brokers by the compliance comanagement, tracking, and reporting company Compliancy Group entitled “How Health Data Brokers Sell Lists of Depression & Anxiety Sufferers” found that information for sale can include personally-identifiable information, like name, address, contact information, prescription records, social media activity, health insurance claims, electronic health records, medical history, and data compiled from public records – at least some of which appear to constitute violations of HIPAA [Source F]. This information is reportedly aggregated and sold to marketers, insurance firms, and pharmaceutical companies. \n" +
+        "\tTracking technologies like cookies and pixels are used to connect health data to activity on social media platforms. An investigation by The Markup, “Facebook Is Receiving Sensitive Medical Information from Hospital Websites”, published in June 2022 found that Meta’s Pixel was present on the websites of 33 of the country’s top 100 hospitals. The tracking technology shared information on patients’ medical conditions, appointments, and prescriptions with Meta. For instance, when scheduling an appointment with a doctor on the website of the University Hospitals Cleveland Medical Center, Meta sent information about the physician's name and and the search term we used to find her: “pregnancy termination” [Source A]. The investigation revealed that data on patients’ sexual orientation and medical conditions from appointment scheduling dropdown menus were shared with Meta. IP address information, which can be used to link appointment scheduling events to individuals / households, were also shared with Meta. Moreover, the Pixel was also found to be present within password-protected websites that many users would assume to be confidential. In cases in which patients are accessing sites with Meta’s pixel while logged into Facebook, Meta can link external website activity to individual Facebook profiles. In response to these findings, Professor Glenn Cohen – director of Harvard Law School’s Petrie-Flom Center for Health Law Policy, Biotechnology, and Bioethics – noted that, “Almost any patient would be shocked to find out that Facebook is being provided an easy way to associate their prescriptions with their name…Even if perhaps there’s something in the legal architecture that permits this to be lawful, it’s totally outside the expectations of what patients think the health privacy laws are doing for them” [Source A].\n" +
+        "\tA related 2018 investigation by ProPublica and NPR was aptly titled “Health Insurers Are Vacuuming Up Details About You — And It Could Raise Your Rates.” While some firms that collect, sell, and purchase healthcare data online denied that their insights could be used to raise insurance premiums for certain patient populations, others suggested that these analyses could inform prices. The article mentions a study by the company SAS with an unnamed insurer. The study found that “higher health care costs could be predicted by looking at things like ethnicity, watching TV and mail order purchases” [Source K].\n";
+
     // Mock data remains the same as in your original code
     const searchResults = [
+        {
+            website: "healthinfo.com",
+            overallScore: 85,
+            policyUrl: "https://healthinfo.com/privacy",
+            policySummary: "Strong privacy practices with clear data handling policies and HIPAA compliance.",
+            sectionScores: {
+                "Data Collection": 90,
+                "Data Sharing": 85,
+                "User Rights": 88,
+                "Security Measures": 82,
+                "Data Retention": 80,
+                "Policy Clarity": 85
+            }
+        },
+        {
+            website: "healthinfo.com",
+            overallScore: 85,
+            policyUrl: "https://healthinfo.com/privacy",
+            policySummary: "Strong privacy practices with clear data handling policies and HIPAA compliance.",
+            sectionScores: {
+                "Data Collection": 90,
+                "Data Sharing": 85,
+                "User Rights": 88,
+                "Security Measures": 82,
+                "Data Retention": 80,
+                "Policy Clarity": 85
+            }
+        },
+        {
+            website: "healthinfo.com",
+            overallScore: 85,
+            policyUrl: "https://healthinfo.com/privacy",
+            policySummary: "Strong privacy practices with clear data handling policies and HIPAA compliance.",
+            sectionScores: {
+                "Data Collection": 90,
+                "Data Sharing": 85,
+                "User Rights": 88,
+                "Security Measures": 82,
+                "Data Retention": 80,
+                "Policy Clarity": 85
+            }
+        },
+        {
+            website: "healthinfo.com",
+            overallScore: 85,
+            policyUrl: "https://healthinfo.com/privacy",
+            policySummary: "Strong privacy practices with clear data handling policies and HIPAA compliance.",
+            sectionScores: {
+                "Data Collection": 90,
+                "Data Sharing": 85,
+                "User Rights": 88,
+                "Security Measures": 82,
+                "Data Retention": 80,
+                "Policy Clarity": 85
+            }
+        },
         {
             website: "healthinfo.com",
             overallScore: 85,
@@ -159,25 +221,19 @@ const PrivacyDashboard = () => {
     ];
     
     return (
-        <Container maxWidth="lg" sx={{ py: 6 }}>
-            {/* Search Bar */}
-            <Box component="form" onSubmit={handleSearch} sx={{ mb: 6 }}>
-                <TextField
-                    fullWidth
-                    placeholder="Search for analyzed websites..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <Button type="submit" variant="contained" startIcon={<Search />}>
-                                    Search
-                                </Button>
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-            </Box>
+        <Container
+            maxWidth="lg"
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'flex-start', // Ensures the content is aligned to the top
+                minHeight: '100vh', // Makes the container span the full height of the browser
+                paddingTop: theme.spacing(4), // Optional: Add spacing at the top
+                boxSizing: 'border-box',
+                py: 6
+            }}
+        >
 
             {/* Tabs */}
             <Box sx={{ width: '100%' }}>
@@ -189,6 +245,7 @@ const PrivacyDashboard = () => {
                     <Tab label="Home" />
                     <Tab label="Search Results Analysis" />
                     <Tab label="About Our Rubric" />
+                    <Tab label="Why?" />
                 </Tabs>
 
                 {/* Search Results Tab */}
@@ -380,6 +437,24 @@ const PrivacyDashboard = () => {
                 )}
                 {tabValue === 1 && (
                     <Box sx={{ space: 'y-6' }}>
+                        {/* Search Bar */}
+                        <Box component="form" onSubmit={handleSearch} sx={{ mb: 6 }}>
+                <TextField
+                    fullWidth
+                    placeholder="Search for analyzed websites..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <Button type="submit" variant="contained" startIcon={<Search />}>
+                                    Search
+                                </Button>
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Box>
                         <Card>
                             <CardHeader title="Privacy Policy Analysis Results" />
                             <CardContent>
@@ -484,6 +559,22 @@ const PrivacyDashboard = () => {
                                     title: "Data Sharing",
                                     description: "Assesses how user data is shared with third parties and for what purposes."
                                 },
+                                {
+                                    title: "Data Collection",
+                                    description: "Evaluates what personal information is collected and how clearly it's disclosed."
+                                },
+                                {
+                                    title: "Data Sharing",
+                                    description: "Assesses how user data is shared with third parties and for what purposes."
+                                },
+                                {
+                                    title: "Data Collection",
+                                    description: "Evaluates what personal information is collected and how clearly it's disclosed."
+                                },
+                                {
+                                    title: "Data Sharing",
+                                    description: "Assesses how user data is shared with third parties and for what purposes."
+                                },
                                 // ... Add other sections
                             ].map((section, index) => (
                                 <Paper key={index} sx={{ p: 2, mb: 2, bgcolor: 'grey.50' }}>
@@ -492,7 +583,7 @@ const PrivacyDashboard = () => {
                                 </Paper>
                             ))}
 
-                            <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>Our Mission & Impact</Typography>
+                            {/*<Typography variant="h6" sx={{ mt: 4, mb: 2 }}>Our Mission & Impact</Typography>
                             {[
                                 {
                                     title: "Why We Started",
@@ -504,7 +595,50 @@ const PrivacyDashboard = () => {
                                     <Typography variant="subtitle1" gutterBottom>{section.title}</Typography>
                                     <Typography color="text.secondary">{section.content}</Typography>
                                 </Paper>
+                            ))}*/}
+                        </CardContent>
+                    </Card>
+                )}
+
+                {tabValue === 3 && (
+                    <Card>
+                        <CardHeader title="How our private data is exploited online?" />
+                        <CardContent>
+                            {/*<Typography variant="h6" gutterBottom>Story 1</Typography>*/}
+                            {[
+                                {
+                                    title: "Story 1",
+                                    description: "Today, a booming business of data brokers collect, analyze, and sell our private health information in ways that defy most Americans’ expectations and evade HIPAA restrictions. Everything these data brokers can access appears to be fair game: your online orders, social media updates, socioeconomic status, race, weight, magazine subscriptions, pet ownerships, hobbies, education, delinquent payments, media consumption, and more. If you’re a minority who belongs to a low-income family, it turns out that associations in these vast troves of digital footprints suggest that you may face heighted health risks. If you’re a woman who purchases plus-size clothing, you’re evidently at risk of depression [Source K]. In 2020 alone, 25 large data brokers in the US spent $29 million on lobbying the federal government [Source E]. This industry exists under the guise of improving health outcomes, but the evidence suggests this data is used for other purposes as well.\n" +
+                                        "\tRecent years have witnessed a number of high-profile cases in which Americans’ health information has been exploited. The online therapy platform Betterhelp collected sensitive mental health-related information from its patients and assured its users that “We never sell or rent any information you share with us.” The firm collected information on sensitive topics, including experience with depression, medication use, and self-harm tendencies. However, the firm actually shared data from over 7 million users with Facebook, Snapchat, Criteo, and Pinterest. The Federal Trade Commission fined Betterhelp $7.8 million in 2023, the same year it levied a $1.5 million civil penalty against GoodRx as part of an enforcement action for sharing consumers’ personal data with a number of large tech platforms [Source, Source]. GoodRx helped patients access discounted prices on prescription drugs. \n" +
+                                        "\tA February 2023 report published by Duke University researcher Joanne Kim found that people seeking mental health services online “often unknowingly [put] their sensitive mental health data at risk” and that the industry underlying this marketplace for sensitive data “appears to lack a set of best practices for handling individuals’ mental health data” [Source B]. In one case, the cost of 5,000 records of mental health-related information was just $275 – less than 6 cents per record. About a dozen data brokers were found to “sell mental health data for dirt cheap” with little effort to limit how the purchased data would be used by potential buyers [Source F]. In addition to the problems inherent in having one’s private information violated, the risks of selling such sensitive information includes identity theft, insurance fraud, blackmail, downstream sales on gray markets, and targeting at-risk groups [Source F]. A related investigation into health data brokers by the compliance comanagement, tracking, and reporting company Compliancy Group entitled “How Health Data Brokers Sell Lists of Depression & Anxiety Sufferers” found that information for sale can include personally-identifiable information, like name, address, contact information, prescription records, social media activity, health insurance claims, electronic health records, medical history, and data compiled from public records – at least some of which appear to constitute violations of HIPAA [Source F]. This information is reportedly aggregated and sold to marketers, insurance firms, and pharmaceutical companies. \n" +
+                                        "\tTracking technologies like cookies and pixels are used to connect health data to activity on social media platforms. An investigation by The Markup, “Facebook Is Receiving Sensitive Medical Information from Hospital Websites”, published in June 2022 found that Meta’s Pixel was present on the websites of 33 of the country’s top 100 hospitals. The tracking technology shared information on patients’ medical conditions, appointments, and prescriptions with Meta. For instance, when scheduling an appointment with a doctor on the website of the University Hospitals Cleveland Medical Center, Meta sent information about the physician's name and and the search term we used to find her: “pregnancy termination” [Source A]. The investigation revealed that data on patients’ sexual orientation and medical conditions from appointment scheduling dropdown menus were shared with Meta. IP address information, which can be used to link appointment scheduling events to individuals / households, were also shared with Meta. Moreover, the Pixel was also found to be present within password-protected websites that many users would assume to be confidential. In cases in which patients are accessing sites with Meta’s pixel while logged into Facebook, Meta can link external website activity to individual Facebook profiles. In response to these findings, Professor Glenn Cohen – director of Harvard Law School’s Petrie-Flom Center for Health Law Policy, Biotechnology, and Bioethics – noted that, “Almost any patient would be shocked to find out that Facebook is being provided an easy way to associate their prescriptions with their name…Even if perhaps there’s something in the legal architecture that permits this to be lawful, it’s totally outside the expectations of what patients think the health privacy laws are doing for them” [Source A].\n" +
+                                        "\tA related 2018 investigation by ProPublica and NPR was aptly titled “Health Insurers Are Vacuuming Up Details About You — And It Could Raise Your Rates.” While some firms that collect, sell, and purchase healthcare data online denied that their insights could be used to raise insurance premiums for certain patient populations, others suggested that these analyses could inform prices. The article mentions a study by the company SAS with an unnamed insurer. The study found that “higher health care costs could be predicted by looking at things like ethnicity, watching TV and mail order purchases” [Source K].\n"
+                                },
+                                /*{
+                                    title: "Story 2",
+                                    description: "Our journey began with a simple observation: people searching for health information online often struggle to understand how their sensitive data is being handled. We set out to change that by creating a tool that makes privacy policies transparent and accessible.Our journey began with a simple observation: people searching for health information online often struggle to understand how their sensitive data is being handled. We set out to change that by creating a tool that makes privacy policies transparent and accessible.Our journey began w"
+                                },*/
+                                // ... Add other sections
+                            ].map((section, index) => (
+                                <Paper key={index} sx={{ p: 2, mb: 2, bgcolor: 'grey.50' }}>
+                                    <Typography variant="subtitle1" gutterBottom>{section.title}</Typography>
+                                    <Typography color="text.secondary">{section.description}</Typography>
+                                </Paper>
                             ))}
+
+                            {/*<Typography variant="h6" sx={{ mt: 4, mb: 2 }}>Our Mission & Impact</Typography>
+                            {[
+                                {
+                                    title: "Why We Started",
+                                    content: "Our journey began with a simple observation: people searching for health information online often struggle to understand how their sensitive data is being handled. We set out to change that by creating a tool that makes privacy policies transparent and accessible."
+                                },
+                                // ... Add other sections
+                            ].map((section, index) => (
+                                <Paper key={index} sx={{ p: 2, mb: 2, bgcolor: 'grey.50' }}>
+                                    <Typography variant="subtitle1" gutterBottom>{section.title}</Typography>
+                                    <Typography color="text.secondary">{section.content}</Typography>
+                                </Paper>
+                            ))}*/}
                         </CardContent>
                     </Card>
                 )}
