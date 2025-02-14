@@ -1,4 +1,5 @@
-import  { useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
+import { Alert } from '@mui/material';
 import {
     Box,
     Button,
@@ -41,81 +42,18 @@ const PrivacyDashboard = () => {
     const [tabValue, setTabValue] = useState(0);
     const [expandedItems, setExpandedItems] = useState({});
     const theme = useTheme();
+    const [error, setError] = useState(false); //
+
+
+    const searchResultsRef = useRef([]);
+
+
+    const [isLoading, setIsLoading] = useState(true); // Track loading state
+    const [error1, setError1] = useState(null);
+
 
     // Mock data remains the same as in your original code
-    const searchResults = [
-        {
-            website: "healthinfo.com",
-            overallScore: 85,
-            policyUrl: "https://healthinfo.com/privacy",
-            policySummary: "Strong privacy practices with clear data handling policies and HIPAA compliance.",
-            sectionScores: {
-                "Data Collection": 90,
-                "Data Sharing": 85,
-                "User Rights": 88,
-                "Security Measures": 82,
-                "Data Retention": 80,
-                "Policy Clarity": 85
-            }
-        },
-        {
-            website: "healthinfo.com",
-            overallScore: 85,
-            policyUrl: "https://healthinfo.com/privacy",
-            policySummary: "Strong privacy practices with clear data handling policies and HIPAA compliance.",
-            sectionScores: {
-                "Data Collection": 90,
-                "Data Sharing": 85,
-                "User Rights": 88,
-                "Security Measures": 82,
-                "Data Retention": 80,
-                "Policy Clarity": 85
-            }
-        },
-        {
-            website: "healthinfo.com",
-            overallScore: 85,
-            policyUrl: "https://healthinfo.com/privacy",
-            policySummary: "Strong privacy practices with clear data handling policies and HIPAA compliance.",
-            sectionScores: {
-                "Data Collection": 90,
-                "Data Sharing": 85,
-                "User Rights": 88,
-                "Security Measures": 82,
-                "Data Retention": 80,
-                "Policy Clarity": 85
-            }
-        },
-        {
-            website: "healthinfo.com",
-            overallScore: 85,
-            policyUrl: "https://healthinfo.com/privacy",
-            policySummary: "Strong privacy practices with clear data handling policies and HIPAA compliance.",
-            sectionScores: {
-                "Data Collection": 90,
-                "Data Sharing": 85,
-                "User Rights": 88,
-                "Security Measures": 82,
-                "Data Retention": 80,
-                "Policy Clarity": 85
-            }
-        },
-        {
-            website: "healthinfo.com",
-            overallScore: 85,
-            policyUrl: "https://healthinfo.com/privacy",
-            policySummary: "Strong privacy practices with clear data handling policies and HIPAA compliance.",
-            sectionScores: {
-                "Data Collection": 90,
-                "Data Sharing": 85,
-                "User Rights": 88,
-                "Security Measures": 82,
-                "Data Retention": 80,
-                "Policy Clarity": 85
-            }
-        },
-        // ... other results remain the same
-    ];
+
 
     const historicalData = [
         { section: "Data Collection", average: 82 },
@@ -126,10 +64,52 @@ const PrivacyDashboard = () => {
         { section: "Policy Clarity", average: 77 }
     ];
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        console.log('Searching for:', searchQuery);
+    const handleSearch = async (event) => {
+        event.preventDefault(); // Prevent the page refresh on form submission
+        setIsLoading(true);
+        setError1(null);
+
+        try {
+            // Step 1: Perform POST request
+            const postResponse = await fetch('http://127.0.0.1:8000/domains', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    searchQuery: searchQuery, // Replace with actual form/query data
+                }),
+            });
+
+            if (!postResponse.ok) {
+                throw new Error(`POST request failed: ${postResponse.status} ${postResponse.statusText}`);
+            }
+
+            console.log('POST request successful');
+
+            // Step 2: Perform GET request
+            const getResponse = await fetch('http://127.0.0.1:8000/searchresults');
+
+            if (getResponse.ok) {
+                const jsonResponse = await getResponse.json();
+
+                if (jsonResponse?.data) {
+                    searchResultsRef.current = jsonResponse.data;
+                    console.log('GET request results:', searchResultsRef.current);
+                } else {
+                    console.error('Invalid or empty response data from GET request');
+                }
+            } else {
+                throw new Error(`GET request failed: ${getResponse.status} ${getResponse.statusText}`);
+            }
+        } catch (error) {
+            console.error('Error during handleSearch:', error.message);
+            setError1(error.message);
+        } finally {
+            setIsLoading(false);
+        }
     };
+
 
     const togglePinSite = (website) => {
         setPinnedSites(prev =>
@@ -213,7 +193,11 @@ const PrivacyDashboard = () => {
             description: "Get instant privacy analysis and scores"
         }
     ];
-    
+
+    //if (isLoading) return <div>Loading...</div>; // Loading state
+    if (error1) return <div>Error: {error1}</div>;
+
+
     return (
         <Container
             maxWidth="lg"
@@ -448,72 +432,30 @@ const PrivacyDashboard = () => {
                         ),
                     }}
                 />
-            </Box>
+                            {error && ( // Conditionally render the error message
+                                <Alert severity="error">Website not found or incorrect input</Alert>
+                            )}
+
+                        </Box>
                         <Card>
                             <CardHeader title="Privacy Policy Analysis Results" />
                             <CardContent>
-                                {searchResults.map((result, index) => (
-                                    <Paper key={index} sx={{ mb: 2, overflow: 'hidden' }}>
-                                        <Box sx={{ p: 2, bgcolor: 'grey.50', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                                                <Checkbox
-                                                    checked={pinnedSites.includes(result.website)}
-                                                    onChange={() => togglePinSite(result.website)}
-                                                />
-                                                <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                                                    {result.website}
-                                                </Typography>
-                                                <Box
-                                                    sx={{
-                                                        px: 2,
-                                                        py: 0.5,
-                                                        borderRadius: 'full',
-                                                        bgcolor: `${getScoreColor(result.overallScore)}`,
-                                                        color: 'white'
-                                                    }}
-                                                >
-                                                    Score: {result.overallScore}
-                                                </Box>
-                                            </Box>
-                                            <IconButton onClick={() => toggleExpanded(index)}>
-                                                <ExpandMore
-                                                    sx={{
-                                                        transform: expandedItems[index] ? 'rotate(180deg)' : 'rotate(0)',
-                                                        transition: 'transform 0.3s'
-                                                    }}
-                                                />
-                                            </IconButton>
-                                        </Box>
+                                <Box sx={{ mt: 4 }}>
+                                    {searchResultsRef.current.length > 0 ? (
+                                        searchResultsRef.current.map((result, index) => (
+                                            <Typography key={index} variant="body1">
+                                                {result?.domain_name || "No domain name available"}
+                                            </Typography>
+                                        ))
+                                    ) : (
+                                        !isLoading && !error1 && (
+                                            <Typography variant="body2" color="textSecondary">
+                                                No results to display. Click "Search" to fetch data.
+                                            </Typography>
+                                        )
+                                    )}
+                                </Box>
 
-                                        <Collapse in={expandedItems[index]}>
-                                            <Box sx={{ p: 2, borderTop: 1, borderColor: 'divider' }}>
-                                                <Typography variant="h6" gutterBottom>Policy Details</Typography>
-                                                <Link href={result.policyUrl}>View Full Policy</Link>
-                                                <Typography color="text.secondary" sx={{ mt: 2 }}>
-                                                    {result.policySummary}
-                                                </Typography>
-
-                                                <Typography variant="h6" sx={{ mt: 4, mb: 2 }}>Section Scores</Typography>
-                                                <Table>
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell>Section</TableCell>
-                                                            <TableCell>Score</TableCell>
-                                                        </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {Object.entries(result.sectionScores).map(([section, score], idx) => (
-                                                            <TableRow key={idx}>
-                                                                <TableCell>{section}</TableCell>
-                                                                <TableCell>{score}</TableCell>
-                                                            </TableRow>
-                                                        ))}
-                                                    </TableBody>
-                                                </Table>
-                                            </Box>
-                                        </Collapse>
-                                    </Paper>
-                                ))}
                             </CardContent>
                         </Card>
 
