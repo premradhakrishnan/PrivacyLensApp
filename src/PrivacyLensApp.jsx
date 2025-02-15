@@ -1,0 +1,294 @@
+import React, { useState } from 'react';
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Container,
+    Grid,
+    Paper,
+    Tab,
+    Tabs,
+    Typography,
+    useTheme
+} from '@mui/material';
+import {
+    Security,
+    Visibility,
+    TrendingUp,
+    Search as SearchIcon,
+    Assignment,
+    ArrowForward
+} from '@mui/icons-material';
+
+const PrivacyDashboard = () => {
+    const [tabValue, setTabValue] = useState(0);
+    const theme = useTheme();
+
+    const features = [
+        {
+            title: "Privacy Policy Analysis",
+            description: "Instant analysis of website privacy policies using our comprehensive scoring system.",
+            icon: <Assignment sx={{ fontSize: 40, color: theme.palette.primary.main }} />
+        },
+        {
+            title: "Real-time Monitoring",
+            description: "Stay updated with changes to privacy policies of your favorite healthcare websites.",
+            icon: <Visibility sx={{ fontSize: 40, color: theme.palette.primary.main }} />
+        },
+        {
+            title: "Security Metrics",
+            description: "Detailed security assessment of healthcare platforms and their data protection measures.",
+            icon: <Security sx={{ fontSize: 40, color: theme.palette.primary.main }} />
+        },
+        {
+            title: "Trend Analysis",
+            description: "Track privacy policy changes and trends across the healthcare industry.",
+            icon: <TrendingUp sx={{ fontSize: 40, color: theme.palette.primary.main }} />
+        }
+    ];
+
+    const stats = [
+        { label: "Websites Analyzed", value: "10,000+" },
+        { label: "Active Users", value: "50,000+" },
+        { label: "Privacy Issues Identified", value: "25,000+" },
+        { label: "Average Response Time", value: "2.5s" }
+    ];
+
+    const steps = [
+        {
+            number: "1",
+            title: "Install Plugin",
+            description: "Add our extension to your browser"
+        },
+        {
+            number: "2",
+            title: "Enter Website",
+            description: "Type or paste the URL you want to analyze"
+        },
+        {
+            number: "3",
+            title: "View Results",
+            description: "Get instant privacy analysis and scores"
+        }
+    ];
+
+    return (
+        <Container maxWidth="lg" sx={{ py: 6 }}>
+            <Box sx={{ width: '100%' }}>
+                <Tabs
+                    value={tabValue}
+                    onChange={(e, newValue) => setTabValue(newValue)}
+                    sx={{ mb: 4 }}
+                >
+                    <Tab label="Home" />
+                    <Tab label="Search Results Analysis" />
+                    <Tab label="About Our Rubric" />
+                </Tabs>
+
+                {/* Home Tab Content */}
+                {tabValue === 0 && (
+                    <Box>
+                        {/* Hero Section */}
+                        <Card
+                            sx={{
+                                mb: 6,
+                                bgcolor: 'primary.main',
+                                color: 'white',
+                                backgroundImage: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)'
+                            }}
+                        >
+                            <CardContent sx={{ py: 8 }}>
+                                <Grid container spacing={4} alignItems="center">
+                                    <Grid item xs={12} md={7}>
+                                        <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
+                                            Understand Privacy Policies at a Glance
+                                        </Typography>
+                                        <Typography variant="h6" sx={{ mb: 4, opacity: 0.9 }}>
+                                            Make informed decisions about your health data privacy with our AI-powered analysis tool
+                                        </Typography>
+                                        <Button
+                                            variant="contained"
+                                            size="large"
+                                            sx={{
+                                                bgcolor: 'white',
+                                                color: 'primary.main',
+                                                '&:hover': {
+                                                    bgcolor: 'grey.100'
+                                                }
+                                            }}
+                                            startIcon={<SearchIcon />}
+                                        >
+                                            Analyze a Website
+                                        </Button>
+                                    </Grid>
+                                    <Grid item xs={12} md={5}>
+                                        <Box sx={{ textAlign: 'center' }}>
+                                            <Security sx={{ fontSize: 200, opacity: 0.9 }} />
+                                        </Box>
+                                    </Grid>
+                                </Grid>
+                            </CardContent>
+                        </Card>
+
+                        {/* Stats Section */}
+                        <Grid container spacing={3} sx={{ mb: 6 }}>
+                            {stats.map((stat, index) => (
+                                <Grid item xs={12} sm={6} md={3} key={index}>
+                                    <Paper
+                                        elevation={2}
+                                        sx={{
+                                            p: 3,
+                                            textAlign: 'center',
+                                            height: '100%',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            justifyContent: 'center',
+                                            transition: 'transform 0.2s',
+                                            '&:hover': {
+                                                transform: 'translateY(-4px)'
+                                            }
+                                        }}
+                                    >
+                                        <Typography variant="h4" color="primary" gutterBottom fontWeight="bold">
+                                            {stat.value}
+                                        </Typography>
+                                        <Typography variant="subtitle1" color="text.secondary">
+                                            {stat.label}
+                                        </Typography>
+                                    </Paper>
+                                </Grid>
+                            ))}
+                        </Grid>
+
+                        {/* Features Section */}
+                        <Typography variant="h4" gutterBottom sx={{ mb: 4, fontWeight: 'bold' }}>
+                            Key Features
+                        </Typography>
+                        <Grid container spacing={4} sx={{ mb: 8 }}>
+                            {features.map((feature, index) => (
+                                <Grid item xs={12} sm={6} md={3} key={index}>
+                                    <Paper
+                                        elevation={2}
+                                        sx={{
+                                            p: 3,
+                                            height: '100%',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            textAlign: 'center',
+                                            transition: 'transform 0.2s',
+                                            '&:hover': {
+                                                transform: 'translateY(-4px)'
+                                            }
+                                        }}
+                                    >
+                                        <Box
+                                            sx={{
+                                                mb: 2,
+                                                p: 2,
+                                                borderRadius: '50%',
+                                                bgcolor: 'primary.light',
+                                                opacity: 0.1
+                                            }}
+                                        >
+                                            {feature.icon}
+                                        </Box>
+                                        <Typography variant="h6" gutterBottom fontWeight="bold">
+                                            {feature.title}
+                                        </Typography>
+                                        <Typography color="text.secondary">
+                                            {feature.description}
+                                        </Typography>
+                                    </Paper>
+                                </Grid>
+                            ))}
+                        </Grid>
+
+                        {/* Getting Started Guide */}
+                        <Card sx={{ mb: 6 }}>
+                            <CardContent sx={{ py: 6 }}>
+                                <Typography variant="h4" gutterBottom sx={{ mb: 4, textAlign: 'center', fontWeight: 'bold' }}>
+                                    Getting Started Guide
+                                </Typography>
+                                <Grid container spacing={4} sx={{ mb: 4 }}>
+                                    {steps.map((step, index) => (
+                                        <Grid item xs={12} md={4} key={index}>
+                                            <Paper
+                                                elevation={0}
+                                                sx={{
+                                                    p: 4,
+                                                    height: '100%',
+                                                    bgcolor: 'grey.50',
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    alignItems: 'center',
+                                                    textAlign: 'center'
+                                                }}
+                                            >
+                                                <Box
+                                                    sx={{
+                                                        width: 50,
+                                                        height: 50,
+                                                        borderRadius: '50%',
+                                                        bgcolor: 'primary.main',
+                                                        color: 'white',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        mb: 3,
+                                                        fontSize: 24,
+                                                        fontWeight: 'bold'
+                                                    }}
+                                                >
+                                                    {step.number}
+                                                </Box>
+                                                <Typography variant="h6" gutterBottom fontWeight="bold">
+                                                    {step.title}
+                                                </Typography>
+                                                <Typography color="text.secondary">
+                                                    {step.description}
+                                                </Typography>
+                                            </Paper>
+                                        </Grid>
+                                    ))}
+                                </Grid>
+                                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                                    <Button
+                                        variant="contained"
+                                        size="large"
+                                        endIcon={<ArrowForward />}
+                                        sx={{
+                                            px: 4,
+                                            py: 1.5,
+                                            borderRadius: 50,
+                                            textTransform: 'none',
+                                            fontSize: '1.1rem'
+                                        }}
+                                    >
+                                        Get Started Now
+                                    </Button>
+                                </Box>
+                            </CardContent>
+                        </Card>
+                    </Box>
+                )}
+
+                {/* Other tabs - empty as requested */}
+                {tabValue === 1 && (
+                    <Box>
+                        {/* Search Results Analysis content would go here */}
+                    </Box>
+                )}
+
+                {tabValue === 2 && (
+                    <Box>
+                        {/* About Our Rubric content would go here */}
+                    </Box>
+                )}
+            </Box>
+        </Container>
+    );
+};
+
+export default PrivacyDashboard;
