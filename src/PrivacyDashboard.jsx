@@ -25,6 +25,7 @@ import StatsSection from './components/StatsSection';
 import FeaturesSection from './components/FeaturesSection';
 import ChatWindow from './components/ChatWindow';
 import SearchSection from './components/SearchSection';
+import { Link } from 'react-router-dom';
 
 const PrivacyDashboard = () => {
   // State management
@@ -117,6 +118,8 @@ const PrivacyDashboard = () => {
     }
   };
 
+
+
   // Chat message handler
   const sendMessage = (e) => {
     e.preventDefault();
@@ -135,7 +138,24 @@ const PrivacyDashboard = () => {
 
   return (
     <Container maxWidth="lg">
-      <Box sx={{ width: '100%' }}>
+        {/* Banner Image */}
+      <Box 
+        sx={{ 
+          width: '80%',
+          position: 'relative',
+          mb: 4,
+          '& img': {
+            width: '80%',
+          }
+        }}
+      >
+        <img 
+          src="/src/assets/pl_banner.png" 
+          alt="Privacy Dashboard Banner"
+        />
+
+      </Box>
+      <Box sx={{ width: '100%', textAlign: 'center' }}>
         {/* Navigation Tabs */}
         <Tabs
           value={tabValue}

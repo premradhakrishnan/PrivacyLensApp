@@ -1,11 +1,16 @@
-import "react";
+// App.jsx
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PrivacyDashboard from "./PrivacyDashboard";
+import DetailedResults from "./components/DetailedResults";
 
 const App = () => {
     return (
-        <div>
-            <PrivacyDashboard />
-        </div>
+        <Router>
+            <Routes>
+                <Route path="/" element={<PrivacyDashboard />} />
+                <Route path="/detailed-results" element={<DetailedResults />} />
+            </Routes>
+        </Router>
     );
 };
 

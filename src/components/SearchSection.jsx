@@ -21,6 +21,7 @@ import {
   Legend, 
   ResponsiveContainer 
 } from 'recharts';
+import { Link } from 'react-router-dom';
 
 const SearchSection = ({ 
   searchQuery, 
@@ -51,6 +52,8 @@ const SearchSection = ({
       {error && <Alert severity="error">Website not found or incorrect input</Alert>}
     </Box>
     
+
+
     <Card>
       <CardHeader title="Privacy Policy Analysis Results" />
       <CardContent>
@@ -71,6 +74,16 @@ const SearchSection = ({
         </Box>
       </CardContent>
     </Card>
+
+    <Button
+    component={Link}
+    to="/detailed-results"
+    variant="contained"
+    color="secondary"
+    sx={{ mt: 2 }}
+  >
+    View Detailed Results
+  </Button>
 
     {/* Historical Performance Chart */}
     <Card sx={{ mt: 4 }}>

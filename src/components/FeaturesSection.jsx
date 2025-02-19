@@ -4,7 +4,7 @@ import { Grid, Paper, Typography, Box } from '@mui/material';
 
 const FeaturesSection = ({ features }) => (
   <>
-    <Typography variant="h4" gutterBottom sx={{ mb: 4, fontWeight: 'bold' }}>
+    <Typography variant="h4" gutterBottom sx={{ mb: 4, mt:4, fontWeight: 'bold' }}>
       Key Features
     </Typography>
     <Grid container spacing={4} sx={{ mb: 8 }}>

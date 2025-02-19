@@ -16,7 +16,8 @@ const StatsSection = ({ stats }) => (
             flexDirection: 'column',
             justifyContent: 'center',
             transition: 'transform 0.2s',
-            '&:hover': { transform: 'translateY(-4px)' }
+            '&:hover': { transform: 'translateY(-4px)' },
+            padding: '10px'
           }}
         >
           <Typography variant="h4" color="primary" gutterBottom fontWeight="bold">
