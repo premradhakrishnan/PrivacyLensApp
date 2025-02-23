@@ -2,6 +2,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PrivacyDashboard from "./PrivacyDashboard";
 import DetailedResults from "./components/DetailedResults";
+import './App.css';
 
 const App = () => {
     return (

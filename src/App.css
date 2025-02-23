@@ -40,3 +40,16 @@
 .read-the-docs {
   color: #888;
 }
+
+body{
+  place-items: normal;
+  margin: 0; /* Remove default browser margin */
+  padding: 0; /* Remove default browser padding */
+  background-color: #f8f9fa; /* Set a background color */
+  font-family: 'Arial', sans-serif; /* Set a global font */
+  color: #333; /* Define default font color */
+  min-height: 100vh; /* Make sure the body spans the entire viewport height */
+  box-sizing: border-box;
+
+}
+
