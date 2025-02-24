@@ -3,9 +3,9 @@ import { Box, Card, CardContent, Grid, Paper, Typography, Button } from '@mui/ma
 import ArrowForward from '@mui/icons-material/ArrowForward';
 
 const steps = [
-    { number: 1, title: 'Step 1', description: 'Set up your account and configure your preferences.' },
-    { number: 2, title: 'Step 2', description: 'Learn more about the features available to you.' },
-    { number: 3, title: 'Step 3', description: 'Start exploring the app and achieving your goals!' }
+    { number: 1, title: 'Step 1', description: 'Head to the Chrome Web Store and install the Privacy Lens extension.' },
+    { number: 2, title: 'Step 2', description: 'Start the plugin, then do a health related search on Google.' },
+    { number: 3, title: 'Step 3', description: 'See the invasiveness of each site listed in the Privacy Lens plugin. Enjoy!' }
 ];
 
 class GettingStarted extends React.Component {

@@ -297,7 +297,6 @@ const PrivacyDashboard = () => {
         {tabValue === 0 && (
           <Box>
             <HeroSection />
-            <StatsSection stats={stats} />
             <FeaturesSection features={features} />
             <GettingStarted />
           </Box>
@@ -433,23 +432,34 @@ const PrivacyDashboard = () => {
             margin: '0 auto',
             padding: '20px', // Add consistent padding inside the container
           }}>
-            <CardHeader title="Our Privacy Policy Rubric" />
+            <CardHeader title="How We Grade Privacy Policies" />
             <CardContent>
-              <Typography variant="h6" gutterBottom>How We Grade Privacy Policies</Typography>
               {[
                 {
-                  title: "Data Collection",
-                  description: "Evaluates what personal information is collected and how clearly it's disclosed."
+                  title: "Privacy Document Accessibility",
+                  description: "Privacy policies serve as the foundation of user trust. This section measures how easily users can locate and comprehend the privacy policy of a website. A transparent and well-structured privacy policy ensures that users are informed about their data rights. It is crucial that the document is readily accessible, includes a 'last-updated' date for accountability, and provides timely notifications to users about policy changes. Without proactive communication, users might unknowingly agree to terms that could negatively impact their privacy."
                 },
                 {
-                  title: "Data Sharing",
-                  description: "Assesses how user data is shared with third parties and for what purposes."
+                  title: "Privacy Document Scope",
+                  description: "The scope and clarity of a privacy policy are vital indicators of a website’s transparency. This section evaluates whether the privacy policy clearly explains what data is collected, how it is processed, and whether it is shared with third parties. Users deserve comprehensive, straightforward information to empower them to make informed decisions. To achieve full marks, the policy must describe the methods of data collection, the purposes for which data is collected, any third-party involvement, and the security measures taken to protect user data."
+                },
+                {
+                  title: "Browser Storage",
+                  description: "Browser storage plays a key role in both user experience and tracking practices. This section assesses if websites reveal their use of browser storage techniques like cookies and HTML5 Local Storage. While these technologies often enable improved functionality, they can also be used for invasive tracking. A high score in this section reflects a website’s ability to maintain functionality without abusing browser storage or engaging in persistent monitoring."
+                },
+                {
+                  title: "Third-Party Tracking",
+                  description: "This section focuses on the extent of third-party tracking and its potential implications for user privacy. Transparency around third-party scripts, tracking beacons, and cookies is critical. A responsible website limits unnecessary third-party tracking and provides mechanisms for users to opt out where tracking is unavoidable."
+                },
+                {
+                  title: "Data Handling",
+                  description: "Data handling practices are an essential aspect of digital privacy. This section evaluates how securely websites manage user data and whether users are granted reasonable control over their information. High-performing websites in this category enforce HTTPS protocols, maintain clear and reasonable data retention policies, and empower users to access, modify, and delete their data."
                 }
               ].map((section, index) => (
-                <Paper key={index} sx={{ p: 2, mb: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="subtitle1" gutterBottom>{section.title}</Typography>
-                  <Typography color="text.secondary">{section.description}</Typography>
-                </Paper>
+                  <Paper key={index} sx={{ p: 2, mb: 2, bgcolor: 'grey.50' }}>
+                    <Typography variant="subtitle1" gutterBottom>{section.title}</Typography>
+                    <Typography color="text.secondary">{section.description}</Typography>
+                  </Paper>
               ))}
             </CardContent>
           </Card>
