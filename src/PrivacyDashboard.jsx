@@ -546,9 +546,9 @@ const PrivacyDashboard = () => {
                   </Typography>
 
                   <Typography variant="body1" paragraph>
-                    The article mentions a study by the company SAS with an unnamed insurer. The study found that “higher health care costs could be predicted by looking at things like ethnicity, watching TV, and mail order purchases” <a href="https://www.propublica.org/article/health-insurers-are-vacuuming-up-details-about-you-and-it-could-raise-your-rates" target="_blank" rel="noopener noreferrer">
-                    Source E
-                  </a>.
+                    The article mentions a study by the company SAS with an unnamed insurer. The study found that “higher health care costs could be predicted by looking at things like ethnicity, watching TV, and mail order purchases” [<a href="https://www.propublica.org/article/health-insurers-are-vacuuming-up-details-about-you-and-it-could-raise-your-rates" target="_blank" rel="noopener noreferrer">
+                    Source
+                  </a>].
                   </Typography>
 
                   <Typography variant="body1" paragraph>
