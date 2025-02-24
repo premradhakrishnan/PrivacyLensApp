@@ -158,7 +158,7 @@ const SearchSection = ({
                                                         fontWeight: 'bold',
                                                     }}
                                                 >
-                          Score: {result.finalScore}/30
+                          Score: {result.finalScore >= 24 ? 'Weak' : result.finalScore >= 14 ? 'Moderate' : 'Strong'}
                         </span>
 
                                                 {/* Persist Checkbox */}

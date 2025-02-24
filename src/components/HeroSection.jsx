@@ -21,7 +21,7 @@ const HeroSection = () => (
           <Typography variant="h6" sx={{ mb: 4, opacity: 0.9 }}>
             Make informed decisions about your health data privacy with our AI-powered analysis tool
           </Typography>
-          <Button
+          {/*<Button
             variant="contained"
             size="large"
             sx={{
@@ -32,7 +32,7 @@ const HeroSection = () => (
             startIcon={<SearchIcon />}
           >
             Analyze a Website
-          </Button>
+          </Button>*/}
         </Grid>
         <Grid item xs={12} md={5}>
           <Box sx={{ textAlign: 'center' }}>
