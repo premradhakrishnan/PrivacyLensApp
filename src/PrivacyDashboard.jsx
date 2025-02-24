@@ -616,14 +616,14 @@ const PrivacyDashboard = () => {
       </Box>
 
       {/* Chat Window */}
-      <ChatWindow
+      {/*<ChatWindow
         isChatOpen={isChatOpen}
         setIsChatOpen={setIsChatOpen}
         chatMessages={chatMessages}
         messageInput={messageInput}
         setMessageInput={setMessageInput}
         sendMessage={sendMessage}
-      />
+      />*/}
     </Container>
   );
 };
