@@ -174,7 +174,7 @@ const PrivacyDashboard = () => {
 
     try {
       // Send POST request
-      const postResponse = await fetch('http://127.0.0.1:8000/searchresults', {
+      const postResponse = await fetch(`${import.meta.env.VITE_API_URL}/searchresults`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -228,7 +228,8 @@ const PrivacyDashboard = () => {
   useEffect(() => {
     const fetchAllCharts = async () => {
       try {
-        const response = await fetch('http://localhost:8000/getAllCharts'); // API call
+        console.log("API URL:", import.meta.env.VITE_API_URL);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/getAllCharts`); // API call
         if (!response.ok) {
           throw new Error(`Error fetching charts: ${response.statusText}`);
         }
