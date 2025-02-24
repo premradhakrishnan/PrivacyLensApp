@@ -37,6 +37,8 @@ import ChatWindow from './components/ChatWindow';
 import SearchSection from './components/SearchSection';
 import GettingStarted from './components/GettingStarted';
 
+import BannerImage from './assets/pl_banner.png';
+
 const PrivacyDashboard = () => {
   // State management
   const [tabValue, setTabValue] = useState(0);
@@ -272,7 +274,7 @@ const PrivacyDashboard = () => {
         }}
       >
         <img 
-          src="/src/assets/pl_banner.png" 
+          src={BannerImage} 
           alt="Privacy Dashboard Banner"
         />
 
