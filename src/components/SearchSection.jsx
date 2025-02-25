@@ -144,21 +144,21 @@ const SearchSection = ({
                                                         fontSize: 14,
                                                         marginLeft: 'auto',
                                                         backgroundColor:
-                                                            result.finalScore >= 24
+                                                            result.finalScore > 24
                                                                 ? 'rgba(46, 125, 50, 0.1)'
-                                                                : result.finalScore >= 14
+                                                                : result.finalScore > 14
                                                                     ? 'rgba(249, 168, 37, 0.1)'
                                                                     : 'rgba(198, 40, 40, 0.1)',
                                                         color:
-                                                            result.finalScore >= 24
+                                                            result.finalScore > 24
                                                                 ? '#2e7d32'
-                                                                : result.finalScore >= 14
+                                                                : result.finalScore > 14
                                                                     ? '#f9a825'
                                                                     : '#c62828',
                                                         fontWeight: 'bold',
                                                     }}
                                                 >
-                          Score: {result.finalScore >= 24 ? 'Strong' : result.finalScore >= 14 ? 'Moderate' : 'Weak'}
+                          Score: {result.finalScore > 24 ? 'Strong' : result.finalScore > 14 ? 'Moderate' : 'Weak'}
                         </span>
 
                                                 {/* Persist Checkbox */}
