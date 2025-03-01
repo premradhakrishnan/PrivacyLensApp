@@ -2,7 +2,8 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
+  /* Changed from center to left for better readability */
+  text-align: left;
 }
 
 .logo {
@@ -50,6 +51,46 @@ body{
   color: #333; /* Define default font color */
   min-height: 100vh; /* Make sure the body spans the entire viewport height */
   box-sizing: border-box;
-
 }
 
+/* New styles for text alignment */
+.text-left {
+  text-align: left !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+/* Utility class for section containers */
+.section-container {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+/* Override MUI default typography alignment */
+.MuiTypography-root {
+  text-align: left;
+}
+
+/* Exception for specific elements that should remain centered */
+.centered-element, 
+.header-centered,
+.footer-centered,
+.cta-centered {
+  text-align: center !important;
+}
+
+/* For cases where you want to preserve center alignment */
+.preserve-center {
+  text-align: center !important;
+}
+
+/* Accordion styling */
+.MuiAccordionSummary-content {
+  text-align: left;
+}
+
+.MuiAccordionDetails-root {
+  text-align: left;
+}
