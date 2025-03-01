@@ -14,6 +14,7 @@ class GettingStarted extends React.Component {
             <Card sx={{ mb: 6 }}>
                 <CardContent sx={{ py: 6 }}>
                     {/* Title Section */}
+                    {/* Call to Action */}
                     <Typography
                         variant="h4"
                         gutterBottom
@@ -35,7 +36,7 @@ class GettingStarted extends React.Component {
                                     sx={{
                                         p: 4,
                                         height: '100%',
-                                        bgcolor: 'grey.50',
+                                        bgcolor: '#EFFAD9',
                                         display: 'flex',
                                         flexDirection: 'column',
                                         alignItems: 'center',

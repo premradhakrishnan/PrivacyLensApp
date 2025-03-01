@@ -1,6 +1,6 @@
 // components/HeroSection.jsx
 import React from 'react';
-import { Card, CardContent, Grid, Typography, Button, Box } from '@mui/material';
+import { Card, CardContent, Grid, Typography, Button, Box, Grid2 } from '@mui/material';
 import { Search as SearchIcon, Security } from '@mui/icons-material';
 
 const HeroSection = () => (
@@ -9,12 +9,12 @@ const HeroSection = () => (
       mb: 6,
       bgcolor: 'primary.main',
       color: 'white',
-      backgroundImage: 'linear-gradient(135deg, #4282AA 0%, #55A3D4 100%)'
+      backgroundImage: 'linear-gradient(135deg, #6140AC 0%,rgb(151, 133, 191) 100%)'
     }}
   >
     <CardContent sx={{ py: 8 }}>
-      <Grid container spacing={4} alignItems="center">
-        <Grid item xs={12} md={7}>
+      <Grid2 container spacing={4} alignItems="center">
+        <Grid2 item xs={12} md={7}>
           <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
             Understand Privacy Policies at a Glance
           </Typography>
@@ -33,13 +33,13 @@ const HeroSection = () => (
           >
             Analyze a Website
           </Button>*/}
-        </Grid>
-        <Grid item xs={12} md={5}>
+        </Grid2>
+        <Grid2 item xs={12} md={5}>
           <Box sx={{ textAlign: 'center' }}>
             <Security sx={{ fontSize: 200, opacity: 0.9 }} />
           </Box>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </CardContent>
   </Card>
 );

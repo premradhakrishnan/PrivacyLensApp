@@ -272,7 +272,7 @@ const PrivacyDashboard = () => {
           mb: 4,
           '& img': {
             width: '80%',
-          }
+          },
         }}
       >
         <img 
@@ -286,13 +286,13 @@ const PrivacyDashboard = () => {
         <Tabs
           value={tabValue}
           onChange={(e, newValue) => setTabValue(newValue)}
-          sx={{ mb: 4 }}
+          sx={{ mb: 4, fontSize: '50px', }}
         >
-          <Tab label="Home" />
-          <Tab label="Problem Background" />
-          <Tab label="Our Solution" />
-          <Tab label="Search" />
-          <Tab label="Aggregate Findings" />
+          <Tab sx={{fontSize: '20px',}} label="Home" />
+          <Tab sx={{fontSize: '20px',}} label="Problem Background" />
+          <Tab sx={{fontSize: '20px',}} label="Our Solution" />
+          <Tab sx={{fontSize: '20px',}} label="Search" />
+          <Tab sx={{fontSize: '20px',}} label="Aggregate Findings" />
         </Tabs>
 
         {/* Home Tab */}
