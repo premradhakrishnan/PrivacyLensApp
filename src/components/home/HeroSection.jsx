@@ -1,7 +1,7 @@
 // components/home/HeroSection.jsx
 import React from 'react';
 import { Card, CardContent, Grid, Typography, Button, Box } from '@mui/material';
-import { Security } from '@mui/icons-material';
+import { Security, Search, OpenInNew } from '@mui/icons-material';
 
 const HeroSection = () => {
   return (
@@ -24,15 +24,16 @@ const HeroSection = () => {
         <Grid container spacing={4} alignItems="center">
           <Grid item xs={12} md={7}>
             <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
-              Understand Privacy Policies at a Glance
+              Protect Your Health Data Privacy
             </Typography>
             <Typography variant="h6" sx={{ mb: 4, opacity: 0.9 }}>
-              Make informed decisions about your health data privacy with our AI-powered analysis tool
+              Know which websites respect your privacy with our browser plugin and analysis tool
             </Typography>
-            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 2 }}>
               <Button
                 variant="contained"
                 size="large"
+                startIcon={<Search />}
                 sx={{
                   bgcolor: 'white',
                   color: '#6140AC',
@@ -46,6 +47,7 @@ const HeroSection = () => {
               <Button
                 variant="outlined"
                 size="large"
+                startIcon={<OpenInNew />}
                 sx={{
                   borderColor: 'white',
                   color: 'white',
@@ -54,9 +56,12 @@ const HeroSection = () => {
                   py: 1.5
                 }}
               >
-                Learn More
+                Get Browser Plugin
               </Button>
             </Box>
+            <Typography variant="body1" sx={{ opacity: 0.9, mt: 1 }}>
+              Automatically see privacy ratings in Google search results or analyze any healthcare website directly
+            </Typography>
           </Grid>
           <Grid item xs={12} md={5} sx={{ textAlign: 'center' }}>
             <Security sx={{ fontSize: { xs: 150, md: 200 }, opacity: 0.9 }} />

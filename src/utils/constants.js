@@ -17,12 +17,11 @@ export const brandColors = {
 };
 
 // Features data for Key Features section
-// Instead of JSX, we'll export the icon component itself
 export const featuresData = [
   {
     title: "Privacy Policy Analysis",
     description: "Instant analysis of health related website privacy policies in our plugin or website.",
-    iconComponent: Assignment // Just export the component reference, not JSX
+    iconComponent: Assignment
   },
   {
     title: "Our Grading",
@@ -49,13 +48,13 @@ export const statsData = [
   { label: "Average Response Time", value: "2.5s" }
 ];
 
-// Navigation items
+// Navigation items with route paths
 export const navItems = [
-  { label: "Home", value: 0 },
-  { label: "Problem Background", value: 1 },
-  { label: "Our Solution", value: 2 },
-  { label: "Search", value: 3 },
-  { label: "Aggregate Findings", value: 4 }
+  { label: "Home", value: 0, path: "/" },
+  { label: "Problem Background", value: 1, path: "/problem-background" },
+  { label: "Our Solution", value: 2, path: "/our-solution" },
+  { label: "Search", value: 3, path: "/search" },
+  { label: "Aggregate Findings", value: 4, path: "/aggregate-findings" }
 ];
 
 // Getting started steps

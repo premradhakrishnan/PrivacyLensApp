@@ -35,18 +35,29 @@ const Header = ({ activeTab, setActiveTab }) => {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleNavClick = (tabValue) => {
+    setActiveTab(tabValue);
+    if (mobileOpen) {
+      setMobileOpen(false);
+    }
+  };
+
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+    <Box sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2, color: brandColors.purple, fontWeight: 'bold' }}>
         Privacy Lens
       </Typography>
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item.label} disablePadding>
+          <ListItem 
+            key={item.label} 
+            disablePadding
+            onClick={() => handleNavClick(item.value)}
+            sx={{ cursor: 'pointer' }}
+          >
             <ListItemText 
               primary={item.label} 
-              onClick={() => setActiveTab(item.value)}
               sx={{ 
                 textAlign: 'center',
                 py: 1,
@@ -65,15 +76,31 @@ const Header = ({ activeTab, setActiveTab }) => {
       <AppBar position="static" elevation={0} sx={{ bgcolor: 'white', color: 'black', borderBottom: '1px solid #eaeaea' }}>
         <Toolbar>
           {/* Logo Area */}
-          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              flexGrow: 1, 
+              cursor: 'pointer' 
+            }}
+            onClick={() => handleNavClick(0)}
+          >
             <img 
               src="/src/assets/pl_banner.png" 
               alt="Privacy Lens Logo"
-              style={{ height: '100px', marginRight: '10px' }}
+              style={{ height: '50px', marginRight: '10px' }}
             />
-            {/* <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: brandColors.purple, display: { xs: 'none', sm: 'block' } }}>
+            <Typography 
+              variant="h6" 
+              component="div" 
+              sx={{ 
+                fontWeight: 'bold', 
+                color: brandColors.purple, 
+                display: { xs: 'none', sm: 'block' } 
+              }}
+            >
               Privacy Lens
-            </Typography> */}
+            </Typography>
           </Box>
 
           {/* Mobile Menu Button */}
@@ -92,7 +119,7 @@ const Header = ({ activeTab, setActiveTab }) => {
             {navItems.map((item) => (
               <Button 
                 key={item.label}
-                onClick={() => setActiveTab(item.value)}
+                onClick={() => handleNavClick(item.value)}
                 sx={{ 
                   mx: 1, 
                   color: activeTab === item.value ? brandColors.purple : 'text.primary',
@@ -113,6 +140,7 @@ const Header = ({ activeTab, setActiveTab }) => {
           {/* CTA Button */}
           <Button 
             variant="contained" 
+            onClick={() => handleNavClick(3)} // Navigate to Search
             sx={{ 
               ml: 2, 
               bgcolor: brandColors.green, 
