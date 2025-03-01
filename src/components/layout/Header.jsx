@@ -18,6 +18,9 @@ import {
 import { Menu as MenuIcon } from '@mui/icons-material';
 import { brandColors } from '../../utils/constants';
 
+// Import the banner image properly
+import bannerImage from '../../assets/pl_banner.png';
+
 const navItems = [
   { label: "Home", value: 0 },
   { label: "Problem Background", value: 1 },
@@ -85,8 +88,9 @@ const Header = ({ activeTab, setActiveTab }) => {
             }}
             onClick={() => handleNavClick(0)}
           >
+            {/* Use the imported image instead of direct path */}
             <img 
-              src="/src/assets/pl_banner.png" 
+              src={bannerImage} 
               alt="Privacy Lens Logo"
               style={{ height: '100px', marginRight: '10px' }}
             />
