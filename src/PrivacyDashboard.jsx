@@ -31,10 +31,10 @@ import {
 } from '@mui/icons-material';
 
 // Import components
-import HeroSection from './components/HeroSection';
+import HeroSection from './components/home/HeroSection';
 import StatsSection from './components/StatsSection';
 import FeaturesSection from './components/FeaturesSection';
-import GettingStarted from './components/GettingStarted';
+import GettingStarted from './components/home/GettingStartedSteps';
 import BannerImage from './assets/pl_banner.png';
 
 // Brand colors from your theme
