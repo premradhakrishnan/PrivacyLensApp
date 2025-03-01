@@ -1,169 +1,460 @@
 // components/sections/OurSolutionSection.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
   Card,
   CardContent,
-  CardHeader,
-  Divider,
-  Link,
-  Grid,
-  Paper
+  Grid
 } from '@mui/material';
+import CustomAccordion from '../common/CustomAccordion';
 import { brandColors } from '../../utils/constants';
 
 const OurSolutionSection = () => {
+  // State to track which accordion is expanded
+  const [expanded, setExpanded] = useState('panel1');
+
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
   return (
     <Box>
-      <Typography variant="h4" gutterBottom sx={{ color: brandColors.purple, fontWeight: 'bold', my: 4 }}>
+      <Typography variant="h4" gutterBottom sx={{ color: brandColors.purple, fontWeight: 'bold', my: 4, textAlign: 'left' }}>
         Our Solution
       </Typography>
       
-      <Card elevation={3} sx={{ mb: 5 }}>
-        <CardHeader 
-          title="Building on the Shoulders of Past Researchers" 
-          titleTypographyProps={{ variant: 'h5', color: brandColors.purple, fontWeight: 'bold' }}
-          sx={{ bgcolor: `${brandColors.lightPurple}15` }}
-        />
-        <CardContent sx={{ p: 4 }}>
-          <Typography variant="body1" paragraph>
-            The paper <Link href="https://people.eecs.berkeley.edu/~tygar/papers/Buck.pdf" target="_blank" rel="noopener noreferrer">
-              Systematic Analysis and Evaluation of Web Privacy Policies and Implementations
-            </Link>, authored by <strong>Brad Miller, Kaitlyn Buck, and J.D. Tygar</strong> of UC Berkeley and Microsoft 
-            in 2012, presents a framework for evaluating website privacy policies. It critiques existing privacy 
-            disclosures, highlighting their complexity and inaccessibility to average users. The authors propose 
-            a structured rubric that assesses transparency, data handling, and user control, combining legal, 
-            technical, and usability perspectives. The paper also discusses how websites often fail to comply 
-            with their stated privacy policies and the challenges of enforcing meaningful privacy protections.
-          </Typography>
-        </CardContent>
-      </Card>
-      
-      <Card elevation={3} sx={{ mb: 5 }}>
-        <CardHeader 
-          title="What has Changed Since 2012?" 
-          titleTypographyProps={{ variant: 'h5', color: brandColors.purple, fontWeight: 'bold' }}
-          sx={{ bgcolor: `${brandColors.lightPurple}15` }}
-        />
-        <CardContent sx={{ p: 4 }}>
-          <Typography variant="body1" paragraph>
-            Since the paper's publication, privacy regulations and industry practices have evolved significantly. 
-            The EU's GDPR (2018) and the California CCPA (2020) introduced stricter requirements for user consent, 
-            data access, and transparency. Academic studies have highlighted that privacy policies remain difficult 
-            to read, leading to the adoption of simplified privacy notices, layered disclosures, and AI-driven 
-            privacy summaries.
-          </Typography>
-          <Typography variant="body1" paragraph>
-            Additionally, technical research has exposed loopholes in enforcement, with companies continuing to 
-            track users despite opt-out mechanisms. Studies have also evaluated the usability of privacy controls, 
-            emphasizing that users rarely adjust default settings due to interface complexity. The modernized 
-            rubric reflects these insights by stressing explicit opt-in/opt-out options, user control over 
-            tracking, and improved transparency in data collection.
-          </Typography>
-        </CardContent>
-      </Card>
-      
-      <Card elevation={3} sx={{ mb: 5 }}>
-        <CardHeader 
-          title="Modern Times Require Modern Solutions" 
-          titleTypographyProps={{ variant: 'h5', color: brandColors.purple, fontWeight: 'bold' }}
-          sx={{ bgcolor: `${brandColors.lightPurple}15` }}
-        />
-        <CardContent sx={{ p: 4 }}>
-          <Typography variant="body1" paragraph>
-            The original Berkeley rubric focused on policy accessibility, comprehensibility, and enforcement, 
-            evaluating whether websites aligned with their stated privacy commitments. It analyzed data collection 
-            transparency, security measures, and third-party sharing, but lacked explicit attention to modern 
-            tracking methods (e.g., fingerprinting, persistent identifiers beyond cookies).
-          </Typography>
-          <Typography variant="body1" paragraph>
-            The PrivacyLens rubric expands upon this foundation by incorporating newer privacy concerns, such as 
-            device fingerprinting and cross-platform tracking. It also emphasizes user rights, including data 
-            modification, deletion, and retention limits—which were not as prominent in the original study. 
-            Additionally, the PrivacyLens rubric accounts for opt-out mechanisms and granular consent options, 
-            aligning it with contemporary privacy laws.
-          </Typography>
-          <Typography variant="body1" paragraph>
-            The intent and ethos behind PrivacyLens is to provide users with as much information as they want 
-            and need in order to browse health-care websites safely. While the current iteration of the rubric 
-            accounts for many different types of metrics and focus areas, there is always room for improvement. 
-            With that said, PrivacyLens has the entire rubric along with the LLM's Master Prompt posted in order 
-            to provide maximum visibility and awareness to PrivacyLens's users. Our team welcomes feedback and 
-            recommendations as it can only help everyone.
-          </Typography>
-        </CardContent>
-      </Card>
-      
       <Card elevation={3}>
-        <CardHeader 
-          title="PrivacyLens Scoring" 
-          titleTypographyProps={{ variant: 'h5', color: brandColors.purple, fontWeight: 'bold' }}
-          sx={{ bgcolor: `${brandColors.lightPurple}15` }}
-        />
         <CardContent sx={{ p: 4 }}>
-          <Typography variant="body1" paragraph>
-            The PrivacyLens rubric consists of 29 metrics across 5 major categories to properly score 
-            websites' privacy policies. A Large Language Model, ChatGPT, is being utilized to automatically 
-            assess each website's privacy policy according to the rubric, providing a repeatable and quick 
-            method of scoring. While an LLM is a powerful tool in these assessments, it is important to 
-            understand the standard in which these policies are being graded.
-          </Typography>
-          <Typography variant="body1" paragraph>
-            Currently, the rubric consists of 29 metrics that are binary ('Yes' or 'No') with an associated 
-            score of either 0 or 1. However, this implementation is limited by its lack of flexibility. For 
-            instance, some situations may require 'grey' scoring such as partial matches. Future iterations 
-            of this rubric will allow for weighting and floating scores between 0 and 1 to account for such nuances.
-          </Typography>
-          <Typography variant="body1" paragraph sx={{ mb: 4 }}>
-            Websites whose privacy policies lack data for the metrics automatically score a zero in those areas. 
-            However, the same zero score is applied to policies that provide the required data but show poor 
-            results. While the rubric aims to encourage comprehensive privacy documentation, this approach can 
-            result in harsher scores for websites that don't explicitly state information. It's important to 
-            consider that even a poorly worded policy may be better than no mention of a topic at all.
+          <Typography variant="h5" gutterBottom fontWeight="bold" color={brandColors.purple} sx={{ textAlign: 'left' }}>
+            How PrivacyLens Works to Protect Your Health Data
           </Typography>
           
-          <Divider sx={{ mb: 4 }} />
+          <Typography variant="body1" paragraph sx={{ mb: 3, textAlign: 'left' }}>
+            PrivacyLens provides users with clear insights into how healthcare websites handle their personal data. 
+            We analyze privacy policies to highlight potential risks and empower you to make informed decisions.
+          </Typography>
           
-          <Grid container spacing={4}>
-            {[
-              {
-                title: "1. Privacy Document Accessibility",
-                content: "This section evaluates how easily users can find and understand the website's privacy policy. A well-structured and readily available privacy policy demonstrates transparency and a commitment to user privacy. Each metric in this section is binary (0 or 1). A website earns a 1 if it provides a dedicated, easily accessible privacy policy, includes a last-updated date, and offers notifications about changes."
-              },
-              {
-                title: "2. Privacy Document Scope",
-                content: "This section measures how well the privacy policy communicates key details about data collection, processing, and sharing. A transparent privacy policy should outline what data is collected, how it is gathered, and for what purpose. Each metric is scored as 1 if the policy provides clear and comprehensive information, and 0 if it is missing or ambiguous."
-              },
-              {
-                title: "3. Browser Storage",
-                content: "This section assesses whether the website uses browser storage techniques such as cookies, HTML5 Local Storage, or other tracking technologies. Websites that avoid persistent tracking methods (e.g., third-party cookies, HTML5 local storage) and provide clear disclosures earn 1 point per metric. A high score in this section indicates that the site respects user control over browser storage and tracking."
-              },
-              {
-                title: "4. Third-Party Tracking",
-                content: "This section evaluates how much user data is shared with third parties and whether tracking mechanisms persist beyond the website itself. Websites that avoid unnecessary third-party tracking earn 1 point per metric. If tracking is unavoidable, clear disclosures and opt-out mechanisms are required to receive full credit."
-              },
-              {
-                title: "5. Data Handling",
-                content: "This section focuses on how securely the website manages user data, whether users have control over their stored information, and whether retention policies are reasonable. Websites that allow users to access, modify, and delete their data, and that default to HTTPS for secure communication, earn 1 point per metric."
-              }
-            ].map((category, index) => (
-              <Grid item xs={12} md={6} key={index}>
-                <Paper elevation={2} sx={{ 
-                  p: 3, 
-                  height: '100%',
-                  borderTop: `4px solid ${index % 2 === 0 ? brandColors.purple : brandColors.green}`
-                }}>
-                  <Typography variant="h6" gutterBottom fontWeight="bold" color={index % 2 === 0 ? brandColors.purple : brandColors.green}>
-                    {category.title}
-                  </Typography>
-                  <Typography variant="body2">
-                    {category.content}
-                  </Typography>
-                </Paper>
+          {/* Accordion Group */}
+          <Box sx={{ mt: 4 }}>
+            <CustomAccordion
+              title="Privacy Policy Analysis Engine"
+              expanded={expanded}
+              onChange={handleChange}
+              panelId="panel1"
+              color="purple"
+            >
+              <Typography variant="body1" paragraph>
+                Our AI-powered analysis engine reads and evaluates privacy policies according to a comprehensive 
+                rubric developed by privacy experts. The engine examines key factors including:
+              </Typography>
+              
+              <Grid container spacing={2} sx={{ mt: 1, mb: 2 }}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ p: 2, bgcolor: `${brandColors.purple}10`, borderRadius: 2 }}>
+                    <Typography variant="body2" fontWeight="bold" color={brandColors.purple}>
+                      Data Collection
+                    </Typography>
+                    <Typography variant="body2">
+                      What personal and health information is being collected
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ p: 2, bgcolor: `${brandColors.green}10`, borderRadius: 2 }}>
+                    <Typography variant="body2" fontWeight="bold" color={brandColors.green}>
+                      Third-Party Sharing
+                    </Typography>
+                    <Typography variant="body2">
+                      Which external entities receive your data and for what purposes
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ p: 2, bgcolor: `${brandColors.green}10`, borderRadius: 2 }}>
+                    <Typography variant="body2" fontWeight="bold" color={brandColors.green}>
+                      User Control
+                    </Typography>
+                    <Typography variant="body2">
+                      Whether you can access, modify, or delete your data
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ p: 2, bgcolor: `${brandColors.purple}10`, borderRadius: 2 }}>
+                    <Typography variant="body2" fontWeight="bold" color={brandColors.purple}>
+                      Data Security
+                    </Typography>
+                    <Typography variant="body2">
+                      How the website protects your sensitive information
+                    </Typography>
+                  </Box>
+                </Grid>
               </Grid>
-            ))}
-          </Grid>
+              
+              <Typography variant="body1">
+                Based on this analysis, each website receives an overall privacy protection score, 
+                along with detailed breakdowns of specific privacy practices.
+              </Typography>
+            </CustomAccordion>
+            
+            <CustomAccordion
+              title="Browser Extension Integration"
+              expanded={expanded}
+              onChange={handleChange}
+              panelId="panel2"
+              color="green"
+            >
+              <Typography variant="body1" paragraph>
+                Our Chrome browser extension seamlessly integrates with your Google search experience to provide 
+                real-time privacy ratings for healthcare websites. As you search for health-related topics, 
+                the extension:
+              </Typography>
+              
+              <Box sx={{ pl: 3, mb: 2 }}>
+                <Typography variant="body1" paragraph sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Box sx={{ mr: 2, width: 8, height: 8, borderRadius: '50%', bgcolor: brandColors.purple }}/>
+                  Detects health-related search queries automatically
+                </Typography>
+                <Typography variant="body1" paragraph sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Box sx={{ mr: 2, width: 8, height: 8, borderRadius: '50%', bgcolor: brandColors.purple }}/>
+                  Checks our database for privacy ratings of websites in your search results
+                </Typography>
+                <Typography variant="body1" paragraph sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Box sx={{ mr: 2, width: 8, height: 8, borderRadius: '50%', bgcolor: brandColors.purple }}/>
+                  Displays color-coded privacy ratings (Strong, Moderate, or Weak) next to each result
+                </Typography>
+                <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Box sx={{ mr: 2, width: 8, height: 8, borderRadius: '50%', bgcolor: brandColors.purple }}/>
+                  Allows one-click access to detailed privacy analysis reports
+                </Typography>
+              </Box>
+              
+              <Typography variant="body1">
+                This seamless integration helps you make privacy-conscious decisions without disrupting your 
+                normal browsing experience.
+              </Typography>
+            </CustomAccordion>
+            
+            <CustomAccordion
+              title="Our Privacy Grading System"
+              expanded={expanded}
+              onChange={handleChange}
+              panelId="panel3"
+              color="purple"
+            >
+              <Typography variant="body1" paragraph>
+                PrivacyLens evaluates websites using a comprehensive grading system that considers multiple 
+                privacy factors, each weighted according to its importance for health data protection:
+              </Typography>
+              
+              <Box sx={{ my: 2, p: 2, bgcolor: '#f5f5f5', borderRadius: 2 }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={8}>
+                    <Typography variant="body2" fontWeight="bold">Privacy Factor</Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography variant="body2" fontWeight="bold">Weight</Typography>
+                  </Grid>
+                  
+                  <Grid item xs={8}>
+                    <Typography variant="body2">Data Collection Practices</Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography variant="body2">25%</Typography>
+                  </Grid>
+                  
+                  <Grid item xs={8}>
+                    <Typography variant="body2">Third-Party Sharing</Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography variant="body2">30%</Typography>
+                  </Grid>
+                  
+                  <Grid item xs={8}>
+                    <Typography variant="body2">User Control & Rights</Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography variant="body2">20%</Typography>
+                  </Grid>
+                  
+                  <Grid item xs={8}>
+                    <Typography variant="body2">Data Security Measures</Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography variant="body2">15%</Typography>
+                  </Grid>
+                  
+                  <Grid item xs={8}>
+                    <Typography variant="body2">Policy Clarity & Accessibility</Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography variant="body2">10%</Typography>
+                  </Grid>
+                </Grid>
+              </Box>
+              
+              <Typography variant="body1" paragraph>
+                Based on the composite score, websites receive one of three privacy ratings:
+              </Typography>
+              
+              <Grid container spacing={2} sx={{ mb: 2 }}>
+                <Grid item xs={12} md={4}>
+                  <Box sx={{ 
+                    p: 2, 
+                    bgcolor: 'rgba(46, 125, 50, 0.1)', 
+                    borderRadius: 2,
+                    border: '1px solid rgba(46, 125, 50, 0.3)'
+                  }}>
+                    <Typography variant="body1" fontWeight="bold" color="#2e7d32" gutterBottom>
+                      Strong (80-100%)
+                    </Typography>
+                    <Typography variant="body2">
+                      Websites with transparent policies that minimize data collection, limit third-party 
+                      sharing, and give users strong control over their information.
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Box sx={{ 
+                    p: 2, 
+                    bgcolor: 'rgba(249, 168, 37, 0.1)', 
+                    borderRadius: 2,
+                    border: '1px solid rgba(249, 168, 37, 0.3)'
+                  }}>
+                    <Typography variant="body1" fontWeight="bold" color="#f9a825" gutterBottom>
+                      Moderate (50-79%)
+                    </Typography>
+                    <Typography variant="body2">
+                      Websites with adequate privacy protections but with some concerning practices 
+                      in specific areas.
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Box sx={{ 
+                    p: 2, 
+                    bgcolor: 'rgba(198, 40, 40, 0.1)', 
+                    borderRadius: 2,
+                    border: '1px solid rgba(198, 40, 40, 0.3)'
+                  }}>
+                    <Typography variant="body1" fontWeight="bold" color="#c62828" gutterBottom>
+                      Weak (0-49%)
+                    </Typography>
+                    <Typography variant="body2">
+                      Websites with significant privacy concerns, including excessive data collection,
+                      broad third-party sharing, and limited user control.
+                    </Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+            </CustomAccordion>
+            
+            <CustomAccordion
+              title="Aggregate Privacy Insights"
+              expanded={expanded}
+              onChange={handleChange}
+              panelId="panel4"
+              color="green"
+            >
+              <Typography variant="body1" paragraph>
+                Beyond individual website ratings, PrivacyLens provides valuable insights into industry-wide 
+                privacy trends for healthcare websites. Our aggregate findings include:
+              </Typography>
+              
+              <Grid container spacing={3} sx={{ my: 2 }}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ p: 2, border: `1px solid ${brandColors.purple}30`, borderRadius: 2 }}>
+                    <Typography variant="h6" gutterBottom color={brandColors.purple} sx={{ fontSize: '1.1rem' }}>
+                      Privacy Score Distribution
+                    </Typography>
+                    <Typography variant="body2">
+                      How healthcare websites compare across different categories, revealing which types of 
+                      sites tend to have better or worse privacy practices.
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ p: 2, border: `1px solid ${brandColors.green}30`, borderRadius: 2 }}>
+                    <Typography variant="h6" gutterBottom color={brandColors.green} sx={{ fontSize: '1.1rem' }}>
+                      Common Privacy Violations
+                    </Typography>
+                    <Typography variant="body2">
+                      The most widespread concerning practices across healthcare websites, helping users 
+                      understand what to watch out for.
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ p: 2, border: `1px solid ${brandColors.green}30`, borderRadius: 2 }}>
+                    <Typography variant="h6" gutterBottom color={brandColors.green} sx={{ fontSize: '1.1rem' }}>
+                      Top Performing Websites
+                    </Typography>
+                    <Typography variant="body2">
+                      Healthcare resources with exemplary privacy practices that users can trust with their 
+                      sensitive information.
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ p: 2, border: `1px solid ${brandColors.purple}30`, borderRadius: 2 }}>
+                    <Typography variant="h6" gutterBottom color={brandColors.purple} sx={{ fontSize: '1.1rem' }}>
+                      Privacy Trend Analysis
+                    </Typography>
+                    <Typography variant="body2">
+                      How privacy practices in the healthcare industry are evolving over time, based on 
+                      our ongoing monitoring.
+                    </Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+              
+              <Typography variant="body1">
+                These aggregate insights help drive industry-wide improvements by highlighting 
+                both concerning practices and positive examples worth emulating.
+              </Typography>
+            </CustomAccordion>
+            
+            <CustomAccordion
+              title="User Education & Empowerment"
+              expanded={expanded}
+              onChange={handleChange}
+              panelId="panel5"
+              color="purple"
+            >
+              <Typography variant="body1" paragraph>
+                PrivacyLens goes beyond simply rating websites by providing educational resources to help 
+                users understand healthcare privacy issues and take control of their data:
+              </Typography>
+              
+              <Box sx={{ my: 2 }}>
+                <Typography variant="body1" paragraph sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                  <Box 
+                    sx={{ 
+                      mr: 2, 
+                      minWidth: 24, 
+                      height: 24, 
+                      borderRadius: '50%', 
+                      bgcolor: brandColors.purple,
+                      color: 'white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 'bold',
+                      fontSize: '0.8rem',
+                      mt: 0.5
+                    }}
+                  >
+                    1
+                  </Box>
+                  <Box>
+                    <Typography variant="body1" fontWeight="bold" color={brandColors.purple}>
+                      Privacy Glossary
+                    </Typography>
+                    <Typography variant="body2">
+                      Plain-language explanations of common privacy terms and concepts found in healthcare privacy policies.
+                    </Typography>
+                  </Box>
+                </Typography>
+                
+                <Typography variant="body1" paragraph sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                  <Box 
+                    sx={{ 
+                      mr: 2, 
+                      minWidth: 24, 
+                      height: 24, 
+                      borderRadius: '50%', 
+                      bgcolor: brandColors.green,
+                      color: 'white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 'bold',
+                      fontSize: '0.8rem',
+                      mt: 0.5
+                    }}
+                  >
+                    2
+                  </Box>
+                  <Box>
+                    <Typography variant="body1" fontWeight="bold" color={brandColors.green}>
+                      Privacy Best Practices
+                    </Typography>
+                    <Typography variant="body2">
+                      Actionable guidance on protecting your health data online, including browser settings, 
+                      cookie management, and smart data-sharing decisions.
+                    </Typography>
+                  </Box>
+                </Typography>
+                
+                <Typography variant="body1" paragraph sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                  <Box 
+                    sx={{ 
+                      mr: 2, 
+                      minWidth: 24, 
+                      height: 24, 
+                      borderRadius: '50%', 
+                      bgcolor: brandColors.purple,
+                      color: 'white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 'bold',
+                      fontSize: '0.8rem',
+                      mt: 0.5
+                    }}
+                  >
+                    3
+                  </Box>
+                  <Box>
+                    <Typography variant="body1" fontWeight="bold" color={brandColors.purple}>
+                      Red Flag Detection
+                    </Typography>
+                    <Typography variant="body2">
+                      Guidance on identifying warning signs in privacy policies that indicate heightened 
+                      data collection or sharing risks.
+                    </Typography>
+                  </Box>
+                </Typography>
+                
+                <Typography variant="body1" sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                  <Box 
+                    sx={{ 
+                      mr: 2, 
+                      minWidth: 24, 
+                      height: 24, 
+                      borderRadius: '50%', 
+                      bgcolor: brandColors.green,
+                      color: 'white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 'bold',
+                      fontSize: '0.8rem',
+                      mt: 0.5
+                    }}
+                  >
+                    4
+                  </Box>
+                  <Box>
+                    <Typography variant="body1" fontWeight="bold" color={brandColors.green}>
+                      Data Rights Resources
+                    </Typography>
+                    <Typography variant="body2">
+                      Information on exercising your legal rights regarding personal health data, including 
+                      requesting data deletion and limiting data sharing.
+                    </Typography>
+                  </Box>
+                </Typography>
+              </Box>
+              
+              <Typography variant="body1" sx={{ mt: 2 }}>
+                By combining actionable privacy ratings with educational resources, PrivacyLens empowers 
+                users to make informed choices about their health data privacy and take concrete steps 
+                to protect their sensitive information.
+              </Typography>
+            </CustomAccordion>
+          </Box>
         </CardContent>
       </Card>
     </Box>

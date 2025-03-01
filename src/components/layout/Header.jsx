@@ -88,19 +88,8 @@ const Header = ({ activeTab, setActiveTab }) => {
             <img 
               src="/src/assets/pl_banner.png" 
               alt="Privacy Lens Logo"
-              style={{ height: '50px', marginRight: '10px' }}
+              style={{ height: '100px', marginRight: '10px' }}
             />
-            <Typography 
-              variant="h6" 
-              component="div" 
-              sx={{ 
-                fontWeight: 'bold', 
-                color: brandColors.purple, 
-                display: { xs: 'none', sm: 'block' } 
-              }}
-            >
-              Privacy Lens
-            </Typography>
           </Box>
 
           {/* Mobile Menu Button */}
