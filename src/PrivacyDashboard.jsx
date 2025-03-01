@@ -1,55 +1,57 @@
-import React, { useState, useRef, useEffect } from 'react';
+// Updated PrivacyDashboard.jsx with improved homepage layout
+import React, { useState } from 'react';
 import {
   Container,
   Box,
+  AppBar,
+  Toolbar,
   Tabs,
   Tab,
-  Card,
-  CardHeader,
-  CardContent,
   Typography,
-  Paper,
-  useTheme, Slider
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  useTheme,
+  useMediaQuery,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+  Divider
 } from '@mui/material';
 import { 
   Security, 
   Visibility, 
   TrendingUp, 
-  Assignment 
+  Assignment,
+  Menu as MenuIcon,
+  KeyboardArrowDown
 } from '@mui/icons-material';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  LineChart,
-  Line
-} from 'recharts';
 
 // Import components
 import HeroSection from './components/HeroSection';
 import StatsSection from './components/StatsSection';
 import FeaturesSection from './components/FeaturesSection';
-import ChatWindow from './components/ChatWindow';
-import SearchSection from './components/SearchSection';
 import GettingStarted from './components/GettingStarted';
-
 import BannerImage from './assets/pl_banner.png';
+
+// Brand colors from your theme
+const brandColors = {
+  purple: '#7e3dab',
+  green: '#8cc43f', 
+  lightGreen: '#beed68',
+  darkPurple: '#5e2d7f',
+  lightPurple: '#a168c9'
+};
 
 const PrivacyDashboard = () => {
   // State management
   const [tabValue, setTabValue] = useState(0);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState([]);
-  const [messageInput, setMessageInput] = useState('');
-  const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
-  const [searchResults, setSearchResults] = useState([]);
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   // Features data
   const features = [
@@ -83,548 +85,598 @@ const PrivacyDashboard = () => {
     { label: "Average Response Time", value: "2.5s" }
   ];
 
-  const createBins = (data, numBins) => {
-    const scores = data.map((item) => item.score); // Extract all scores
-    const min = Math.min(...scores);
-    const max = Math.max(...scores);
-    const binSize = (max - min) / numBins;
-
-    // Generate bins and count occurrences within each bin
-    const binnedData = Array.from({ length: numBins }, (_, index) => {
-      const binStart = min + index * binSize;
-      const binEnd = binStart + binSize;
-
-      return {
-        binLabel: `${binStart.toFixed(2)} - ${binEnd.toFixed(2)}`, // Label for the bin
-        value: scores.filter((score) => score >= binStart && score < binEnd).length,
-      };
-    });
-
-    return binnedData;
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
   };
 
-  // eslint-disable-next-line react/prop-types
-  const ScoreChart = ({ data, title, color }) => {
-    const [numBins, setNumBins] = useState(5); // Default number of bins
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue);
+  };
 
-    // Recalculate binned data when numBins changes
-    const binnedData = createBins(data, numBins);
+  const navItems = [
+    { label: "Home", value: 0 },
+    { label: "Problem Background", value: 1 },
+    { label: "Our Solution", value: 2 },
+    { label: "Search", value: 3 },
+    { label: "Aggregate Findings", value: 4 }
+  ];
 
-    return (
-        <Box
-            style={{
-              marginBottom: '60px', // Ensure enough space below each ScoreChart
-              padding: '24px', // Consistent padding inside the component
-              border: '1px solid #e0e0e0', // Optional border for better clarity
-              borderRadius: '8px', // Rounded corners
-            }}
-        >
-          {/* Slider Section */}
-          <Box
-              style={{
-                paddingBottom: '20px', // Add space between slider and chart
-                marginBottom: '20px', // Ensure spacing between slider and chart logic
-                borderBottom: '1px solid #ddd', // Optional visual separation
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+      <Typography variant="h6" sx={{ my: 2, color: brandColors.purple, fontWeight: 'bold' }}>
+        Privacy Lens
+      </Typography>
+      <Divider />
+      <List>
+        {navItems.map((item) => (
+          <ListItem key={item.label} disablePadding>
+            <ListItemText 
+              primary={item.label} 
+              onClick={() => setTabValue(item.value)}
+              sx={{ 
+                textAlign: 'center',
+                py: 1,
+                color: tabValue === item.value ? brandColors.purple : 'inherit',
+                fontWeight: tabValue === item.value ? 'bold' : 'normal'
               }}
-          >
-            <Typography variant="h6" gutterBottom>
-              Adjust Number of Bins
-            </Typography>
-            <Slider
-                value={numBins}
-                min={1}
-                max={20}
-                step={1}
-                onChange={(e, newValue) => setNumBins(newValue)}
-                valueLabelDisplay="auto"
-                style={{
-                  width: '90%', // Center alignment and constraint to prevent overflow
-                  margin: '0 auto', // Center horizontally
-                }}
             />
-          </Box>
-
-          {/* Chart Section */}
-          <Box>
-            <Typography
-                variant="h5"
-                align="center"
-                gutterBottom
-                style={{ marginBottom: '16px' }}
-            >
-              {title}
-            </Typography>
-            <ResponsiveContainer width="100%" height={400}>
-              <BarChart data={binnedData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="binLabel" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill={color} />
-              </BarChart>
-            </ResponsiveContainer>
-          </Box>
-        </Box>
-    );
-  };
-
-  // Search handler
-  const handleSearch = async (event) => {
-    event.preventDefault();
-    setIsLoading(true);
-    setError(false);
-
-    try {
-      // Send POST request
-        const postResponse = await fetch(`${import.meta.env.VITE_API_URL}/searchresults`, {
-        //const postResponse = await fetch(` http://127.0.0.1:8000/searchresults`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ searchQuery }), // Ensure searchQuery is being passed correctly
-      });
-
-      // Check for response success
-      if (!postResponse.ok) {
-        throw new Error(`POST request failed with status: ${postResponse.status}`);
-      }
-
-      // Parse JSON data from response
-      const responseData = await postResponse.json();
-
-      // Log the response to see its structure
-      console.log("Received Response:", responseData);
-
-      // Example of storing the "data" object in a React state (if using React)
-      setSearchResults(responseData.data); // Assuming setSearchResults is a state updater function
-      console.log("Search Results:", searchResults);
-
-    } catch (error) {
-      console.error("Error while making the POST request:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-
-
-  // Chat message handler
-  const sendMessage = (e) => {
-    e.preventDefault();
-    if (messageInput.trim()) {
-      setChatMessages(prev => [...prev, { text: messageInput, sender: 'user' }]);
-      setMessageInput('');
-      // Simulate bot response
-      setTimeout(() => {
-        setChatMessages(prev => [
-          ...prev, 
-          { text: "Thank you for your question. How else can I help?", sender: 'bot' }
-        ]);
-      }, 1000);
-    }
-  };
-
-  const [chartData, setChartData] = useState(null); // Store all chart data here
-  const [fetchError, setFetchError] = useState(null); // Renamed error to fetchError
-
-  useEffect(() => {
-    const fetchAllCharts = async () => {
-      try {
-        console.log("API URL:", import.meta.env.VITE_API_URL);
-        //const response = await fetch(`http://localhost:8000/getAllCharts`); // API call
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/getAllCharts`); // API call
-        if (!response.ok) {
-          throw new Error(`Error fetching charts: ${response.statusText}`);
-        }
-        const result = await response.json();
-        if (result.status === 'success') {
-          setChartData(result.data); // Save the chart data structure
-        } else {
-          setFetchError(result.message || 'Unknown error occurred'); // Handle backend-specific errors
-        }
-      } catch (error) {
-        console.error('Failed to fetch charts:', error);
-        setFetchError(`Failed to fetch chart data: ${error.message}`); // Set fetchError for API errors
-      }
-    };
-
-    fetchAllCharts();
-  }, []);
-
-
-  if (!chartData && !fetchError) {
-    return <div>Loading chart data...</div>;
-  }
-
-  if (fetchError) {
-    return <div>Error: {fetchError}</div>;
-  }
-
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
 
   return (
-    <Container maxWidth="lg">
-        {/* Banner Image */}
-      <Box 
-        sx={{ 
-          width: '80%',
-          position: 'relative',
-          mb: 4,
-          '& img': {
-            width: '80%',
-          },
+    <>
+      {/* New Header / Navigation */}
+      <AppBar position="static" elevation={0} sx={{ bgcolor: 'white', color: 'black', borderBottom: '1px solid #eaeaea' }}>
+        <Toolbar>
+          {/* Logo Area */}
+          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+            <img 
+              src={BannerImage} 
+              alt="Privacy Lens Logo"
+              style={{ height: '50px', marginRight: '10px' }}
+            />
+            <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: brandColors.purple, display: { xs: 'none', sm: 'block' } }}>
+              Privacy Lens
+            </Typography>
+          </Box>
+
+          {/* Mobile Menu Button */}
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { md: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+
+          {/* Desktop Navigation */}
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
+            {navItems.map((item) => (
+              <Button 
+                key={item.label}
+                onClick={() => setTabValue(item.value)}
+                sx={{ 
+                  mx: 1, 
+                  color: tabValue === item.value ? brandColors.purple : 'text.primary',
+                  fontWeight: tabValue === item.value ? 'bold' : 'normal',
+                  borderBottom: tabValue === item.value ? `2px solid ${brandColors.purple}` : 'none',
+                  borderRadius: 0,
+                  '&:hover': {
+                    bgcolor: 'transparent',
+                    borderBottom: `2px solid ${brandColors.lightPurple}`
+                  }
+                }}
+              >
+                {item.label}
+              </Button>
+            ))}
+          </Box>
+          
+          {/* CTA Button */}
+          <Button 
+            variant="contained" 
+            sx={{ 
+              ml: 2, 
+              bgcolor: brandColors.green, 
+              '&:hover': { bgcolor: brandColors.lightGreen, color: '#333' },
+              display: { xs: 'none', sm: 'block' }
+            }}
+          >
+            Get Started
+          </Button>
+        </Toolbar>
+      </AppBar>
+
+      {/* Mobile Navigation Drawer */}
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{ keepMounted: true }}
+        sx={{
+          display: { xs: 'block', md: 'none' },
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
         }}
       >
-        <img 
-          src={BannerImage} 
-          alt="Privacy Dashboard Banner"
-        />
+        {drawer}
+      </Drawer>
 
-      </Box>
-      <Box sx={{ width: '100%', textAlign: 'center' }}>
-        {/* Navigation Tabs */}
-        <Tabs
-          value={tabValue}
-          onChange={(e, newValue) => setTabValue(newValue)}
-          sx={{ mb: 4, fontSize: '50px', }}
-        >
-          <Tab sx={{fontSize: '20px',}} label="Home" />
-          <Tab sx={{fontSize: '20px',}} label="Problem Background" />
-          <Tab sx={{fontSize: '20px',}} label="Our Solution" />
-          <Tab sx={{fontSize: '20px',}} label="Search" />
-          <Tab sx={{fontSize: '20px',}} label="Aggregate Findings" />
-        </Tabs>
-
-        {/* Home Tab */}
+      <Container maxWidth="lg" sx={{ mt: 4 }}>
+        {/* Home Tab - Updated Layout */}
         {tabValue === 0 && (
           <Box>
-            <HeroSection />
-            <FeaturesSection features={features} />
-            <GettingStarted />
-          </Box>
-        )}
-
-        {/* Search Results Tab */}
-        {tabValue === 3 && (
-          <Box style={{
-            width: '100%',
-            minWidth: '1200px',
-            maxWidth: '1200px',
-            margin: '0 auto',
-            padding: '20px', // Add consistent padding inside the container
-          }}>
-            <SearchSection
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                handleSearch={handleSearch}
-                error={error}
-                searchResults={searchResults} // Pass the state directly
-                isLoading={isLoading}
-            />
-          </Box>
-        )}
-
-        {tabValue === 4 && (
-            <div className="page-container"
-                 style={{
-                   width: '100%',
-                   minWidth: '1200px',
-                   maxWidth: '1200px',
-                   margin: '0 auto',
-                   padding: '20px', // Add consistent padding inside the container
-                 }}
+            {/* Hero Section With Improved Layout */}
+            <Card 
+              sx={{
+                mb: 6,
+                position: 'relative',
+                overflow: 'hidden',
+                borderRadius: '16px',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)'
+              }}
             >
-              {/* Render charts 1 through 6 */}
-              {['chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6'].map((chartId, index) => {
-                // Define specific titles for each chart
-                const chartTitles = [
-                  'Distribution of Invasiveness Scores',
-                  'Distribution of Scope Scores',
-                  'Distribution of Storage Scores',
-                  'Distribution of Tracking Scores',
-                  'Distribution of Handling Scores',
-                  'Distribution of Access Scores',
-                ];
-
-                // Define specific colors for each chart
-                const chartColors = [
-                  '#007bff', // Blue for chart 1
-                  '#28a745', // Green for chart 2
-                  '#ffc107', // Yellow for chart 3
-                  '#dc3545', // Red for chart 4
-                  '#17a2b8', // Teal for chart 5
-                  '#6f42c1', // Purple for chart 6
-                ];
-
-                return (
-                    <div
-                        key={chartId}
-                        style={{
-                          marginBottom: '50px', // Increased space between charts
-                          padding: '20px',
-                          border: '1px solid #ddd', // Optional: add border for clarity
-                          borderRadius: '8px', // Optional: rounded corners for distinction
-                          backgroundColor: '#f9f9f9', // Optional: light background for charts
+              <CardContent sx={{ 
+                py: 8, 
+                backgroundImage: 'linear-gradient(135deg, #6140AC 0%, rgb(151, 133, 191) 100%)',
+                color: 'white',
+                position: 'relative',
+                zIndex: 1
+              }}>
+                <Grid container spacing={4} alignItems="center">
+                  <Grid item xs={12} md={7}>
+                    <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
+                      Understand Privacy Policies at a Glance
+                    </Typography>
+                    <Typography variant="h6" sx={{ mb: 4, opacity: 0.9 }}>
+                      Make informed decisions about your health data privacy with our AI-powered analysis tool
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                      <Button
+                        variant="contained"
+                        size="large"
+                        sx={{
+                          bgcolor: 'white',
+                          color: brandColors.purple,
+                          '&:hover': { bgcolor: 'grey.100' },
+                          px: 4,
+                          py: 1.5
                         }}
-                    >
-                      <ScoreChart
-                          data={chartData[chartId]} // Data for the chart
-                          title={chartTitles[index]} // Assign specific titles based on index
-                          color={chartColors[index]} // Assign specific colors based on index
-                      />
-                    </div>
-                );
-              })}
-
-              {/* Render cumulative chart for domains */}
-              <div
-                  style={{
-                    marginTop: '50px',
-                    padding: '30px',
-                    border: '1px solid #ddd', // Optional: add border for clarity
-                    borderRadius: '8px', // Optional: rounded corners for distinction
-                    backgroundColor: '#f9f9f9', // Optional: light background for cumulative chart
-                  }}
-              >
-                <h3 style={{ textAlign: 'center', marginBottom: '20px' }}>
-                  Distribution of Cumulative Domains
-                </h3>
-                <ResponsiveContainer width="100%" height={400}>
-                  <LineChart
-                      data={chartData['chart7']}
-                      margin={{ top: 20, right: 30, left: 50, bottom: 100 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis
-                        dataKey="date_added"
-                        label={{ value: 'Date Added', position: 'bottom', offset: 50 }}
-                        angle={-45}
-                        textAnchor="end"
-                        dy={0}
-                        tickFormatter={(value) => value.substring(0, 10)}
-                    />
-                    <YAxis
-                        label={{
-                          value: 'Cumulative Count',
-                          angle: -90,
-                          position: 'left',
-                          offset: 0,
+                      >
+                        Analyze a Website
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        size="large"
+                        sx={{
+                          borderColor: 'white',
+                          color: 'white',
+                          '&:hover': { borderColor: 'white', bgcolor: 'rgba(255,255,255,0.1)' },
+                          px: 4,
+                          py: 1.5
                         }}
-                    />
-                    <Tooltip />
-                    <Line
-                        type="monotone"
-                        dataKey="cumulative_count"
-                        stroke="#8884d8" // Keep consistent stroke color for cumulative chart
-                        activeDot={{ r: 8 }}
-                        isAnimationActive={true}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-        )}
-
-        {/* About Our Rubric Tab */}
-        {tabValue === 2 && (
-          <Card style={{
-            width: '100%',
-            minWidth: '1200px',
-            maxWidth: '1200px',
-            margin: '0 auto',
-            padding: '20px', // Add consistent padding inside the container
-          }}>
-            <CardHeader title="Building on the Shoulders of Past Researchers" />
-            <CardContent>
-              <Typography variant="body1" paragraph align="left">
-                The paper <a href="https://people.eecs.berkeley.edu/~tygar/papers/Buck.pdf" target="_blank" rel="noopener noreferrer">Systematic Analysis and Evaluation of Web Privacy Policies and Implementations</a>, authored by <strong>Brad Miller, Kaitlyn Buck, and J.D. Tygar</strong> of UC Berkeley and Microsoft in 2012, presents a framework for evaluating website privacy policies. It critiques existing privacy disclosures, highlighting their complexity and inaccessibility to average users. The authors propose a structured rubric that assesses transparency, data handling, and user control, combining legal, technical, and usability perspectives. The paper also discusses how websites often fail to comply with their stated privacy policies and the challenges of enforcing meaningful privacy protections.
-              </Typography>
-            </CardContent>
-            <CardHeader title="What has Changed Since 2012?" />
-            <CardContent>
-              <Typography variant="body1" paragraph align="left">
-                Since the paper’s publication, privacy regulations and industry practices have evolved significantly. The EU’s GDPR (2018) and the California CCPA (2020) introduced stricter requirements for user consent, data access, and transparency. Academic studies have highlighted that privacy policies remain difficult to read, leading to the adoption of simplified privacy notices, layered disclosures, and AI-driven privacy summaries.
-              </Typography>
-              <Typography variant="body1" paragraph align="left">
-                Additionally, technical research has exposed loopholes in enforcement, with companies continuing to track users despite opt-out mechanisms. Studies have also evaluated the usability of privacy controls, emphasizing that users rarely adjust default settings due to interface complexity. The modernized rubric reflects these insights by stressing explicit opt-in/opt-out options, user control over tracking, and improved transparency in data collection.
-              </Typography>
-            </CardContent>
-            <CardHeader title="Modern Times Requre Modern Solutions" />
-            <CardContent>
-              <Typography variant="body1" paragraph align="left">
-                The original Berkeley rubric focused on policy accessibility, comprehensibility, and enforcement, evaluating whether websites aligned with their stated privacy commitments. It analyzed data collection transparency, security measures, and third-party sharing, but lacked explicit attention to modern tracking methods (e.g., fingerprinting, persistent identifiers beyond cookies).
-              </Typography>
-              <Typography variant="body1" paragraph align="left">
-                The PrivacyLens rubric expands upon this foundation by incorporating newer privacy concerns, such as device fingerprinting and cross-platform tracking. It also emphasizes user rights, including data modification, deletion, and retention limits—which were not as prominent in the original study. Additionally, the PrivacyLens rubric accounts for opt-out mechanisms and granular consent options, aligning it with contemporary privacy laws.
-              </Typography>
-              <Typography variant="body1" paragraph align="left">
-                The intent and ethos behind PrivacyLens is to provide users with as much information as they want and need in order to browse health-care websites safely. While the current iteration of the rubric accounts for many different types of metrics and focus areas, there is always room for improvement. With that said, PrivacyLens has the entire rubric along with the LLM’s Master Prompt posted in order to provide maximum visibility and awareness to PrivacyLens’s users. Our team welcomes feedback and recommendations as it can only help everyone.
-              </Typography>
-            </CardContent>
-            <CardHeader title="PrivacyLens Scoring" />
-            <CardContent>
-              <Typography variant="body1" paragraph align="left">
-                The PrivacyLens rubric consists of 29 metrics across 5 major categories to properly score websites’ privacy policies. A Large Language Model, ChatGPT, is being utilized to automatically assess each website’s privacy policy according to the rubric, providing a repeatable and quick method of scoring. While an LLM is a powerful tool in these assessments, it is important to understand the standard in which these policies are being graded.
-              </Typography>
-              <Typography variant="body1" paragraph align="left">
-                Currently, the rubric consists of 29 metrics that are binary (‘Yes’ or ‘No’) with an associated score of either 0 or 1. However, this implementation is limited by its lack of flexibility. For instance, some situations may require ‘grey’ scoring such as partial matches. Future iterations of this rubric will allow for weighting and floating scores between 0 and 1 to account for such nuances.
-              </Typography>
-              <Typography variant="body1" paragraph align="left">
-                Websites whose privacy policies lack data for the metrics automatically score a zero in those areas. However, the same zero score is applied to policies that provide the required data but show poor results. While the rubric aims to encourage comprehensive privacy documentation, this approach can result in harsher scores for websites that don't explicitly state information. It’s important to consider that even a poorly worded policy may be better than no mention of a topic at all.
-              </Typography>
-
-              <Typography variant="h6" gutterBottom>1. Privacy Document Accessibility</Typography>
-              <Typography variant="body2" paragraph align="left" color="text.secondary">
-                <strong>Intent & Importance</strong>: This section evaluates how easily users can find and understand the website’s privacy policy. A well-structured and readily available privacy policy demonstrates transparency and a commitment to user privacy. If users struggle to locate this document or if it's outdated, it raises concerns about whether the company prioritizes data protection. Furthermore, notifying users of policy changes is essential, as data handling practices may evolve over time. Without clear notifications, users might unknowingly accept new terms that could negatively impact their privacy.
-              </Typography>
-              <Typography variant="body2" paragraph align="left" color="text.secondary">
-                <strong>Scoring Method</strong>: Each metric in this section is binary (0 or 1). A website earns a 1 if it provides a dedicated, easily accessible privacy policy, includes a last-updated date, and offers notifications about changes. If any of these criteria are missing, the score for that metric is 0.
-              </Typography>
-
-              <Typography variant="h6" gutterBottom>2. Privacy Document Scope</Typography>
-              <Typography variant="body2" paragraph align="left" color="text.secondary">
-                <strong>Intent & Importance</strong>: This section measures how well the privacy policy communicates key details about data collection, processing, and sharing. A transparent privacy policy should outline what data is collected, how it is gathered, and for what purpose. Additionally, users should be informed if their data is shared with third parties and what security measures are in place to protect it. Without these details, users are left in the dark about how their personal information is handled, making informed decision-making impossible.
-              </Typography>
-              <Typography variant="body2" paragraph align="left" color="text.secondary">
-                <strong>Scoring Method</strong>: Each metric in this section is scored as 1 if the policy provides clear and comprehensive information, and 0 if it is missing or ambiguous. If the policy states all methods of data collection, explains the reason for data usage, identifies third parties involved, and outlines security protections, it achieves full points in this category. A vague or incomplete policy results in lower scores.
-              </Typography>
-
-              <Typography variant="h6" gutterBottom>3. Browser Storage</Typography>
-              <Typography variant="body2" paragraph align="left" color="text.secondary">
-                <strong>Intent & Importance</strong>: This section assesses whether the website uses browser storage techniques such as cookies, HTML5 Local Storage, or other tracking technologies. The intent is to determine whether users are informed about these tracking mechanisms and whether they can reasonably limit their exposure without sacrificing website functionality. Many websites rely on cookies and local storage to enhance user experience, but some exploit these technologies for invasive tracking. It’s important that users can disable unnecessary tracking without losing access to essential site functions.
-              </Typography>
-              <Typography variant="body2" paragraph align="left" color="text.secondary">
-                <strong>Scoring Method</strong>: Websites that avoid persistent tracking methods (e.g., third-party cookies, HTML5 local storage) and provide clear disclosures earn 1 point per metric. If a website becomes difficult to use without cookies or does not disclose tracking methods, it receives 0 points. A high score in this section indicates that the site respects user control over browser storage and tracking.
-              </Typography>
-
-              <Typography variant="h6" gutterBottom>4. Third-Party Tracking</Typography>
-              <Typography variant="body2" paragraph align="left" color="text.secondary">
-                <strong>Intent & Importance</strong>: This section evaluates how much user data is shared with third parties and whether tracking mechanisms persist beyond the website itself. Third-party scripts, beacons, and persistent cookies are often used for advertising, analytics, and behavioral profiling. Websites should be transparent about their reliance on third-party tracking and provide users with options to opt out. Unrestricted third-party tracking can significantly erode user privacy, as data may be collected across multiple sites without consent.
-              </Typography>
-              <Typography variant="body2" paragraph align="left" color="text.secondary">
-                <strong>Scoring Method</strong>: Websites that avoid unnecessary third-party tracking earn 1 point per metric. If tracking is unavoidable, clear disclosures and opt-out mechanisms are required to receive full credit. A 0 is assigned when the site engages in undisclosed third-party tracking, continues to function poorly when tracking is blocked, or uses tracking techniques that bypass standard protections.
-              </Typography>
-
-              <Typography variant="h6" gutterBottom>5. Data Handling</Typography>
-              <Typography variant="body2" paragraph align="left" color="text.secondary">
-                <strong>Intent & Importance</strong>: This section focuses on how securely the website manages user data, whether users have control over their stored information, and whether retention policies are reasonable. The goal is to ensure that users can access, modify, or delete their data and that the website adheres to security best practices such as HTTPS enforcement. A responsible data handling policy reduces risks related to data breaches, unauthorized access, and indefinite data retention.
-              </Typography>
-              <Typography variant="body2" paragraph align="left" color="text.secondary">
-                <strong>Scoring Method</strong>: Websites that allow users to access, modify, and delete their data, and that default to HTTPS for secure communication, earn 1 point per metric. A 0 is given if data retention policies are vague or excessive, if HTTPS is not enforced by default, or if users lack meaningful control over their data. A high score in this section signifies a strong commitment to data security and user rights.
-              </Typography>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Why Tab */}
-        {tabValue === 1 && (
-            <Card>
-              <CardContent>
-                <Box>
-                  <Typography variant="h4" gutterBottom>
-                    How Our Private Health Data Is Exploited Online
-                  </Typography>
-                  <CardContent>
-                    <Typography variant="body1" paragraph align="left">
-                      Today, a booming business of data brokers collects, analyzes, and sells our private health information in ways that defy most Americans’ expectations and evade HIPAA restrictions. Everything these data brokers can access appears to be fair game: your online orders, social media updates, socioeconomic status, race, weight, magazine subscriptions, pet ownership, hobbies, education, delinquent payments, media consumption, and more.
-                    </Typography>
-
-                    <Typography variant="body1" paragraph align="left">
-                      If you’re a minority who belongs to a low-income family, it turns out that patterns in vast troves of digital footprints suggest that you may face heightened health risks and cost an insurance company more money. If you’re a woman who purchases plus-size clothing, you’re evidently at risk of depression [<a href="https://www.propublica.org/article/health-insurers-are-vacuuming-up-details-about-you-and-it-could-raise-your-rates" target="_blank" rel="noopener noreferrer">
-                      Source
-                    </a>]. In 2020 alone, 25 large data brokers in the US spent $29 million on lobbying the United States federal government [<a href="https://themarkup.org/privacy/2021/04/01/the-little-known-data-broker-industry-is-spending-big-bucks-lobbying-congress" target="_blank" rel="noopener noreferrer">
-                      Source
-                    </a>]. This industry exists under the guise of improving health outcomes, but the evidence suggests this data is used for other, more nefarious purposes as well.
-                    </Typography>
-
-                    <Typography variant="body1" paragraph align="left">
-                      Recent years have witnessed a number of high-profile cases in which Americans’ health information has been exploited. The online therapy platform BetterHelp collected sensitive mental health information from its patients and assured its users that “We never sell or rent any information you share with us.” The firm collected information on sensitive topics, including experience with depression, medication use, and self-harm tendencies.
-                    </Typography>
-
-                    <Typography variant="body1" paragraph align="left">
-                      However, the firm actually shared data from over 7 million users with Facebook, Snapchat, Criteo, and Pinterest. The Federal Trade Commission fined BetterHelp $7.8 million in 2023, the same year it levied a $1.5 million civil penalty against GoodRx as part of an enforcement action for the firm’s practice of sharing consumers’ personal data with a number of large tech platforms [<a href="https://www.ftc.gov/business-guidance/blog/2023/03/ftc-says-online-counseling-service-betterhelp-pushed-people-handing-over-health-information-broke" target="_blank" rel="noopener noreferrer">
-                      Source
-                    </a>]. GoodRx helped patients access discounted prices on prescription drugs.
-                    </Typography>
-
-                    <Typography variant="body1" paragraph align="left">
-                      A February 2023 report published by Duke University researcher Joanne Kim found that people seeking mental health services online “often unknowingly [put] their sensitive mental health data at risk” and that the industry underlying this marketplace for sensitive data “appears to lack a set of best practices for handling individuals’ mental health data” [<a href="https://techpolicy.sanford.duke.edu/wp-content/uploads/sites/4/2023/02/Kim-2023-Data-Brokers-and-the-Sale-of-Americans-Mental-Health-Data.pdf" target="_blank" rel="noopener noreferrer">
-                      Source
-                    </a>].
-                    </Typography>
-
-                    <Typography variant="body1" paragraph align="left">
-                      In one case, the cost of 5,000 records of mental health-related information was just $275 – less than 6 cents per record. About a dozen data brokers were found to “sell mental health data for dirt cheap” with little effort to limit how the purchased data would be used by potential buyers [<a href="https://compliancy-group.com/health-data-brokers-sell-lists-of-depression-anxiety-sufferers/" target="_blank" rel="noopener noreferrer">
-                      Source
-                    </a>].
-                    </Typography>
-
-                    <Typography variant="body1" paragraph align="left">
-                      In addition to the problems inherent in having one’s private information violated through these transactions, the risks of selling such sensitive information span identity theft, insurance fraud, blackmail, downstream sales on gray markets, and targeting at-risk groups [<a href="https://compliancy-group.com/health-data-brokers-sell-lists-of-depression-anxiety-sufferers/" target="_blank" rel="noopener noreferrer">
-                      Source
-                    </a>]. A related investigation into health data brokers by the compliance management, tracking, and reporting firm Compliancy Group entitled “How Health Data Brokers Sell Lists of Depression & Anxiety Sufferers” found that information for sale can include personally-identifiable information, like name, address, contact information, prescription records, social media activity, health insurance claims, electronic health records, medical history, and data compiled from public records – at least some of which appear to constitute violations of HIPAA [<a href="https://compliancy-group.com/health-data-brokers-sell-lists-of-depression-anxiety-sufferers/" target="_blank" rel="noopener noreferrer">
-                      Source
-                    </a>]. This information is reportedly aggregated and sold to marketers, insurance firms, and pharmaceutical companies.
-                    </Typography>
-
-                    <Typography variant="body1" paragraph align="left">
-                      How is this information amassed in the first place? For starters, a vast collection of tracking technologies that power the economic model of the modern Internet – advertising – hoovers up data about our online activities. Cookies and tracking pixels, for instance, are used to connect health data to activity on social media platforms.
-                    </Typography>
-
-                    <Typography variant="body1" paragraph align="left">
-                      An investigation by The Markup, “Facebook Is Receiving Sensitive Medical Information from Hospital Websites,” published in June 2022, found that Meta’s Pixel was present on the websites of 33 of the country’s top 100 hospitals. The tracking technology enabled information on patients’ medical conditions, appointments, and prescriptions to be shared with Meta. When scheduling an appointment with a doctor on the website of the University Hospitals Cleveland Medical Center, this tracking Pixel sent Meta information about the physician's name and the query used to reach her online: “pregnancy termination” [<a href="https://themarkup.org/pixel-hunt/2022/06/16/facebook-is-receiving-sensitive-medical-information-from-hospital-websites" target="_blank" rel="noopener noreferrer">
-                      Source
-                    </a>].
-                    </Typography>
-
-                    <Typography variant="body1" paragraph align="left">
-                      The investigation revealed that data on patients’ sexual orientation and medical conditions from appointment scheduling services were shared with Meta, too. IP address information, which can be used to link appointment scheduling events to individuals or households, was shared with Meta as well. Moreover, the Pixel was found to be present within password-protected websites that many users would assume to be confidential.
-                    </Typography>
-
-                    <Typography variant="body1" paragraph align="left">
-                      When patients accessed such sites with Meta’s Pixel while logged into Facebook, Meta can link such activity to individual Facebook profiles. In response to these findings, Professor Glenn Cohen – director of Harvard Law School’s Petrie-Flom Center for Health Law Policy, Biotechnology, and Bioethics – noted:
-                    </Typography>
-
-                    <Typography variant="body1" paragraph sx={{ fontStyle: 'italic', ml: 4 }} align="left">
-                      “Almost any patient would be shocked to find out that Facebook is being provided an easy way to associate their prescriptions with their name…Even if perhaps there’s something in the legal architecture that permits this to be lawful, it’s totally outside the expectations of what patients think the health privacy laws are doing for them” [<a href="https://themarkup.org/pixel-hunt/2022/06/16/facebook-is-receiving-sensitive-medical-information-from-hospital-websites" target="_blank" rel="noopener noreferrer">
-                      Source
-                    </a>].
-                    </Typography>
-
-                    <Typography variant="body1" paragraph align="left">
-                      A related 2018 investigation by ProPublica and NPR was aptly titled “Health Insurers Are Vacuuming Up Details About You — And It Could Raise Your Rates.” While some firms that collect, sell, and purchase healthcare data online denied that their insights could be used to compute insurance premiums for certain patient populations, others suggested that these analyses could inform pricing.
-                    </Typography>
-
-                    <Typography variant="body1" paragraph align="left">
-                      The article mentions a study by the company SAS with an unnamed insurer. The study found that “higher health care costs could be predicted by looking at things like ethnicity, watching TV, and mail order purchases” [<a href="https://www.propublica.org/article/health-insurers-are-vacuuming-up-details-about-you-and-it-could-raise-your-rates" target="_blank" rel="noopener noreferrer">
-                      Source
-                    </a>].
-                    </Typography>
-
-                    <Typography variant="body1" paragraph align="left">
-                      Our health data – what medications we take, what side effects we sustain, what troubles our minds, what symptoms we experience, what diets we adhere to, which chronic conditions we manage – is some of the most private information about us. At a time when health insurers want access to all this information about us, those of us interested in protecting our online privacy must be selective about those entities with whom we entrust this sensitive information.
-                    </Typography>
-
-                    <Typography variant="body1" paragraph align="left">
-                      We are all patients at some point in our lives, and protecting our online privacy helps ensure we keep sensitive information safe while also sending a sign to businesses that we demand measured treatment of our most private data. PrivacyLens was created to help us accomplish precisely this goal.
-                    </Typography>
-                  </CardContent>
-                </Box>
+                      >
+                        Learn More
+                      </Button>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} md={5} sx={{ textAlign: 'center' }}>
+                    <Security sx={{ fontSize: { xs: 150, md: 200 }, opacity: 0.9 }} />
+                  </Grid>
+                </Grid>
               </CardContent>
             </Card>
-        )}
-      </Box>
 
-      {/* Chat Window */}
-      {/*<ChatWindow
-        isChatOpen={isChatOpen}
-        setIsChatOpen={setIsChatOpen}
-        chatMessages={chatMessages}
-        messageInput={messageInput}
-        setMessageInput={setMessageInput}
-        sendMessage={sendMessage}
-      />*/}
-    </Container>
+            {/* "Why Privacy Matters" Section */}
+            <Box sx={{ mb: 8 }}>
+              <Typography 
+                variant="h4" 
+                gutterBottom 
+                sx={{ 
+                  mb: 3, 
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  color: brandColors.purple
+                }}
+              >
+                Why Privacy Matters in Healthcare
+              </Typography>
+              
+              <Grid container spacing={4}>
+                <Grid item xs={12} md={6}>
+                  <Typography variant="body1" paragraph>
+                    Healthcare data is among the most sensitive personal information. When this data is collected online, it's often subject to different rules than in traditional healthcare settings.
+                  </Typography>
+                  <Typography variant="body1" paragraph>
+                    Privacy Lens helps bridge this gap by analyzing how websites protect—or expose—your health information.
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Card elevation={3} sx={{ height: '100%', bgcolor: `${brandColors.lightGreen}20` }}>
+                    <CardContent>
+                      <Typography variant="h6" gutterBottom fontWeight="bold" color={brandColors.purple}>
+                        Did you know?
+                      </Typography>
+                      <Typography variant="body2">
+                        Many healthcare websites share your sensitive data with third parties without clear disclosure. 
+                        Our analysis found that over 70% of health websites have concerning privacy practices.
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
+            </Box>
+
+            {/* Statistics Section with Improved Layout */}
+            <Box sx={{ mb: 8 }}>
+              <Typography 
+                variant="h4" 
+                gutterBottom 
+                sx={{ 
+                  mb: 4, 
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  color: brandColors.purple
+                }}
+              >
+                Making an Impact
+              </Typography>
+              <StatsSection stats={stats} />
+            </Box>
+
+            {/* How It Works Section - Redesigned from FeaturesSection */}
+            <Box sx={{ mb: 8 }}>
+              <Typography 
+                variant="h4" 
+                gutterBottom 
+                sx={{ 
+                  mb: 4, 
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  color: brandColors.purple
+                }}
+              >
+                How Privacy Lens Works
+              </Typography>
+              
+              <Grid container spacing={4} alignItems="center">
+                <Grid item xs={12} md={6}>
+                  <img 
+                    src="/api/placeholder/500/350" 
+                    alt="How Privacy Lens Works" 
+                    style={{ width: '100%', borderRadius: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box>
+                    {[
+                      { 
+                        number: 1, 
+                        title: "Enter a Healthcare Website", 
+                        description: "Simply provide the URL of any healthcare website you want to analyze",
+                        color: brandColors.purple
+                      },
+                      { 
+                        number: 2, 
+                        title: "AI-Powered Analysis", 
+                        description: "Our algorithms scan the privacy policy and evaluate it against our comprehensive rubric",
+                        color: brandColors.green
+                      },
+                      { 
+                        number: 3, 
+                        title: "Get Detailed Results", 
+                        description: "Receive a clear breakdown of how the website handles your data across multiple categories",
+                        color: brandColors.purple
+                      },
+                      { 
+                        number: 4, 
+                        title: "Make Informed Decisions", 
+                        description: "Use our insights to decide which healthcare services best protect your privacy",
+                        color: brandColors.green
+                      }
+                    ].map((step, index) => (
+                      <Box 
+                        key={index} 
+                        sx={{ 
+                          display: 'flex', 
+                          alignItems: 'flex-start', 
+                          mb: 3
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: '50%',
+                            bgcolor: step.color,
+                            color: 'white',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            mr: 2,
+                            flexShrink: 0,
+                            fontSize: 18,
+                            fontWeight: 'bold'
+                          }}
+                        >
+                          {step.number}
+                        </Box>
+                        <Box>
+                          <Typography variant="h6" gutterBottom fontWeight="bold" sx={{ color: step.color }}>
+                            {step.title}
+                          </Typography>
+                          <Typography color="text.secondary">
+                            {step.description}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    ))}
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
+
+            {/* Key Features Section */}
+            <Box sx={{ mb: 8 }}>
+              <Typography 
+                variant="h4" 
+                gutterBottom 
+                sx={{ 
+                  mb: 4, 
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  color: brandColors.purple
+                }}
+              >
+                Key Features
+              </Typography>
+              <Grid container spacing={4}>
+                {features.map((feature, index) => (
+                  <Grid item xs={12} sm={6} md={3} key={index}>
+                    <Card
+                      elevation={2}
+                      sx={{
+                        p: 3,
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        transition: 'transform 0.3s, box-shadow 0.3s',
+                        '&:hover': { 
+                          transform: 'translateY(-8px)',
+                          boxShadow: '0 12px 20px rgba(0,0,0,0.1)'
+                        },
+                        borderTop: `4px solid ${index % 2 === 0 ? brandColors.purple : brandColors.green}`
+                      }}
+                    >
+                      <Box 
+                        sx={{ 
+                          mb: 2, 
+                          p: 2, 
+                          borderRadius: '50%', 
+                          bgcolor: index % 2 === 0 ? `${brandColors.lightPurple}30` : `${brandColors.lightGreen}30`,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
+                      >
+                        {React.cloneElement(feature.icon, { 
+                          style: { fontSize: 40, color: index % 2 === 0 ? brandColors.purple : brandColors.green } 
+                        })}
+                      </Box>
+                      <Typography 
+                        variant="h6" 
+                        gutterBottom 
+                        fontWeight="bold"
+                        sx={{ 
+                          color: index % 2 === 0 ? brandColors.purple : brandColors.green 
+                        }}
+                      >
+                        {feature.title}
+                      </Typography>
+                      <Typography color="text.secondary">
+                        {feature.description}
+                      </Typography>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
+
+            {/* CTA Section */}
+            <Box 
+              sx={{ 
+                py: 6, 
+                px: 4, 
+                textAlign: 'center', 
+                borderRadius: 4, 
+                mb: 8,
+                bgcolor: `${brandColors.lightGreen}30`,
+                boxShadow: '0 8px 32px rgba(140, 196, 63, 0.15)'
+              }}
+            >
+              <Typography variant="h4" fontWeight="bold" sx={{ mb: 2, color: brandColors.purple }}>
+                Ready to Protect Your Health Data?
+              </Typography>
+              <Typography variant="h6" sx={{ mb: 4, maxWidth: '700px', mx: 'auto' }}>
+                Start analyzing healthcare websites today and take control of your privacy.
+              </Typography>
+              <Button 
+                variant="contained" 
+                size="large" 
+                sx={{ 
+                  bgcolor: brandColors.green, 
+                  px: 4, 
+                  py: 1.5,
+                  fontSize: '1.1rem',
+                  '&:hover': { bgcolor: brandColors.lightGreen, color: '#333' } 
+                }}
+              >
+                Analyze a Website Now
+              </Button>
+            </Box>
+
+            {/* Getting Started Guide - Simplified */}
+            <Box sx={{ mb: 8 }}>
+              <Typography 
+                variant="h4" 
+                gutterBottom 
+                sx={{ 
+                  mb: 4, 
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  color: brandColors.purple
+                }}
+              >
+                Getting Started is Easy
+              </Typography>
+              
+              <Grid container spacing={4}>
+                {[
+                  { 
+                    number: 1, 
+                    title: "Install Privacy Lens", 
+                    description: "Head to the Chrome Web Store and install the Privacy Lens extension."
+                  },
+                  { 
+                    number: 2, 
+                    title: "Start Your Search", 
+                    description: "Start the plugin, then do a health related search on Google."
+                  },
+                  { 
+                    number: 3, 
+                    title: "See Instant Results", 
+                    description: "See the invasiveness of each site listed in the Privacy Lens plugin. Enjoy!"
+                  }
+                ].map((step, index) => (
+                  <Grid item xs={12} md={4} key={index}>
+                    <Card
+                      sx={{
+                        p: 4,
+                        height: '100%',
+                        bgcolor: '#EFFAD9',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        transition: 'transform 0.3s',
+                        '&:hover': { transform: 'translateY(-5px)' }
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          width: 60,
+                          height: 60,
+                          borderRadius: '50%',
+                          bgcolor: brandColors.purple,
+                          color: 'white',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          mb: 3,
+                          fontSize: 24,
+                          fontWeight: 'bold'
+                        }}
+                      >
+                        {step.number}
+                      </Box>
+                      <Typography variant="h6" gutterBottom fontWeight="bold">
+                        {step.title}
+                      </Typography>
+                      <Typography>
+                        {step.description}
+                      </Typography>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+              
+              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{
+                    px: 4,
+                    py: 1.5,
+                    borderRadius: 50,
+                    textTransform: 'none',
+                    fontSize: '1.1rem',
+                    bgcolor: brandColors.purple
+                  }}
+                >
+                  Get Started Now
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        )}
+
+        {/* Other tabs remain unchanged */}
+        {tabValue !== 0 && (
+          <Typography variant="h5" sx={{ textAlign: 'center', my: 8, color: 'text.secondary' }}>
+            Switch to this tab content when selected ({navItems[tabValue].label})
+          </Typography>
+        )}
+      </Container>
+
+      {/* Footer */}
+      <Box 
+        sx={{ 
+          bgcolor: '#f5f5f5', 
+          py: 4, 
+          borderTop: '1px solid #e0e0e0',
+          mt: 4
+        }}
+      >
+        <Container maxWidth="lg">
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={4}>
+              <Typography variant="h6" gutterBottom fontWeight="bold" color={brandColors.purple}>
+                Privacy Lens
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Making healthcare privacy policies transparent and understandable.
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography variant="subtitle1" gutterBottom fontWeight="bold">
+                Quick Links
+              </Typography>
+              <Typography variant="body2" component="a" href="#" sx={{ display: 'block', mb: 1, color: 'text.secondary', textDecoration: 'none' }}>
+                Home
+              </Typography>
+              <Typography variant="body2" component="a" href="#" sx={{ display: 'block', mb: 1, color: 'text.secondary', textDecoration: 'none' }}>
+                Problem Background
+              </Typography>
+              <Typography variant="body2" component="a" href="#" sx={{ display: 'block', mb: 1, color: 'text.secondary', textDecoration: 'none' }}>
+                Our Solution
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography variant="subtitle1" gutterBottom fontWeight="bold">
+                Connect With Us
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                info@privacylens.org
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+                {/* Social media icons would go here */}
+              </Box>
+            </Grid>
+          </Grid>
+          <Box sx={{ mt: 4, pt: 2, borderTop: '1px solid #e0e0e0', textAlign: 'center' }}>
+            <Typography variant="body2" color="text.secondary">
+              © {new Date().getFullYear()} Privacy Lens. All rights reserved.
+            </Typography>
+          </Box>
+        </Container>
+      </Box>
+    </>
   );
 };
 
