@@ -7,8 +7,11 @@
  */
 export const fetchDetailedResults = async (domains) => {
     try {
+      // Use the environment variable instead of hardcoded URL
+      const apiUrl = import.meta.env.VITE_API_URL;
+      
       // Call backend API
-      const response = await fetch("http://127.0.0.1:8000/detailedResults", {
+      const response = await fetch(`${apiUrl}/detailedResults`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -22,6 +25,7 @@ export const fetchDetailedResults = async (domains) => {
   
       // Return parsed JSON data
       const data = await response.json();
+      console.log("Fetched detailed results:",data);
       return data;
     } catch (error) {
       console.error("Error fetching detailed results:", error);

@@ -1,5 +1,5 @@
 // components/results/SiteScoreCard.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Card, 
   CardContent, 
@@ -9,9 +9,29 @@ import {
   Button, 
   Divider, 
   Tooltip,
-  LinearProgress
+  LinearProgress,
+  Collapse,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Chip
 } from '@mui/material';
-import { InfoOutlined } from '@mui/icons-material';
+import { 
+  InfoOutlined, 
+  ExpandMore, 
+  ExpandLess, 
+  CheckCircle, 
+  Cancel,
+  WarningAmber
+} from '@mui/icons-material';
 
 import { textStyles } from '../../utils/textStyles';
 import { 
@@ -30,9 +50,53 @@ import { brandColors } from '../../utils/constants';
  * @param {boolean} props.isExpanded - Whether card is expanded
  */
 const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
+  const [openDialog, setOpenDialog] = useState(false);
+  const [expandedSections, setExpandedSections] = useState({});
+  
+  // Handle null or undefined site data
+  if (!site) return null;
+  
   const finalScore = site.finalScore !== undefined ? site.finalScore : null;
   const scoreColor = getScoreColor(finalScore);
   const scoreRating = getScoreRating(finalScore);
+  
+  // Safely extract assessment scores
+  const assessmentScores = site.assessment?.PrivacyLensAssessmentScore || [];
+  
+  // Safely extract summary data with null checks
+  // Handle both object and array formats for summary
+  let summary = null;
+  if (site.assessment?.PrivacyLensAssessmentSummary) {
+    if (Array.isArray(site.assessment.PrivacyLensAssessmentSummary)) {
+      summary = site.assessment.PrivacyLensAssessmentSummary[0];
+    } else {
+      summary = site.assessment.PrivacyLensAssessmentSummary;
+    }
+  }
+  
+  const hasPositives = summary?.positives && Array.isArray(summary.positives);
+  const hasConcerns = summary?.concerns && Array.isArray(summary.concerns);
+  
+  // Function to toggle section expansion
+  const toggleSection = (section) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+  
+  // Get grouped scores by section
+  const groupedScores = groupScoresBySection(assessmentScores);
+  
+  // Open full analysis dialog
+  const handleOpenFullAnalysis = () => {
+    setOpenDialog(true);
+  };
+  
+  // Close full analysis dialog
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
   
   return (
     <Card 
@@ -53,7 +117,10 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
               {site.domain}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Analyzed: {new Date(site.dateCaptured).toLocaleDateString()}
+              {site.dateCaptured ? 
+                `Analyzed: ${new Date(site.dateCaptured).toLocaleDateString()}` :
+                "Not yet analyzed"
+              }
             </Typography>
           </Grid>
           <Grid item xs={6} sm={3} sx={{ textAlign: { xs: 'left', sm: 'center' } }}>
@@ -61,35 +128,48 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
               <Typography variant="h5" sx={{ color: scoreColor, fontWeight: 'bold', mr: 1 }}>
                 {getScoreDisplay(finalScore)}
               </Typography>
-              <Tooltip title={`Score Rating: ${scoreRating}`}>
-                <InfoOutlined fontSize="small" />
-              </Tooltip>
+              {finalScore !== null && (
+                <Tooltip title={`Score Rating: ${scoreRating}`}>
+                  <InfoOutlined fontSize="small" />
+                </Tooltip>
+              )}
             </Box>
-            <Typography variant="body2">{scoreRating}</Typography>
+            <Typography variant="body2">{finalScore !== null ? scoreRating : "Not scored"}</Typography>
           </Grid>
           <Grid item xs={6} sm={3} sx={{ textAlign: 'right' }}>
-            <Button 
-              variant="outlined" 
-              color="primary"
-              onClick={() => onSelectSite(site)}
-              size="small"
-            >
-              {isExpanded ? "Collapse" : "View Details"}
-            </Button>
+            {(assessmentScores.length > 0 || summary) ? (
+              <Button 
+                variant="outlined" 
+                color="primary"
+                onClick={() => onSelectSite(site)}
+                size="small"
+              >
+                {isExpanded ? "Collapse" : "View Details"}
+              </Button>
+            ) : (
+              <Button 
+                variant="outlined" 
+                color="primary"
+                disabled
+                size="small"
+              >
+                No Data Available
+              </Button>
+            )}
           </Grid>
         </Grid>
         
-        {isExpanded && (
+        {isExpanded && assessmentScores.length > 0 && (
           <Box mt={2}>
             <Divider sx={{ my: 2 }} />
             
             <Typography variant="subtitle1" fontWeight="bold" sx={textStyles.headingLeft}>
               Summary
             </Typography>
-            {site.assessment?.PrivacyLensAssessmentSummary ? (
+            {summary ? (
               <>
                 <Typography variant="body2" paragraph sx={textStyles.bodyLeft}>
-                  {site.assessment.PrivacyLensAssessmentSummary.overview}
+                  {summary.overview || "No overview available."}
                 </Typography>
                 
                 <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -97,25 +177,37 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
                     <Typography variant="subtitle2" fontWeight="bold" sx={textStyles.headingLeft}>
                       Positives
                     </Typography>
-                    <ul style={{ paddingLeft: '1.5rem', margin: '0.5rem 0' }}>
-                      {site.assessment.PrivacyLensAssessmentSummary.positives.map((item, index) => (
-                        <li key={index}>
-                          <Typography variant="body2">{item}</Typography>
-                        </li>
-                      ))}
-                    </ul>
+                    {hasPositives && summary.positives.length > 0 ? (
+                      <ul style={{ paddingLeft: '1.5rem', margin: '0.5rem 0' }}>
+                        {summary.positives.map((item, index) => (
+                          <li key={index}>
+                            <Typography variant="body2">{item}</Typography>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <Typography variant="body2" color="text.secondary" sx={textStyles.bodyLeft}>
+                        No positive points identified.
+                      </Typography>
+                    )}
                   </Grid>
                   <Grid item xs={12} md={6}>
                     <Typography variant="subtitle2" fontWeight="bold" sx={textStyles.headingLeft}>
                       Concerns
                     </Typography>
-                    <ul style={{ paddingLeft: '1.5rem', margin: '0.5rem 0' }}>
-                      {site.assessment.PrivacyLensAssessmentSummary.concerns.map((item, index) => (
-                        <li key={index}>
-                          <Typography variant="body2">{item}</Typography>
-                        </li>
-                      ))}
-                    </ul>
+                    {hasConcerns && summary.concerns.length > 0 ? (
+                      <ul style={{ paddingLeft: '1.5rem', margin: '0.5rem 0' }}>
+                        {summary.concerns.map((item, index) => (
+                          <li key={index}>
+                            <Typography variant="body2">{item}</Typography>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <Typography variant="body2" color="text.secondary" sx={textStyles.bodyLeft}>
+                        No concerns identified.
+                      </Typography>
+                    )}
                   </Grid>
                 </Grid>
               </>
@@ -131,18 +223,43 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
               Category Scores
             </Typography>
             
-            {site.assessment?.PrivacyLensAssessmentScore ? (
+            {Object.keys(groupedScores).length > 0 ? (
               <Box sx={{ mt: 2 }}>
-                {Object.entries(groupScoresBySection(site.assessment.PrivacyLensAssessmentScore)).map(([section, items]) => {
+                {Object.entries(groupedScores).map(([section, items]) => {
                   const sectionScore = items.reduce((acc, item) => acc + parseInt(item.score || 0), 0);
                   const maxPossible = items.length;
                   const percentage = (sectionScore / maxPossible) * 100;
+                  
+                  // Count failing items (score = 0)
+                  const failingItems = items.filter(item => parseInt(item.score) === 0);
+                  const hasFailures = failingItems.length > 0;
                   
                   return (
                     <Box key={section} sx={{ mb: 2 }}>
                       <Grid container alignItems="center" spacing={1}>
                         <Grid item xs={6}>
-                          <Typography variant="body2">{section}</Typography>
+                          <Box 
+                            sx={{ 
+                              display: 'flex', 
+                              alignItems: 'center', 
+                              cursor: 'pointer' 
+                            }}
+                            onClick={() => toggleSection(section)}
+                          >
+                            {expandedSections[section] ? <ExpandLess /> : <ExpandMore />}
+                            <Typography variant="body2" sx={{ ml: 1 }}>
+                              {section}
+                              {hasFailures && (
+                                <Tooltip title={`${failingItems.length} failed metrics`}>
+                                  <WarningAmber 
+                                    fontSize="small" 
+                                    color="warning" 
+                                    sx={{ ml: 1, verticalAlign: 'middle' }} 
+                                  />
+                                </Tooltip>
+                              )}
+                            </Typography>
+                          </Box>
                         </Grid>
                         <Grid item xs={3}>
                           <Typography variant="body2" align="right">
@@ -170,6 +287,44 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
                           </Box>
                         </Grid>
                       </Grid>
+                      
+                      <Collapse in={expandedSections[section]} timeout="auto" unmountOnExit>
+                        <Box sx={{ pl: 4, pr: 2, pt: 1, pb: 1 }}>
+                          {items.map((item, index) => (
+                            <Grid container key={index} sx={{ mb: 1 }}>
+                              <Grid item xs={10}>
+                                <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center' }}>
+                                  {parseInt(item.score) === 1 ? (
+                                    <CheckCircle fontSize="small" color="success" sx={{ mr: 1 }} />
+                                  ) : (
+                                    <Cancel fontSize="small" color="error" sx={{ mr: 1 }} />
+                                  )}
+                                  {item.question}
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={2} sx={{ textAlign: 'right' }}>
+                                <Chip 
+                                  label={item.answer} 
+                                  size="small"
+                                  color={item.answer === 'Yes' ? 'success' : 'error'}
+                                  variant="outlined"
+                                />
+                              </Grid>
+                              {parseInt(item.score) === 0 && (
+                                <Grid item xs={12}>
+                                  <Typography 
+                                    variant="caption" 
+                                    color="text.secondary"
+                                    sx={{ pl: 4, fontStyle: 'italic' }}
+                                  >
+                                    {item.justification}
+                                  </Typography>
+                                </Grid>
+                              )}
+                            </Grid>
+                          ))}
+                        </Box>
+                      </Collapse>
                     </Box>
                   );
                 })}
@@ -194,6 +349,8 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
                 variant="outlined" 
                 color="secondary"
                 size="small"
+                onClick={handleOpenFullAnalysis}
+                disabled={assessmentScores.length === 0}
               >
                 Full Analysis Report
               </Button>
@@ -201,6 +358,160 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
           </Box>
         )}
       </CardContent>
+      
+      {/* Full Analysis Report Dialog */}
+      <Dialog 
+        open={openDialog} 
+        onClose={handleCloseDialog}
+        fullWidth
+        maxWidth="md"
+      >
+        <DialogTitle>
+          <Typography variant="h6">
+            Full Privacy Analysis Report: {site.domain}
+          </Typography>
+        </DialogTitle>
+        <DialogContent dividers>
+          {summary && (
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="subtitle1" gutterBottom fontWeight="bold">
+                Executive Summary
+              </Typography>
+              <Typography variant="body2" paragraph>
+                {summary.overview}
+              </Typography>
+              
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid item xs={12} md={6}>
+                  <Typography variant="subtitle2" gutterBottom fontWeight="bold">
+                    Strengths
+                  </Typography>
+                  {hasPositives && summary.positives.length > 0 ? (
+                    <ul>
+                      {summary.positives.map((item, index) => (
+                        <li key={index}>
+                          <Typography variant="body2">{item}</Typography>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <Typography variant="body2" color="text.secondary">
+                      No strengths identified.
+                    </Typography>
+                  )}
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Typography variant="subtitle2" gutterBottom fontWeight="bold">
+                    Areas of Concern
+                  </Typography>
+                  {hasConcerns && summary.concerns.length > 0 ? (
+                    <ul>
+                      {summary.concerns.map((item, index) => (
+                        <li key={index}>
+                          <Typography variant="body2">{item}</Typography>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <Typography variant="body2" color="text.secondary">
+                      No concerns identified.
+                    </Typography>
+                  )}
+                </Grid>
+              </Grid>
+            </Box>
+          )}
+          
+          <Typography variant="subtitle1" gutterBottom fontWeight="bold">
+            Detailed Assessment
+          </Typography>
+          
+          <TableContainer component={Paper} sx={{ mt: 2, mb: 3 }}>
+            <Table size="small">
+              <TableHead>
+                <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+                  <TableCell width="40%"><strong>Question</strong></TableCell>
+                  <TableCell width="15%"><strong>Answer</strong></TableCell>
+                  <TableCell width="15%"><strong>Score</strong></TableCell>
+                  <TableCell width="30%"><strong>Justification</strong></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {assessmentScores.map((item, index) => (
+                  <TableRow 
+                    key={index}
+                    sx={{
+                      backgroundColor: parseInt(item.score) === 0 ? 'rgba(255, 235, 235, 0.5)' : 'inherit'
+                    }}
+                  >
+                    <TableCell>
+                      <Typography variant="body2">
+                        {item.question}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        Section: {item.section}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Chip 
+                        label={item.answer} 
+                        size="small"
+                        color={item.answer === 'Yes' ? 'success' : 'error'}
+                        variant="outlined"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Typography 
+                        variant="body2" 
+                        fontWeight="bold"
+                        color={parseInt(item.score) === 1 ? 'success.main' : 'error.main'}
+                      >
+                        {item.score}/1
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2">
+                        {item.justification}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          
+          {site.assessment?.assumptions_or_gaps && (
+            <Box>
+              <Typography variant="subtitle1" gutterBottom fontWeight="bold">
+                Assessment Notes & Assumptions
+              </Typography>
+              <ul>
+                {site.assessment.assumptions_or_gaps.map((item, index) => (
+                  <li key={index}>
+                    <Typography variant="body2">{item}</Typography>
+                  </li>
+                ))}
+              </ul>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Close
+          </Button>
+          {/* <Button 
+            variant="contained" 
+            color="primary"
+            onClick={() => {
+              // Here you could implement export functionality
+              // For example, exporting to PDF or CSV
+              alert('Export functionality will be implemented here');
+            }}
+          >
+            Export Report
+          </Button> */}
+        </DialogActions>
+      </Dialog>
     </Card>
   );
 };
