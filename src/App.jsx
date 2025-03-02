@@ -11,6 +11,7 @@ import Footer from './components/layout/Footer';
 import HomePage from './pages/HomePage';
 import DetailedResults from './components/DetailedResults';
 import PrivacyDashboard from './PrivacyDashboard';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage'; // Import the new privacy policy page
 
 // Import the theme
 import theme from './theme';
@@ -103,6 +104,7 @@ const AppRoutes = () => {
           <Route path="/search" element={<MainContent activeTab={3} />} />
           <Route path="/findings" element={<MainContent activeTab={4} />} />
           <Route path="/detailed-results" element={<DetailedResults />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
         </Routes>
       </Box>
       
