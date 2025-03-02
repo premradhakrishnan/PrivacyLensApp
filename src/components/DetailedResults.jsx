@@ -2,78 +2,144 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { 
-    Container, 
-    Box, 
-    Typography, 
-    Card, 
-    CardContent, 
-    List, 
-    ListItem, 
-    ListItemText,
-    Button,
-    CircularProgress
+  Box, 
+  Button,
+  CircularProgress,
+  Tabs,
+  Tab
 } from '@mui/material';
-import { ArrowBack } from '@mui/icons-material';
+import { 
+  ArrowBack, 
+  FilterList,
+  Search,
+  BarChart 
+} from '@mui/icons-material';
+
+import PageContainer from './layout/PageContainer';
+import ResultsHeader from './results/ResultsHeader';
+import OverviewTab from './results/OverviewTab';
+import DetailedScoresTab from './results/DetailedScoresTab';
+import CompareTab from './results/CompareTab';
+import { fetchDetailedResults } from '../api/resultsApi';
 
 const DetailedResults = () => {
-    const [searchParams] = useSearchParams();
-    const [domains, setDomains] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [domains, setDomains] = useState([]);
+  const [results, setResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [expandedSite, setExpandedSite] = useState(null);
+  const [activeTab, setActiveTab] = useState(0);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        // Get all domains from URL parameters
-        const domainParams = searchParams.getAll('domains[]');
-        setDomains(domainParams);
+  useEffect(() => {
+    // Get domains from URL parameters
+    const domainParams = searchParams.getAll('domains[]');
+    setDomains(domainParams);
+    
+    // Fetch detailed results
+    const loadResults = async () => {
+      try {
+        const data = await fetchDetailedResults(domainParams);
+        setResults(data);
         setIsLoading(false);
-    }, [searchParams]);
+      } catch (error) {
+        console.error("Error fetching detailed results:", error);
+        setIsLoading(false);
+      }
+    };
+    
+    loadResults();
+  }, [searchParams]);
 
-    return (
-        <Container maxWidth="lg">
-            <Box sx={{ py: 4 }}>
-                <Button 
-                    startIcon={<ArrowBack />} 
-                    onClick={() => navigate('/')}
-                    sx={{ mb: 3 }}
-                >
-                    Back to Dashboard
-                </Button>
+  const handleSiteSelect = (site) => {
+    setExpandedSite(expandedSite === site.domain ? null : site.domain);
+  };
 
-                <Typography variant="h4" gutterBottom>
-                    Detailed Analysis Results
-                </Typography>
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
 
-                {isLoading ? (
-                    <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
-                        <CircularProgress />
-                    </Box>
-                ) : (
-                    <Card>
-                        <CardContent>
-                            <Typography variant="h6" gutterBottom>
-                                Analyzed Domains
-                            </Typography>
-                            <List>
-                                {domains.map((domain, index) => (
-                                    <ListItem key={index} divider={index !== domains.length - 1}>
-                                        <ListItemText 
-                                            primary={domain}
-                                            secondary="Click for detailed analysis"
-                                        />
-                                    </ListItem>
-                                ))}
-                            </List>
-                            {domains.length === 0 && (
-                                <Typography color="text.secondary">
-                                    No domains provided for analysis.
-                                </Typography>
-                            )}
-                        </CardContent>
-                    </Card>
-                )}
+  return (
+    <PageContainer>
+      <Box sx={{ pb: 2 }}>
+        <Button 
+          startIcon={<ArrowBack />} 
+          onClick={() => navigate('/')}
+          sx={{ mb: 3 }}
+        >
+          Back to Dashboard
+        </Button>
+
+        {/* <ResultsHeader>
+          <Button 
+            startIcon={<FilterList />} 
+            size="small" 
+            sx={{ mr: 1 }}
+          >
+            Filter
+          </Button>
+          <Button 
+            startIcon={<Search />} 
+            size="small"
+          >
+            Search
+          </Button>
+        </ResultsHeader> */}
+
+        {isLoading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <>
+            <Tabs 
+              value={activeTab} 
+              onChange={handleTabChange}
+              sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}
+            >
+              <Tab label="Overview" />
+              <Tab label="Detailed Scores" />
+              <Tab label="Compare Sites" />
+            </Tabs>
+
+            {activeTab === 0 && (
+              <OverviewTab 
+                results={results} 
+                expandedSite={expandedSite}
+                onSiteSelect={handleSiteSelect}
+              />
+            )}
+
+            {activeTab === 1 && (
+              <DetailedScoresTab results={results} />
+            )}
+
+            {activeTab === 2 && (
+              <CompareTab results={results} />
+            )}
+            
+            <Box sx={{ mt: 4, display: 'flex', justifyContent: 'space-between' }}>
+              <Button 
+                variant="outlined" 
+                startIcon={<ArrowBack />} 
+                onClick={() => navigate('/')}
+              >
+                Back to Dashboard
+              </Button>
+              
+              {/* <Button 
+                variant="contained"
+                color="primary"
+                startIcon={<BarChart />}
+              >
+                Export Analysis
+              </Button> */}
             </Box>
-        </Container>
-    );
+          </>
+        )}
+      </Box>
+    </PageContainer>
+  );
 };
 
 export default DetailedResults;

@@ -1,73 +1,62 @@
-// components/StepItem.jsx
 import React from 'react';
-import { Paper, Typography, Box, useTheme, useMediaQuery } from '@mui/material';
+import { Box, Typography, Paper } from '@mui/material';
 import { brandColors } from '../utils/constants';
 
 /**
- * A responsive component for displaying numbered steps
- * Adapts layout and sizing based on screen dimensions
+ * StepItem component for displaying numbered steps with consistent styling
+ * 
+ * @param {Object} props Component props
+ * @param {number} props.number The step number
+ * @param {string} props.title The title of the step
+ * @param {string} props.description The description text for the step
+ * @param {Object} props.sx Additional styling props
  */
-const StepItem = ({ number, title, description, sx = {} }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
-
+const StepItem = ({ 
+  number, 
+  title, 
+  description, 
+  sx = {} 
+}) => {
   return (
-    <Paper
+    <Paper 
       elevation={1}
-      sx={{
-        p: isMobile ? 2 : 3,
-        borderRadius: 2,
+      sx={{ 
+        p: 2, 
+        mb: 2,
         display: 'flex',
-        flexDirection: isMobile ? 'column' : 'row',
-        alignItems: isMobile ? 'flex-start' : 'center',
-        gap: 2,
-        transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-        '&:hover': {
-          transform: 'translateY(-5px)',
-          boxShadow: 3
-        },
+        borderRadius: 2,
+        overflow: 'hidden',
+        position: 'relative',
         ...sx
       }}
     >
-      <Box
+      {/* Number bubble */}
+      <Box 
         sx={{
-          bgcolor: brandColors.purple,
-          color: 'white',
-          width: isMobile ? '36px' : '48px',
-          height: isMobile ? '36px' : '48px',
-          borderRadius: '50%',
           display: 'flex',
-          justifyContent: 'center',
           alignItems: 'center',
+          justifyContent: 'center',
+          width: 40,
+          height: 40,
+          borderRadius: '50%',
+          backgroundColor: brandColors.purple,
+          color: 'white',
           fontWeight: 'bold',
-          fontSize: isMobile ? '1.2rem' : '1.5rem',
+          mr: 2,
           flexShrink: 0
         }}
       >
-        {number}
+        <Typography variant="h6">
+          {number}
+        </Typography>
       </Box>
-
-      <Box sx={{ flex: 1 }}>
-        <Typography 
-          variant={isMobile ? "h6" : "h5"} 
-          component="h3" 
-          sx={{ 
-            fontWeight: 'bold',
-            mb: 0.5,
-            color: theme.palette.text.primary
-          }}
-        >
+      
+      {/* Content */}
+      <Box sx={{ textAlign: 'left' }}>
+        <Typography variant="h6" gutterBottom>
           {title}
         </Typography>
-        
-        <Typography 
-          variant="body2" 
-          color="text.secondary"
-          sx={{
-            fontSize: isMobile ? '0.875rem' : '1rem'
-          }}
-        >
+        <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: 'pre-wrap' }}>
           {description}
         </Typography>
       </Box>

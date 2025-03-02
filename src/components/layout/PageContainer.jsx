@@ -1,44 +1,63 @@
-// components/layout/PageContainer.jsx
 import React from 'react';
-import { Container, Box, useTheme, useMediaQuery } from '@mui/material';
+import { Container, Box, Typography, Divider } from '@mui/material';
+import { textStyles } from '/src/utils/textStyles';
 
 /**
- * A responsive container component for page content
- * Handles different padding and max-width based on screen size
+ * PageContainer component to provide consistent layout for pages
+ * 
+ * @param {Object} props Component props
+ * @param {React.ReactNode} props.children Child components to render
+ * @param {string} props.title Optional page title
+ * @param {string} props.subtitle Optional page subtitle
+ * @param {boolean} props.showDivider Whether to show a divider below the title
+ * @param {Object} props.sx Additional styling props for the container
+ * @param {Object} props.contentSx Additional styling props for the content area
  */
-const PageContainer = ({ children, maxWidth = "lg", sx = {} }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
-
+const PageContainer = ({ 
+  children, 
+  title, 
+  subtitle, 
+  showDivider = true,
+  sx = {}, 
+  contentSx = {} 
+}) => {
   return (
     <Container 
-      maxWidth={maxWidth}
+      maxWidth="lg" 
       sx={{ 
-        py: isMobile ? 2 : 4,
-        px: isMobile ? 1.5 : 3, // Smaller padding on mobile
-        overflow: 'hidden', // Prevent horizontal scroll on mobile
+        py: 4,
         ...sx
       }}
     >
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: isMobile ? 2 : 3
-        }}
-      >
+      {title && (
+        <Box sx={{ mb: subtitle ? 1 : 3 }}>
+          <Typography 
+            variant="h4" 
+            component="h1"
+            sx={{ ...textStyles.headingLeft }}
+          >
+            {title}
+          </Typography>
+          
+          {subtitle && (
+            <Typography 
+              variant="subtitle1" 
+              color="text.secondary"
+              sx={{ ...textStyles.bodyLeft, mb: 3 }}
+            >
+              {subtitle}
+            </Typography>
+          )}
+          
+          {showDivider && <Divider sx={{ mb: 4 }} />}
+        </Box>
+      )}
+      
+      <Box sx={contentSx}>
         {children}
       </Box>
     </Container>
   );
-};
-
-// Media query helper for dynamic spacing and layout
-const getResponsiveSpacing = (theme, isMobile, options = {}) => {
-  const { base = 3, mobileReduction = 1 } = options;
-  return isMobile ? base - mobileReduction : base;
 };
 
 export default PageContainer;
