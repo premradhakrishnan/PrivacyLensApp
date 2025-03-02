@@ -94,3 +94,114 @@ body{
 .MuiAccordionDetails-root {
   text-align: left;
 }
+
+/* mobile.css - Add to your existing CSS */
+
+/* Mobile-friendly adjustments */
+@media (max-width: 600px) {
+  #root {
+    padding: 1rem;
+  }
+  
+  h1 {
+    font-size: 2.2em;
+  }
+  
+  h2 {
+    font-size: 1.8em;
+  }
+  
+  h3 {
+    font-size: 1.5em;
+  }
+  
+  /* Adjust button size on mobile */
+  button {
+    padding: 0.5em 1em;
+  }
+  
+  /* Better image handling on small screens */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 601px) and (max-width: 960px) {
+  #root {
+    padding: 1.5rem;
+  }
+}
+
+/* Ensure content doesn't overflow on mobile */
+.responsive-container {
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Fix for mobile viewports */
+@viewport {
+  width: device-width;
+  zoom: 1.0;
+}
+
+/* Mobile grid adjustments */
+.mobile-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 600px) {
+  .desktop-only {
+    display: none !important;
+  }
+  
+  .mobile-full-width {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex-basis: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  .mobile-text-center {
+    text-align: center !important;
+  }
+  
+  .mobile-stack {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Adjust spacing on mobile */
+  .mobile-spacing-sm {
+    margin: 0.5rem !important;
+    padding: 0.5rem !important;
+  }
+  
+  .mobile-spacing-md {
+    margin: 1rem !important;
+    padding: 1rem !important;
+  }
+}
+
+/* Touch-friendly adjustments */
+@media (hover: none) {
+  /* Increase tap targets for mobile */
+  button, 
+  .MuiButtonBase-root,
+  .clickable,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Disable hover effects on touch devices */
+  button:hover,
+  .MuiButtonBase-root:hover,
+  a:hover {
+    background-color: inherit;
+  }
+}
