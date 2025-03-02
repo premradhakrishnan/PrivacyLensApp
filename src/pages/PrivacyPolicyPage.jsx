@@ -25,7 +25,7 @@ const PrivacyPolicyPage = () => {
               Privacy Lens is committed to protecting your privacy. We've created this privacy policy to demonstrate our commitment to transparency and to reflect the same high standards we use to evaluate other websites' privacy policies.
             </Typography>
             <Typography paragraph sx={textStyles.bodyLeft}>
-              As an organization dedicated to making healthcare privacy policies transparent and understandable, we hold ourselves to the highest standards of data protection and privacy. This policy explains how we collect, use, share, and protect information when you use our website (privacylens.info) and browser extension.
+              As an organization dedicated to making healthcare privacy policies transparent and understandable for users worldwide, we hold ourselves to the highest standards of data protection and privacy. This policy explains how we collect, use, share, and protect information when you use our website (privacylens.info) and browser extension.
             </Typography>
           </LeftAlignedSection>
           
@@ -36,7 +36,7 @@ const PrivacyPolicyPage = () => {
               2. About Privacy Lens
             </Typography>
             <Typography paragraph sx={textStyles.bodyLeft}>
-              Privacy Lens provides tools that help users understand the privacy implications of health-related websites. We do this through:
+              Privacy Lens provides tools that help users globally understand the privacy implications of health-related websites. We do this through:
             </Typography>
             <Box component="ul" sx={{ ...textStyles.bodyLeft, pl: 4 }}>
               <li>A browser extension that analyzes search results for health-related queries and displays privacy ratings</li>
@@ -44,7 +44,7 @@ const PrivacyPolicyPage = () => {
               <li>A tool allowing users to submit specific website URLs for privacy policy evaluation</li>
             </Box>
             <Typography paragraph sx={textStyles.bodyLeft}>
-              Our mission is to empower users to protect their sensitive health information while still accessing the resources they need.
+              Our mission is to empower users worldwide to protect their sensitive health information while still accessing the resources they need.
             </Typography>
           </LeftAlignedSection>
           
@@ -178,34 +178,35 @@ const PrivacyPolicyPage = () => {
             </Typography>
             
             <Typography variant="h6" sx={{ ...textStyles.headingLeft, fontWeight: 'bold' }}>
-              6.1 Minimal Regulatory Impact Due to Privacy-First Design
+              6.1 Global Privacy Regulations
             </Typography>
             <Typography paragraph sx={textStyles.bodyLeft}>
               Because Privacy Lens does not collect, store, or process personal information about our users, many privacy regulations have limited applicability to our service. Our privacy-by-design approach means:
             </Typography>
             <Box component="ul" sx={{ ...textStyles.bodyLeft, pl: 4 }}>
-              <li>We are not subject to HIPAA regulations as we do not collect or process protected health information (PHI)</li>
-              <li>We are not subject to many obligations under consumer privacy laws because we do not collect personal information that would trigger these requirements</li>
+              <li>We are not subject to most health data protection regulations worldwide as we do not collect or process protected health information</li>
+              <li>We are not subject to many obligations under global consumer privacy laws (such as GDPR in Europe, CCPA in California, PIPEDA in Canada, LGPD in Brazil, or POPIA in South Africa) because we do not collect personal information that would trigger these requirements</li>
               <li>We do not transfer personal data internationally because we don't collect personal data</li>
             </Box>
             <Typography paragraph sx={textStyles.bodyLeft}>
-              While many regulatory requirements do not apply to us due to our minimal data collection practices, we still follow privacy best practices and apply the principles underlying these regulations to our service.
+              While many regulatory requirements do not apply to us due to our minimal data collection practices, we still follow privacy best practices and apply the principles underlying these global regulations to our service.
             </Typography>
             
             <Typography variant="h6" sx={{ ...textStyles.headingLeft, fontWeight: 'bold' }}>
               6.2 Commitment to Privacy Best Practices
             </Typography>
             <Typography paragraph sx={textStyles.bodyLeft}>
-              Although not required by regulation, we voluntarily implement many privacy best practices:
+              Although not required by regulation, we voluntarily implement many privacy best practices that align with international standards:
             </Typography>
             <Box component="ul" sx={{ ...textStyles.bodyLeft, pl: 4 }}>
               <li>Transparency about our data practices</li>
               <li>Data minimization (collecting only what is necessary)</li>
               <li>Purpose limitation (using data only for stated purposes)</li>
               <li>Security safeguards for our systems and database</li>
+              <li>International data protection considerations in our rubric</li>
             </Box>
             <Typography paragraph sx={textStyles.bodyLeft}>
-              Our approach is to exceed regulatory requirements by simply not collecting the types of data that would create privacy risks for our users in the first place.
+              Our approach is to exceed regulatory requirements by simply not collecting the types of data that would create privacy risks for our users in the first place, regardless of which country they're accessing our service from.
             </Typography>
           </LeftAlignedSection>
           
@@ -256,6 +257,13 @@ const PrivacyPolicyPage = () => {
             <Typography paragraph sx={textStyles.bodyLeft}>
               We do not retain any user-specific data. The only information we retain is our database of website privacy ratings, which is not connected to individual users.
             </Typography>
+            
+            <Typography variant="h6" sx={{ ...textStyles.headingLeft, fontWeight: 'bold' }}>
+              8.4 Global Privacy Rights
+            </Typography>
+            <Typography paragraph sx={textStyles.bodyLeft}>
+              We respect data subject rights regardless of location and citizenship. While we don't collect personal data that would typically be subject to these rights, we are committed to upholding the principles behind global privacy regulations such as the EU's GDPR, Brazil's LGPD, Canada's PIPEDA, and other international frameworks.
+            </Typography>
           </LeftAlignedSection>
           
           <Divider sx={{ my: 3 }} />
@@ -303,7 +311,6 @@ const PrivacyPolicyPage = () => {
             </Typography>
             <Box component="ul" sx={{ ...textStyles.bodyLeft, pl: 4 }}>
               <li>A prominent notice on our website</li>
-              <li>An email notification to registered users</li>
               <li>An update notification in the browser extension</li>
             </Box>
             <Typography paragraph sx={textStyles.bodyLeft}>
@@ -324,6 +331,7 @@ const PrivacyPolicyPage = () => {
               <li>We will post a notification on our website within 72 hours of discovery</li>
               <li>We will provide information about the nature of the incident</li>
               <li>We will explain steps we're taking to address the issue and prevent future occurrences</li>
+              <li>Where required by applicable laws in affected regions, we will notify relevant data protection authorities</li>
             </Box>
             <Typography paragraph sx={textStyles.bodyLeft}>
               Given our privacy-by-design approach where no personal user data is collected, there would be no personal information compromised in such an incident.
@@ -352,18 +360,35 @@ const PrivacyPolicyPage = () => {
               13. Children's Privacy
             </Typography>
             <Typography paragraph sx={textStyles.bodyLeft}>
-              Privacy Lens services are designed to help users understand privacy policies for health-related websites. While our services may be valuable to users of all ages concerned about privacy, they are primarily intended for general audiences and not specifically directed at children under 13.
+              Privacy Lens services are designed to help users understand privacy policies for health-related websites. While our services may be valuable to users of all ages concerned about privacy, they are primarily intended for general audiences and not specifically directed at children under the age of digital consent in their jurisdiction.
             </Typography>
             <Typography paragraph sx={textStyles.bodyLeft}>
-              Since we do not collect personal information from any users, including children, the Children's Online Privacy Protection Act (COPPA) has limited applicability to our service. Regardless, we encourage parents and guardians to supervise their children's online activities and help them understand the importance of privacy.
+              Since we do not collect personal information from any users, including children, most children's privacy protection laws worldwide have limited applicability to our service. Different countries define the digital age of consent differently (13 in the US under COPPA, 16 in many EU countries under GDPR, and various ages in other jurisdictions). Regardless of these regulations, we encourage parents and guardians to supervise their children's online activities and help them understand the importance of privacy.
             </Typography>
+          </LeftAlignedSection>
+          
+          <Divider sx={{ my: 3 }} />
+          
+          <LeftAlignedSection>
+            <Typography variant="h5" sx={{ ...textStyles.sectionTitle, color: brandColors.purple }}>
+              14. International Users
+            </Typography>
+            <Typography paragraph sx={textStyles.bodyLeft}>
+              Privacy Lens is designed for users worldwide. Our privacy rubric evaluates health website policies against global standards, recognizing that health privacy expectations are universal while regulatory approaches may differ. Our own practices reflect this global perspective:
+            </Typography>
+            <Box component="ul" sx={{ ...textStyles.bodyLeft, pl: 4 }}>
+              <li>We apply consistent privacy standards regardless of user location</li>
+              <li>Our evaluation criteria incorporate elements from major global privacy frameworks</li>
+              <li>We recognize regional variations in privacy regulations while focusing on core health privacy principles</li>
+              <li>We do not differentiate our privacy practices based on user geography</li>
+            </Box>
           </LeftAlignedSection>
           
           <Divider sx={{ my: 3 }} />
           
           <Box sx={{ mt: 4, pt: 2, borderTop: '1px solid #e0e0e0', fontStyle: 'italic' }}>
             <Typography paragraph sx={textStyles.bodyLeft}>
-              <em>Privacy Lens is committed to setting the standard for transparent, user-friendly privacy policies in the digital health space. We continuously evaluate and improve our privacy practices to ensure they align with our mission of empowering users to protect their health information.</em>
+              <em>Privacy Lens is committed to setting the standard for transparent, user-friendly privacy policies in the digital health space globally. We continuously evaluate and improve our privacy practices to ensure they align with our mission of empowering users worldwide to protect their health information.</em>
             </Typography>
           </Box>
         </Paper>
