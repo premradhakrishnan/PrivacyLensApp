@@ -21,6 +21,7 @@ import {
 import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
 import { brandColors } from '../../utils/constants';
 import { navItems } from '../../utils/constants';
+import banner from '../../assets/pl_banner.png';
 
 /**
  * Enhanced header with improved mobile experience
@@ -171,7 +172,7 @@ const EnhancedHeader = ({ activeTab, setActiveTab }) => {
                 onClick={() => handleNavClick(0)}
               >
                 <img 
-                  src="/src/assets/pl_banner.png" 
+                  src={banner} 
                   alt="Privacy Lens Logo"
                   style={{ 
                     height: isSmallMobile ? '60px' : (scrolled ? '70px' : '90px'),
