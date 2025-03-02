@@ -70,8 +70,8 @@ const DetailedResults = () => {
           Back to Dashboard
         </Button>
 
-        {/* <ResultsHeader>
-          <Button 
+        <ResultsHeader title="Privacy Analysis Results">
+          {/* <Button 
             startIcon={<FilterList />} 
             size="small" 
             sx={{ mr: 1 }}
@@ -83,8 +83,8 @@ const DetailedResults = () => {
             size="small"
           >
             Search
-          </Button>
-        </ResultsHeader> */}
+          </Button> */}
+        </ResultsHeader>
 
         {isLoading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>

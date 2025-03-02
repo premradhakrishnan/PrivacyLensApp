@@ -3,6 +3,7 @@ import React from 'react';
 import { Typography, Grid, Card, CardContent, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import { textStyles } from '../../utils/textStyles';
 import { calculateAverageScore, findHighestScore, findLowestScore } from '../../utils/resultsUtils';
+import { getCommonPrivacyIssues } from '../../utils/privacyIssuesUtils';
 import ScoreDistributionChart from './ScoreDistributionChart';
 import SiteScoreCard from './SiteScoreCard';
 
@@ -14,6 +15,12 @@ import SiteScoreCard from './SiteScoreCard';
  * @param {Function} props.onSiteSelect - Callback when a site is selected
  */
 const OverviewTab = ({ results, expandedSite, onSiteSelect }) => {
+  // Get common privacy issues from the data
+  const commonIssues = getCommonPrivacyIssues(results);
+  
+  // Calculate valid results count
+  const validResultsCount = results.filter(r => r.finalScore !== null).length;
+
   return (
     <>
       <ScoreDistributionChart sites={results} />
@@ -27,7 +34,7 @@ const OverviewTab = ({ results, expandedSite, onSiteSelect }) => {
               </Typography>
               <Box sx={{ mt: 2 }}>
                 <Typography variant="body2" paragraph>
-                  {results.length} websites analyzed using the Global Health Website Privacy Policy Evaluation Rubric.
+                  {validResultsCount} websites analyzed using the Global Health Website Privacy Policy Evaluation Rubric.
                 </Typography>
                 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
@@ -61,34 +68,48 @@ const OverviewTab = ({ results, expandedSite, onSiteSelect }) => {
               <Typography variant="h6" sx={textStyles.headingLeft}>
                 Common Privacy Issues
               </Typography>
-              <TableContainer component={Box} sx={{ mt: 2 }}>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Issue</TableCell>
-                      <TableCell align="center">Frequency</TableCell>
-                      <TableCell align="right">% of Sites</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>Use of Third Party Tracking</TableCell>
-                      <TableCell align="center">3/3</TableCell>
-                      <TableCell align="right">100%</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Vague Data Retention Policies</TableCell>
-                      <TableCell align="center">2/3</TableCell>
-                      <TableCell align="right">67%</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>Limited User Control Over Health Data</TableCell>
-                      <TableCell align="center">2/3</TableCell>
-                      <TableCell align="right">67%</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              {commonIssues.length > 0 ? (
+                <TableContainer component={Box} sx={{ mt: 2 }}>
+                  <Table size="small">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Issue</TableCell>
+                        <TableCell align="center">Frequency</TableCell>
+                        <TableCell align="right">% of Sites</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {commonIssues.slice(0, 5).map((issue, index) => (
+                        <TableRow key={index}>
+                          <TableCell>
+                            {/* Capitalize first letter and format issue text */}
+                            {issue.issue.charAt(0).toUpperCase() + issue.issue.slice(1)}
+                          </TableCell>
+                          <TableCell align="center">
+                            {issue.count}/{validResultsCount}
+                          </TableCell>
+                          <TableCell align="right">
+                            {issue.percentage}%
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                      {commonIssues.length === 0 && (
+                        <TableRow>
+                          <TableCell colSpan={3} align="center">
+                            No common issues found in available data
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              ) : (
+                <Typography variant="body2" sx={{ mt: 2 }}>
+                  {validResultsCount > 0 
+                    ? "Unable to identify common issues from the available data."
+                    : "No assessment data available to analyze."}
+                </Typography>
+              )}
             </CardContent>
           </Card>
         </Grid>
