@@ -46,26 +46,26 @@ const ProblemBackgroundSectionWithCustom = () => {
               panelId="panel1"
               color="purple"
             >
-              <Typography variant="body1" paragraph>
-                Everything these data brokers can access appears to be fair game: your online orders, social 
-                media updates, socioeconomic status, race, weight, magazine subscriptions, pet ownership, 
-                hobbies, education, delinquent payments, media consumption, and more.
-              </Typography>
-              
-              <Typography variant="body1" paragraph>
-                If you're a minority who belongs to a low-income family, it turns out that patterns in vast troves 
-                of digital footprints suggest that you may face heightened health risks and cost an insurance 
-                company more money. If you're a woman who purchases plus-size clothing, you're evidently at 
-                risk of depression [<Link href="https://www.propublica.org/article/health-insurers-are-vacuuming-up-details-about-you-and-it-could-raise-your-rates" target="_blank" rel="noopener noreferrer">Source</Link>]. 
-              </Typography>
-              
-              <Typography variant="body1" paragraph>
-                In 2020 alone, 25 large data brokers in the US spent $29 million on lobbying the United States 
-                federal government [<Link href="https://themarkup.org/privacy/2021/04/01/the-little-known-data-broker-industry-is-spending-big-bucks-lobbying-congress" target="_blank" rel="noopener noreferrer">Source</Link>]. 
-                This industry exists under the guise of improving health outcomes, but the evidence suggests this 
-                data is used for other, more nefarious purposes as well.
-              </Typography>
-            </CustomAccordion>
+            <Typography variant="body1" paragraph>
+              Everything these data brokers can access appears to be fair game: your online orders, social 
+              media updates, socioeconomic status, race, weight, magazine subscriptions, pet ownership, 
+              hobbies, education, delinquent payments, media consumption, and more.
+            </Typography>
+
+            <Typography variant="body1" paragraph>
+              If you're a minority who belongs to a low-income family, it turns out that patterns in vast troves 
+              of digital footprints suggest that you may face heightened health risks and cost an insurance 
+              company more money. If you're a woman who purchases plus-size clothing, you're <Link href="https://www.propublica.org/article/health-insurers-are-vacuuming-up-details-about-you-and-it-could-raise-your-rates" target="_blank" rel="noopener noreferrer">evidently</Link> at 
+              risk of depression. 
+            </Typography>
+
+            <Typography variant="body1" paragraph>
+              In 2020 alone, 25 large data brokers in the US <Link href="https://themarkup.org/privacy/2021/04/01/the-little-known-data-broker-industry-is-spending-big-bucks-lobbying-congress" target="_blank" rel="noopener noreferrer">spent</Link> $29 million on lobbying the United States 
+              federal government. 
+              This industry exists under the guise of improving health outcomes, but the evidence suggests this 
+              data is used for other, more nefarious purposes as well.
+            </Typography>            
+          </CustomAccordion>
             
             <CustomAccordion
               title="High-Profile Privacy Violations"
@@ -84,10 +84,10 @@ const ProblemBackgroundSectionWithCustom = () => {
               
               <Typography variant="body1" paragraph>
                 However, the firm actually shared data from over 7 million users with Facebook, Snapchat, 
-                Criteo, and Pinterest. The Federal Trade Commission fined BetterHelp $7.8 million in 2023, 
+                Criteo, and Pinterest. The Federal Trade Commission <Link href="https://www.ftc.gov/business-guidance/blog/2023/03/ftc-says-online-counseling-service-betterhelp-pushed-people-handing-over-health-information-broke" target="_blank" rel="noopener noreferrer">fined</Link> BetterHelp $7.8 million in 2023, 
                 the same year it levied a $1.5 million civil penalty against GoodRx as part of an enforcement 
                 action for the firm's practice of sharing consumers' personal data with a number of large tech 
-                platforms [<Link href="https://www.ftc.gov/business-guidance/blog/2023/03/ftc-says-online-counseling-service-betterhelp-pushed-people-handing-over-health-information-broke" target="_blank" rel="noopener noreferrer">Source</Link>]. 
+                platforms. 
                 GoodRx helped patients access discounted prices on prescription drugs.
               </Typography>
             </CustomAccordion>
@@ -100,17 +100,17 @@ const ProblemBackgroundSectionWithCustom = () => {
               color="purple"
             >
               <Typography variant="body1" paragraph>
-                A February 2023 report published by Duke University researcher Joanne Kim found that people 
+                A February 2023 <Link href="https://techpolicy.sanford.duke.edu/wp-content/uploads/sites/4/2023/02/Kim-2023-Data-Brokers-and-the-Sale-of-Americans-Mental-Health-Data.pdf" target="_blank" rel="noopener noreferrer">report</Link> published by Duke University researcher Joanne Kim found that people 
                 seeking mental health services online "often unknowingly [put] their sensitive mental health 
                 data at risk" and that the industry underlying this marketplace for sensitive data "appears 
-                to lack a set of best practices for handling individuals' mental health data" [<Link href="https://techpolicy.sanford.duke.edu/wp-content/uploads/sites/4/2023/02/Kim-2023-Data-Brokers-and-the-Sale-of-Americans-Mental-Health-Data.pdf" target="_blank" rel="noopener noreferrer">Source</Link>].
-              </Typography>
-              
+                to lack a set of best practices for handling individuals' mental health data".
+              </Typography>  
+
               <Typography variant="body1" paragraph>
-                In one case, the cost of 5,000 records of mental health-related information was just $275 – 
+                In one <Link href="https://compliancy-group.com/health-data-brokers-sell-lists-of-depression-anxiety-sufferers/" target="_blank" rel="noopener noreferrer">case</Link>, the cost of 5,000 records of mental health-related information was just $275 – 
                 less than 6 cents per record. About a dozen data brokers were found to "sell mental health 
                 data for dirt cheap" with little effort to limit how the purchased data would be used by 
-                potential buyers [<Link href="https://compliancy-group.com/health-data-brokers-sell-lists-of-depression-anxiety-sufferers/" target="_blank" rel="noopener noreferrer">Source</Link>].
+                potential buyers.
               </Typography>
             </CustomAccordion>
             
@@ -137,8 +137,8 @@ const ProblemBackgroundSectionWithCustom = () => {
               
               <Typography variant="body1" paragraph>
                 When scheduling an appointment with a doctor on the website of the University Hospitals 
-                Cleveland Medical Center, this tracking Pixel sent Meta information about the physician's 
-                name and the query used to reach her online: "pregnancy termination" [<Link href="https://themarkup.org/pixel-hunt/2022/06/16/facebook-is-receiving-sensitive-medical-information-from-hospital-websites" target="_blank" rel="noopener noreferrer">Source</Link>].
+                Cleveland Medical Center, this tracking Pixel <Link href="https://themarkup.org/pixel-hunt/2022/06/16/facebook-is-receiving-sensitive-medical-information-from-hospital-websites" target="_blank" rel="noopener noreferrer">sent</Link> Meta information about the physician's 
+                name and the query used to reach her online: "pregnancy termination".
               </Typography>
             </CustomAccordion>
             
