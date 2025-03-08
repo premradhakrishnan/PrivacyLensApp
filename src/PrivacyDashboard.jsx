@@ -30,43 +30,59 @@ const PrivacyDashboard = ({ tabValue = 0 }) => {
   const [isSearchTriggered, setIsSearchTriggered] = useState(false);
 
 
-  const handleSearch = async (event) => {
-    event.preventDefault();
+  const handleSearch = async (event = null, predefinedQuery = null) => {
+    if (event) event.preventDefault();
+
     setIsLoading(true);
     setError(false);
 
     try {
+      // Determine the query: use predefinedQuery if passed, otherwise use the searchQuery
+      const query = predefinedQuery || searchQuery;
+
+      if (!query) {
+        throw new Error("Search query cannot be empty");
+      }
+
+      // If this is a user-triggered search (not a predefined query), clear the previous results
+      if (!predefinedQuery) {
+        setSearchResults([]); // Clear results when user performs a search
+      }
+
       // Send POST request
       //const postResponse = await fetch('http://127.0.0.1:8000/searchresults', {
       const postResponse = await fetch(`${import.meta.env.VITE_API_URL}/searchresults`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ searchQuery }), // Ensure searchQuery is being passed correctly
-        });
+      method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ searchQuery: query }),
+      });
 
-        // Check for response success
-        if (!postResponse.ok) {
+      if (!postResponse.ok) {
         throw new Error(`POST request failed with status: ${postResponse.status}`);
       }
 
-      // Parse JSON data from response
       const responseData = await postResponse.json();
 
-      // Log the response to see its structure
-      console.log("Received Response:", responseData);
+      console.log("Received Response for Query:", query, responseData);
 
-      // Example of storing the "data" object in a React state (if using React)
-      setSearchResults(responseData.data); // Assuming setSearchResults is a state updater function
-      console.log("Search Results:", searchResults);
+      // Combine new results with existing ones, ensuring no duplicates
+      setSearchResults((prevResults) => {
+        const newResults = responseData.data.filter(
+            (newResult) => !prevResults.some((prevResult) => prevResult.domain === newResult.domain)
+        );
+        return [...prevResults, ...newResults]; // Append only unique results
+      });
 
     } catch (error) {
-        console.error("Error while making the POST request:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      console.error("Error during search:", error);
+      setError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
 
   // Render different content based on tabValue
   const renderContent = () => {

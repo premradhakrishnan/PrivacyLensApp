@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Box,
     TextField,
@@ -24,6 +24,16 @@ const SearchSection = ({
                            isLoading,
                            isSearchTriggered, // New prop to track if a manual search happened
                        }) => {
+    const predefinedQueries = ["mayoclinic.org", "niddk.nih.gov"];
+
+    useEffect(() => {
+        // Trigger handleSearch for each predefined website on initial page load
+        predefinedQueries.forEach((query) => {
+            handleSearch(null, query); // Use the handleSearch method to fetch each predefined website
+        });
+    }, []);
+
+
     const [openIndexes, setOpenIndexes] = useState([]);
     const [persistedResults, setPersistedResults] = useState([]);
 
