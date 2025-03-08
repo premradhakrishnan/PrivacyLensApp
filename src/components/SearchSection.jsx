@@ -24,7 +24,7 @@ const SearchSection = ({
                            isLoading,
                            isSearchTriggered, // New prop to track if a manual search happened
                        }) => {
-    const predefinedQueries = ["mayoclinic.org", "niddk.nih.gov"];
+    const predefinedQueries = ["mayoclinic.org", "who.int"];
 
     useEffect(() => {
         // Trigger handleSearch for each predefined website on initial page load
@@ -247,6 +247,43 @@ const SearchSection = ({
                                                     )}
                                                 </ul>
                                             </div>
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    flexDirection: "row", // Layout buttons in a row (horizontally)
+                                                    gap: 2, // Spacing between buttons
+                                                    justifyContent: "center", // Center the buttons
+                                                    mt: 3, // Margin from top
+                                                }}
+                                            >
+                                                <Button
+                                                    component={Link}
+                                                    to="/detailed-results"
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    sx={{
+                                                        px: 4, // Horizontal padding
+                                                        py: 1, // Vertical padding
+                                                        fontSize: "16px", // Font size for better readability
+                                                        textTransform: "none", // Remove uppercase text transformation
+                                                    }}
+                                                >
+                                                    View Detailed Results
+                                                </Button>
+                                                <Button
+                                                    component={Link}
+                                                    to="/detailed-results"
+                                                    variant="contained"
+                                                    sx={{
+                                                        px: 4, // Horizontal padding
+                                                        py: 1, // Vertical padding
+                                                        fontSize: "16px", // Font size for better readability
+                                                        textTransform: "none", // Remove uppercase text transformation
+                                                    }}
+                                                >
+                                                    Request Regrade
+                                                </Button>
+                                            </Box>
                                         </CardContent>
                                     </Collapse>
                                 </Card>
@@ -257,15 +294,7 @@ const SearchSection = ({
             </Card>
 
             {/* View Detailed Results Button */}
-            <Button
-                component={Link}
-                to="/detailed-results"
-                variant="contained"
-                color="secondary"
-                sx={{ mt: 2 }}
-            >
-                View Detailed Results
-            </Button>
+
         </Box>
     );
 };
