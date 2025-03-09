@@ -8,12 +8,13 @@ import {
     CardHeader,
     Alert,
     InputAdornment,
-    Checkbox,
+    Checkbox, Typography, Snackbar,
 } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import { Collapse } from 'react-collapse';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
 
 const SearchSection = ({
                            searchQuery,
@@ -24,7 +25,7 @@ const SearchSection = ({
                            isLoading,
                            isSearchTriggered, // New prop to track if a manual search happened
                        }) => {
-    const predefinedQueries = ["mayoclinic.org", "who.int"];
+    const predefinedQueries = ["mayoclinic.org", "unitypoint.org"];
 
     useEffect(() => {
         // Trigger handleSearch for each predefined website on initial page load
@@ -62,6 +63,45 @@ const SearchSection = ({
             setPersistedResults((prev) =>
                 prev.filter((persisted) => persisted.domain !== result.domain)
             ); // Remove from persisted list
+        }
+    };
+
+    const [showPopup, setShowPopup] = useState(false);
+
+    const handleRequestRegrade = async (domain) => {
+        try {
+            if (!domain) {
+                throw new Error("Domain cannot be empty");
+            }
+
+            // Send POST request to the backend
+            //const postResponse = await fetch('http://127.0.0.1:8000/requestRegrade', {
+            const postResponse = await fetch(`${import.meta.env.VITE_API_URL}/requestRegrade`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    requestRegrade: true,
+                    domain: domain,
+                }),
+            });
+
+            // Validate the response
+            if (!postResponse.ok) {
+                throw new Error(`POST request failed with status: ${postResponse.status}`);
+            }
+
+            // Log success for debugging (since you're not processing the response further)
+            console.log("Regrade request sent successfully for domain:", domain);
+
+            setShowPopup(true);
+
+
+
+        } catch (error) {
+            // Handle and log any errors
+            console.error("Error during regrade request:", error);
         }
     };
 
@@ -271,18 +311,39 @@ const SearchSection = ({
                                                     View Detailed Results
                                                 </Button>
                                                 <Button
-                                                    component={Link}
-                                                    to="/detailed-results"
-                                                    variant="contained"
-                                                    sx={{
-                                                        px: 4, // Horizontal padding
-                                                        py: 1, // Vertical padding
-                                                        fontSize: "16px", // Font size for better readability
-                                                        textTransform: "none", // Remove uppercase text transformation
-                                                    }}
-                                                >
-                                                    Request Regrade
+                                                        onClick={() => handleRequestRegrade(result.domain)} // Trigger the regrade request
+                                                        variant="contained"
+                                                        sx={{
+                                                            px: 4, // Horizontal padding
+                                                            py: 1, // Vertical padding
+                                                            fontSize: "16px", // Font size for better readability
+                                                            textTransform: "none", // Remove uppercase text transformation
+                                                        }}
+                                                    >
+                                                        Request Regrade
                                                 </Button>
+                                                {/* Snackbar popup displayed in the upper-right corner */}
+                                                <Snackbar
+                                                    open={showPopup}
+                                                    autoHideDuration={3000} // Auto-dismiss after 3 seconds
+                                                    onClose={() => setShowPopup(false)} // Close the popup automatically or on user action
+                                                    anchorOrigin={{ vertical: "top", horizontal: "right" }} // Position: Top-Right
+                                                >
+                                                    <Alert
+                                                        onClose={() => setShowPopup(false)} // Adds a close button to the popup
+                                                        severity="success" // Success style (can be "error", "warning", etc.)
+                                                        sx={{
+                                                            backgroundColor: "#e0f7fa", // Teal-like color for success
+                                                            color: "#00695c", // Darker text color to contrast the background
+                                                            borderRadius: "8px",
+                                                            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                                                        }}
+                                                    >
+                                                        <Typography variant="body1" sx={{ fontWeight: "500" }}>
+                                                            Regrade request received
+                                                        </Typography>
+                                                    </Alert>
+                                                </Snackbar>
                                             </Box>
                                         </CardContent>
                                     </Collapse>
