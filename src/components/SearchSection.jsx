@@ -74,17 +74,19 @@ const SearchSection = ({
                 throw new Error("Domain cannot be empty");
             }
 
+            // Prepare the body as application/x-www-form-urlencoded
+            const bodyData = new URLSearchParams();
+            bodyData.append("requestRegrade", "true"); // Boolean values must be stringified
+            bodyData.append("domain", domain);
+
             // Send POST request to the backend
+            const postResponse = await fetch(`${import.meta.env.VITE_API_URL}/searchresults`, {
             //const postResponse = await fetch('http://127.0.0.1:8000/requestRegrade', {
-            const postResponse = await fetch(`${import.meta.env.VITE_API_URL}/requestRegrade`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: JSON.stringify({
-                    requestRegrade: true,
-                    domain: domain,
-                }),
+                body: bodyData.toString(), // Convert the parameters to URL-encoded string
             });
 
             // Validate the response
@@ -96,8 +98,6 @@ const SearchSection = ({
             console.log("Regrade request sent successfully for domain:", domain);
 
             setShowPopup(true);
-
-
 
         } catch (error) {
             // Handle and log any errors
