@@ -80,7 +80,7 @@ const SearchSection = ({
             bodyData.append("domain", domain);
 
             // Send POST request to the backend
-            const postResponse = await fetch(`${import.meta.env.VITE_API_URL}/searchresults`, {
+            const postResponse = await fetch(`${import.meta.env.VITE_API_URL}/requestRegrade`, {
             //const postResponse = await fetch('http://127.0.0.1:8000/requestRegrade', {
                 method: 'POST',
                 headers: {
