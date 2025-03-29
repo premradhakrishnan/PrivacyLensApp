@@ -11,11 +11,11 @@ import { brandColors } from '../../utils/constants';
  */
 const ScoreDistributionChart = ({ sites }) => {
   const ranges = [
-    { label: "Poor (0-9)", count: 0, color: "#f44336" },
-    { label: "Concerning (10-14)", count: 0, color: "#ff9800" },
-    { label: "Adequate (15-19)", count: 0, color: "#f3c01d" },
-    { label: "Good (20-24)", count: 0, color: "#8cc43f" },
-    { label: "Excellent (25-30)", count: 0, color: brandColors.green },
+    // { label: "Poor (0-9)", count: 0, color: "#f44336" },
+    // { label: "Concerning (10-14)", count: 0, color: "#ff9800" },
+    { label: "Weak (0-19)", count: 0, color: "#f3c01d" },
+    { label: "Moderate (20-49)", count: 0, color: "#8cc43f" },
+    { label: "Strong (68-50)", count: 0, color: brandColors.green },
     { label: "Not Available", count: 0, color: "#9e9e9e" } // Added category for N/A scores
   ];
   
