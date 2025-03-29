@@ -25,7 +25,8 @@ const SearchSection = ({
                            isLoading,
                            isSearchTriggered, // New prop to track if a manual search happened
                        }) => {
-    const predefinedQueries = ["example.com.au"];
+    //const predefinedQueries = ["example.com.au"];
+    const predefinedQueries = ["https://www.mayoclinic.org", "https://www.healthline.com", "https://www.webmd.com"];
 
     useEffect(() => {
         // Trigger handleSearch for each predefined website on initial page load
