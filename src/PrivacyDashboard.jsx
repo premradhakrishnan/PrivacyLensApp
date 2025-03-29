@@ -83,7 +83,6 @@ const PrivacyDashboard = ({ tabValue = 0 }) => {
     }
   };
 
-
   // Render different content based on tabValue
   const renderContent = () => {
     switch (tabValue) {
@@ -112,7 +111,9 @@ const PrivacyDashboard = ({ tabValue = 0 }) => {
           </Box>
         );
       case 4: // Aggregate Findings
-        return <AggregateFindingsSection />;
+        return <AggregateFindingsSection
+            //chartData={chartData}
+        />;
       default:
         return null;
     }
