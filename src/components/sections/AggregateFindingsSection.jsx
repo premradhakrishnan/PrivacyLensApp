@@ -119,8 +119,8 @@ const ScoreChart = ({ data, title, color }) => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="binLabel" />
             <YAxis />
-            <Tooltip formatter={(value) => [`${value}`, 'Count']} />
-            <Bar dataKey="value" fill={color} name="Count" />
+            <Tooltip formatter={(value) => [`${value}`, 'Number of Domains']} />
+            <Bar dataKey="value" fill={color} name="Number of Domains" />
           </BarChart>
         </ResponsiveContainer>
       </Box>
@@ -245,7 +245,7 @@ const AggregateFindingsSection = () => {
                   <XAxis dataKey="date_added" />
                   <YAxis />
                   <Tooltip />
-                  <Line type="monotone" dataKey="cumulative_count" name="Total Domains" stroke={brandColors.purple} />
+                  <Line type="monotone" dataKey="cumulative_count" name="Number of Domains" stroke={brandColors.purple} />
                 </LineChart>
               </ResponsiveContainer>
             </Box>
