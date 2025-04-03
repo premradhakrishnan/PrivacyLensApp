@@ -137,8 +137,8 @@ const AggregateFindingsSection = () => {
   useEffect(() => {
     const fetchChartData = async () => {
       try {
-        //const response = await axios.get('http://127.0.0.1:8000/getAllCharts'); // Replace with your API endpoint
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/getAllCharts`);
+        const response = await axios.get('http://127.0.0.1:8000/getAllCharts'); // Replace with your API endpoint
+        //const response = await axios.get(`${import.meta.env.VITE_API_URL}/getAllCharts`);
         if (response.data.status === 'success') {
           setChartData(response.data.data);
         } else {
@@ -166,6 +166,23 @@ const AggregateFindingsSection = () => {
   if (!chartData) {
     return <Typography>No chart data available.</Typography>;
   }
+
+  const aggregatedData = chartData['chart8'].reduce((acc, curr) => {
+    const date = curr.date_added;
+    const existingEntry = acc.find(item => item.date_added === date);
+
+    if (existingEntry) {
+      existingEntry.cumulative_count = curr.cumulative_count;
+    } else {
+      acc.push({
+        date_added: date,
+        cumulative_count: curr.cumulative_count
+      });
+    }
+
+    return acc;
+  }, []);
+
 
   return (
       <Box sx={{ p: 4 }}>
@@ -232,21 +249,33 @@ const AggregateFindingsSection = () => {
               <Typography
                   variant="h6"
                   gutterBottom
-                  sx={{ fontWeight: 'bold', textAlign: 'center', color: brandColors.purple }}
+                  sx={{
+                    fontWeight: 'normal',
+                    textAlign: 'center',
+                    color: 'black',
+                    fontFamily: 'Helvetica',
+                    fontSize: '1.5rem'
+                  }}
               >
                 Domains Over Time
               </Typography>
               <ResponsiveContainer width="100%" height={400}>
                 <LineChart
-                    data={chartData['chart8']}
+                    data={aggregatedData}
                     margin={{ top: 20, right: 30, left: 30, bottom: 20 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date_added" />
                   <YAxis />
                   <Tooltip />
-                  <Line type="monotone" dataKey="cumulative_count" name="Number of Domains" stroke={brandColors.purple} />
+                  <Line
+                      type="monotone"
+                      dataKey="cumulative_count"
+                      name="Number of Domains"
+                      stroke={brandColors.purple}
+                  />
                 </LineChart>
+
               </ResponsiveContainer>
             </Box>
           </CardContent>

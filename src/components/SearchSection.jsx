@@ -26,7 +26,7 @@ const SearchSection = ({
                            isSearchTriggered, // New prop to track if a manual search happened
                        }) => {
     //const predefinedQueries = ["example.com.au"];
-    const predefinedQueries = ["https://www.mayoclinic.org", "https://www.healthline.com", "https://www.webmd.com"];
+    const predefinedQueries = ["mayoclinic.org", "healthline.com", "webmd.com"];
 
     useEffect(() => {
         // Trigger handleSearch for each predefined website on initial page load
@@ -81,8 +81,8 @@ const SearchSection = ({
             bodyData.append("domain", domain);
 
             // Send POST request to the backend
-            const postResponse = await fetch(`${import.meta.env.VITE_API_URL}/requestRegrade`, {
-            //const postResponse = await fetch('http://127.0.0.1:8000/requestRegrade', {
+            //const postResponse = await fetch(`${import.meta.env.VITE_API_URL}/requestRegrade`, {
+            const postResponse = await fetch('http://127.0.0.1:8000/requestRegrade', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',

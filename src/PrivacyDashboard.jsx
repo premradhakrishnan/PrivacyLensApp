@@ -50,8 +50,8 @@ const PrivacyDashboard = ({ tabValue = 0 }) => {
       }
 
       // Send POST request
-      //const postResponse = await fetch('http://127.0.0.1:8000/searchresults', {
-      const postResponse = await fetch(`${import.meta.env.VITE_API_URL}/searchresults`, {
+      const postResponse = await fetch('http://127.0.0.1:8000/searchresults', {
+      //const postResponse = await fetch(`${import.meta.env.VITE_API_URL}/searchresults`, {
       method: 'POST',
         headers: {
           'Content-Type': 'application/json',
