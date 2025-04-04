@@ -40,21 +40,21 @@ const OverviewTab = ({ results, expandedSite, onSiteSelect }) => {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                   <Typography variant="body2">Average Score:</Typography>
                   <Typography variant="body2" fontWeight="bold">
-                    {calculateAverageScore(results) || "Not Available"}{calculateAverageScore(results) ? "/30" : ""}
+                    {calculateAverageScore(results) || "Not Available"}{calculateAverageScore(results) ? "/68" : ""}
                   </Typography>
                 </Box>
                 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                   <Typography variant="body2">Highest Score:</Typography>
                   <Typography variant="body2" fontWeight="bold">
-                    {findHighestScore(results) !== null ? `${findHighestScore(results)}/30` : "Not Available"}
+                    {findHighestScore(results) !== null ? `${findHighestScore(results)}/68` : "Not Available"}
                   </Typography>
                 </Box>
                 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Typography variant="body2">Lowest Score:</Typography>
                   <Typography variant="body2" fontWeight="bold">
-                    {findLowestScore(results) !== null ? `${findLowestScore(results)}/30` : "Not Available"}
+                    {findLowestScore(results) !== null ? `${findLowestScore(results)}/68` : "Not Available"}
                   </Typography>
                 </Box>
               </Box>

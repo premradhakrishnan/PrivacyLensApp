@@ -60,7 +60,7 @@ const CompareTab = ({ results }) => {
         values: selectedSitesData.map(site => ({
           domain: site.domain,
           value: site.finalScore,
-          display: site.finalScore !== null ? `${site.finalScore}/30` : 'N/A'
+          display: site.finalScore !== null ? `${site.finalScore}/68` : 'N/A'
         }))
       },
       {

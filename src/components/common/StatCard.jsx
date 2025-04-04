@@ -25,7 +25,7 @@ import { brandColors } from '/src/utils/constants';
 const StatCard = ({ 
   title, 
   score, 
-  maxScore = 30, 
+  maxScore = 68, 
   tooltipText = '', 
   loading = false,
   sx = {} 

@@ -29,7 +29,7 @@ const DetailedScoresTab = ({ results }) => {
   return (
     <>
       <Typography variant="subtitle1" color="text.secondary" paragraph>
-        The detailed scores are based on the 30-point Global Health Website Privacy Policy Evaluation Rubric.
+        The detailed scores are based on the 68-point Privacy Lens Evaluation Rubric.
       </Typography>
       
       <TableContainer component={Paper} sx={{ mb: 4 }}>
@@ -84,7 +84,7 @@ const DetailedScoresTab = ({ results }) => {
                             fontWeight="bold"
                             sx={{ color: getScoreColor(site.finalScore) }}
                           >
-                            {site.finalScore}/30
+                            {site.finalScore}/68
                           </Typography>
                           <Box sx={{ ml: 1, display: 'flex', alignItems: 'center' }}>
                             <Chip 

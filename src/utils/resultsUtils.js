@@ -51,11 +51,11 @@ export const getScoreRating = (score) => {
   }
   
   // Normal rating logic
-  if (score >= 25) return "Excellent";
-  if (score >= 20) return "Good";
-  if (score >= 15) return "Adequate";
-  if (score >= 10) return "Concerning";
-  return "Poor";
+  if (score >= 50) return "Strong";
+  if (score >= 20) return "Moderate";
+  //if (score >= 15) return "Adequate";
+  //if (score >= 10) return "Concerning";
+  return "Weak";
 };
 
 /**
@@ -64,7 +64,7 @@ export const getScoreRating = (score) => {
  * @param {number} maxScore - Maximum possible score
  * @returns {string} - Formatted score text
  */
-export const getScoreDisplay = (score, maxScore = 30) => {
+export const getScoreDisplay = (score, maxScore = 68) => {
   if (score === null || score === undefined || isNaN(score)) {
     return "N/A";
   }
