@@ -22,7 +22,9 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Chip
+  Chip,
+  IconButton,
+  Avatar
 } from '@mui/material';
 import { 
   InfoOutlined, 
@@ -30,7 +32,9 @@ import {
   ExpandLess, 
   CheckCircle, 
   Cancel,
-  WarningAmber
+  WarningAmber,
+  FormatQuoteRounded,
+  OpenInNew
 } from '@mui/icons-material';
 
 import { textStyles } from '../../utils/textStyles';
@@ -38,9 +42,12 @@ import {
   getScoreColor, 
   getScoreRating, 
   getScoreDisplay,
-  groupScoresBySection 
+  groupScoresBySection,
+  calculateSectionScore,
+  getScoreLevelInfo,
+  findSectionByEnumeration
 } from '../../utils/resultsUtils';
-import { brandColors } from '../../utils/constants';
+import { brandColors, MAX_SCORE } from '../../utils/constants';
 
 /**
  * Card component that displays site score and details
@@ -52,6 +59,7 @@ import { brandColors } from '../../utils/constants';
 const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [expandedSections, setExpandedSections] = useState({});
+  const [showExcerpt, setShowExcerpt] = useState({});
   
   // Handle null or undefined site data
   if (!site) return null;
@@ -84,6 +92,14 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
       [section]: !prev[section]
     }));
   };
+
+  // Function to toggle excerpt visibility
+  const toggleExcerpt = (id) => {
+    setShowExcerpt(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
   
   // Get grouped scores by section
   const groupedScores = groupScoresBySection(assessmentScores);
@@ -96,6 +112,23 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
   // Close full analysis dialog
   const handleCloseDialog = () => {
     setOpenDialog(false);
+  };
+
+  // Get score level indicator (0-2 scale)
+  const getScoreLevelIndicator = (score) => {
+    const { label, color } = getScoreLevelInfo(score);
+    return (
+      <Chip 
+        label={label} 
+        size="small"
+        sx={{ 
+          bgcolor: color,
+          color: 'white',
+          fontSize: '0.7rem',
+          fontWeight: 'bold'
+        }}
+      />
+    );
   };
   
   return (
@@ -126,7 +159,7 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
           <Grid item xs={6} sm={3} sx={{ textAlign: { xs: 'left', sm: 'center' } }}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: { xs: 'flex-start', sm: 'center' } }}>
               <Typography variant="h5" sx={{ color: scoreColor, fontWeight: 'bold', mr: 1 }}>
-                {getScoreDisplay(finalScore)}
+                {getScoreDisplay(finalScore, MAX_SCORE)}
               </Typography>
               {finalScore !== null && (
                 <Tooltip title={`Score Rating: ${scoreRating}`}>
@@ -143,6 +176,7 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
                 color="primary"
                 onClick={() => onSelectSite(site)}
                 size="small"
+                endIcon={isExpanded ? <ExpandLess /> : <ExpandMore />}
               >
                 {isExpanded ? "Collapse" : "View Details"}
               </Button>
@@ -226,13 +260,19 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
             {Object.keys(groupedScores).length > 0 ? (
               <Box sx={{ mt: 2 }}>
                 {Object.entries(groupedScores).map(([section, items]) => {
-                  const sectionScore = items.reduce((acc, item) => acc + parseInt(item.score || 0), 0);
-                  const maxPossible = items.length;
-                  const percentage = (sectionScore / maxPossible) * 100;
+                  if (items.length === 0) return null;
                   
-                  // Count failing items (score = 0)
-                  const failingItems = items.filter(item => parseInt(item.score) === 0);
-                  const hasFailures = failingItems.length > 0;
+                  const { score, maxPossible, percentage } = calculateSectionScore(items);
+                  
+                  // Count items by score level (0, 1, 2)
+                  const scoreBreakdown = {
+                    0: items.filter(item => parseInt(item.score) === 0).length,
+                    1: items.filter(item => parseInt(item.score) === 1).length,
+                    2: items.filter(item => parseInt(item.score) === 2).length
+                  };
+                  
+                  // Check if there are any issues (score < 2)
+                  const hasIssues = scoreBreakdown[0] > 0 || scoreBreakdown[1] > 0;
                   
                   return (
                     <Box key={section} sx={{ mb: 2 }}>
@@ -249,8 +289,8 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
                             {expandedSections[section] ? <ExpandLess /> : <ExpandMore />}
                             <Typography variant="body2" sx={{ ml: 1 }}>
                               {section}
-                              {hasFailures && (
-                                <Tooltip title={`${failingItems.length} failed metrics`}>
+                              {hasIssues && (
+                                <Tooltip title={`${scoreBreakdown[0]} missing, ${scoreBreakdown[1]} partial compliance`}>
                                   <WarningAmber 
                                     fontSize="small" 
                                     color="warning" 
@@ -263,7 +303,7 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
                         </Grid>
                         <Grid item xs={3}>
                           <Typography variant="body2" align="right">
-                            {sectionScore}/{maxPossible}
+                            {score}/{maxPossible}
                           </Typography>
                         </Grid>
                         <Grid item xs={3}>
@@ -290,39 +330,91 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
                       
                       <Collapse in={expandedSections[section]} timeout="auto" unmountOnExit>
                         <Box sx={{ pl: 4, pr: 2, pt: 1, pb: 1 }}>
-                          {items.map((item, index) => (
-                            <Grid container key={index} sx={{ mb: 1 }}>
-                              <Grid item xs={10}>
-                                <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center' }}>
-                                  {parseInt(item.score) === 1 ? (
-                                    <CheckCircle fontSize="small" color="success" sx={{ mr: 1 }} />
-                                  ) : (
-                                    <Cancel fontSize="small" color="error" sx={{ mr: 1 }} />
+                          {items.map((item, index) => {
+                            const itemId = `${section}-${item.enumeration}-${index}`;
+                            const scoreLevel = parseInt(item.score);
+                            const hasExcerpt = item.excerpt && item.excerpt.trim().length > 0;
+                            
+                            return (
+                              <Box key={itemId} sx={{ mb: 2, pb: 1, borderBottom: '1px dashed #e0e0e0' }}>
+                                <Grid container>
+                                  <Grid item xs={8}>
+                                    <Typography variant="body2" sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                                      <Avatar 
+                                        sx={{ 
+                                          width: 20, 
+                                          height: 20, 
+                                          fontSize: '0.75rem',
+                                          mr: 1,
+                                          bgcolor: scoreLevel === 2 ? 'success.main' : 
+                                                 scoreLevel === 1 ? 'warning.main' : 'error.main'
+                                        }}
+                                      >
+                                        {item.enumeration}
+                                      </Avatar>
+                                      <Box>
+                                        {item.question}
+                                      </Box>
+                                    </Typography>
+                                  </Grid>
+                                  
+                                  <Grid item xs={4} sx={{ textAlign: 'right' }}>
+                                    {getScoreLevelIndicator(scoreLevel)}
+                                    {hasExcerpt && (
+                                      <Tooltip title="View text excerpt">
+                                        <IconButton 
+                                          size="small" 
+                                          onClick={() => toggleExcerpt(itemId)}
+                                          sx={{ ml: 1 }}
+                                        >
+                                          <FormatQuoteRounded fontSize="small" />
+                                        </IconButton>
+                                      </Tooltip>
+                                    )}
+                                  </Grid>
+                                  
+                                  {item.justification && (
+                                    <Grid item xs={12}>
+                                      <Typography 
+                                        variant="caption" 
+                                        color="text.secondary"
+                                        sx={{ 
+                                          display: 'block', 
+                                          mt: 1, 
+                                          fontStyle: scoreLevel < 2 ? 'italic' : 'normal',
+                                          color: scoreLevel === 0 ? 'error.main' : 
+                                                scoreLevel === 1 ? 'warning.main' : 'text.secondary'
+                                        }}
+                                      >
+                                        {item.justification}
+                                      </Typography>
+                                    </Grid>
                                   )}
-                                  {item.question}
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={2} sx={{ textAlign: 'right' }}>
-                                <Chip 
-                                  label={item.answer} 
-                                  size="small"
-                                  color={item.answer === 'Yes' ? 'success' : 'error'}
-                                  variant="outlined"
-                                />
-                              </Grid>
-                              {parseInt(item.score) === 0 && (
-                                <Grid item xs={12}>
-                                  <Typography 
-                                    variant="caption" 
-                                    color="text.secondary"
-                                    sx={{ pl: 4, fontStyle: 'italic' }}
-                                  >
-                                    {item.justification}
-                                  </Typography>
+                                  
+                                  {hasExcerpt && showExcerpt[itemId] && (
+                                    <Grid item xs={12}>
+                                      <Box 
+                                        sx={{ 
+                                          mt: 1, 
+                                          p: 1.5, 
+                                          bgcolor: 'rgba(0,0,0,0.03)', 
+                                          borderLeft: '3px solid',
+                                          borderColor: scoreLevel === 2 ? 'success.main' : 
+                                                    scoreLevel === 1 ? 'warning.main' : 'error.main',
+                                          borderRadius: '0 4px 4px 0',
+                                          fontSize: '0.8rem'
+                                        }}
+                                      >
+                                        <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
+                                          {item.excerpt}
+                                        </Typography>
+                                      </Box>
+                                    </Grid>
+                                  )}
                                 </Grid>
-                              )}
-                            </Grid>
-                          ))}
+                              </Box>
+                            );
+                          })}
                         </Box>
                       </Collapse>
                     </Box>
@@ -340,10 +432,23 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
                 variant="contained" 
                 color="primary"
                 size="small"
+                startIcon={<OpenInNew />}
                 onClick={() => window.open(`https://${site.domain}`, '_blank')}
               >
                 Visit Website
               </Button>
+              {site.privacyPolicyURL && (
+                <Button 
+                  sx={{ ml: 2 }}
+                  variant="outlined" 
+                  color="primary"
+                  size="small"
+                  startIcon={<OpenInNew />}
+                  onClick={() => window.open(site.privacyPolicyURL, '_blank')}
+                >
+                  View Privacy Policy
+                </Button>
+              )}
               <Button 
                 sx={{ ml: 2 }}
                 variant="outlined" 
@@ -366,9 +471,12 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
         fullWidth
         maxWidth="md"
       >
-        <DialogTitle>
+        <DialogTitle sx={{ pb: 1 }}>
           <Typography variant="h6">
             Full Privacy Analysis Report: {site.domain}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Score: <span style={{ fontWeight: 'bold', color: scoreColor }}>{getScoreDisplay(finalScore, MAX_SCORE)}</span> - {scoreRating}
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
@@ -421,64 +529,137 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
               </Grid>
             </Box>
           )}
-          
-          <Typography variant="subtitle1" gutterBottom fontWeight="bold">
-            Detailed Assessment
+
+          {/* Detailed Assessment Section with new scoring display */}
+          <Typography variant="subtitle1" gutterBottom fontWeight="bold" sx={{ mt: 3 }}>
+            Detailed Assessment by Category
           </Typography>
+
+          {Object.entries(groupedScores).map(([section, items]) => {
+            if (items.length === 0) return null;
+            
+            const { score, maxPossible, percentage } = calculateSectionScore(items);
+            
+            return (
+              <Box key={section} sx={{ mb: 4 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                  <Typography variant="subtitle2" fontWeight="bold">
+                    {section}
+                  </Typography>
+                  <Box sx={{ 
+                    ml: 2, 
+                    px: 1.5, 
+                    py: 0.5, 
+                    borderRadius: 1, 
+                    bgcolor: percentage > 70 ? 'success.light' : percentage > 40 ? 'warning.light' : 'error.light',
+                    display: 'inline-block'
+                  }}>
+                    <Typography variant="body2" fontWeight="bold">
+                      {score}/{maxPossible} ({Math.round(percentage)}%)
+                    </Typography>
+                  </Box>
+                </Box>
+                
+                <TableContainer component={Paper} variant="outlined" sx={{ mb: 2 }}>
+                  <Table size="small">
+                    <TableHead>
+                      <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+                        <TableCell width="5%"><strong>#</strong></TableCell>
+                        <TableCell width="45%"><strong>Criteria</strong></TableCell>
+                        <TableCell width="15%" align="center"><strong>Score</strong></TableCell>
+                        <TableCell width="35%"><strong>Assessment</strong></TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {items.map((item) => {
+                        const scoreLevel = parseInt(item.score);
+                        const hasExcerpt = item.excerpt && item.excerpt.trim().length > 0;
+                        
+                        return (
+                          <TableRow 
+                            key={item.enumeration}
+                            sx={{
+                              backgroundColor: scoreLevel === 0 ? 'rgba(255, 235, 235, 0.3)' : 
+                                              scoreLevel === 1 ? 'rgba(255, 248, 225, 0.3)' : 
+                                              'rgba(232, 245, 233, 0.3)'
+                            }}
+                          >
+                            <TableCell>{item.enumeration}</TableCell>
+                            <TableCell>
+                              <Typography variant="body2">
+                                {item.question}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="center">
+                              {getScoreLevelIndicator(scoreLevel)}
+                            </TableCell>
+                            <TableCell>
+                              <Typography variant="body2">
+                                {item.justification}
+                              </Typography>
+                              
+                              {hasExcerpt && (
+                                <Box 
+                                  sx={{ 
+                                    mt: 1, 
+                                    p: 1, 
+                                    bgcolor: 'rgba(0,0,0,0.03)', 
+                                    borderLeft: '3px solid',
+                                    borderColor: scoreLevel === 2 ? 'success.main' : 
+                                               scoreLevel === 1 ? 'warning.main' : 'error.main',
+                                    borderRadius: '0 4px 4px 0',
+                                    fontSize: '0.8rem'
+                                  }}
+                                >
+                                  <Typography variant="caption" sx={{ fontStyle: 'italic', display: 'block' }}>
+                                    <FormatQuoteRounded fontSize="inherit" sx={{ opacity: 0.6, mr: 0.5 }} />
+                                    {item.excerpt}
+                                  </Typography>
+                                </Box>
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+            );
+          })}
           
-          <TableContainer component={Paper} sx={{ mt: 2, mb: 3 }}>
-            <Table size="small">
-              <TableHead>
-                <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-                  <TableCell width="40%"><strong>Question</strong></TableCell>
-                  <TableCell width="15%"><strong>Answer</strong></TableCell>
-                  <TableCell width="15%"><strong>Score</strong></TableCell>
-                  <TableCell width="30%"><strong>Justification</strong></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {assessmentScores.map((item, index) => (
-                  <TableRow 
-                    key={index}
-                    sx={{
-                      backgroundColor: parseInt(item.score) === 0 ? 'rgba(255, 235, 235, 0.5)' : 'inherit'
+          {/* Score Distribution */}
+          <Typography variant="subtitle1" gutterBottom fontWeight="bold" sx={{ mt: 3 }}>
+            Score Distribution
+          </Typography>
+          <Grid container spacing={2} sx={{ mb: 3 }}>
+            {[0, 1, 2].map(scoreValue => {
+              const count = assessmentScores.filter(item => parseInt(item.score) === scoreValue).length;
+              const percentage = Math.round((count / assessmentScores.length) * 100);
+              const { label, color } = getScoreLevelInfo(scoreValue);
+              
+              return (
+                <Grid item xs={4} key={scoreValue}>
+                  <Paper 
+                    variant="outlined" 
+                    sx={{ 
+                      p: 2, 
+                      textAlign: 'center',
+                      borderColor: 'transparent',
+                      bgcolor: `${color}20` // 20% opacity version of the color
                     }}
                   >
-                    <TableCell>
-                      <Typography variant="body2">
-                        {item.question}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        Section: {item.section}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Chip 
-                        label={item.answer} 
-                        size="small"
-                        color={item.answer === 'Yes' ? 'success' : 'error'}
-                        variant="outlined"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Typography 
-                        variant="body2" 
-                        fontWeight="bold"
-                        color={parseInt(item.score) === 1 ? 'success.main' : 'error.main'}
-                      >
-                        {item.score}/1
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2">
-                        {item.justification}
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                    <Typography variant="h4" sx={{ color: color, fontWeight: 'bold' }}>
+                      {count}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: color }}>
+                      {label} ({percentage}%)
+                    </Typography>
+                  </Paper>
+                </Grid>
+              );
+            })}
+          </Grid>
           
           {site.assessment?.assumptions_or_gaps && (
             <Box>
@@ -499,17 +680,16 @@ const SiteScoreCard = ({ site, onSelectSite, isExpanded }) => {
           <Button onClick={handleCloseDialog} color="primary">
             Close
           </Button>
-          {/* <Button 
-            variant="contained" 
-            color="primary"
-            onClick={() => {
-              // Here you could implement export functionality
-              // For example, exporting to PDF or CSV
-              alert('Export functionality will be implemented here');
-            }}
-          >
-            Export Report
-          </Button> */}
+          {site.privacyPolicyURL && (
+            <Button 
+              variant="outlined" 
+              color="primary"
+              startIcon={<OpenInNew />}
+              onClick={() => window.open(site.privacyPolicyURL, '_blank')}
+            >
+              View Privacy Policy
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
     </Card>

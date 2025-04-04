@@ -16,6 +16,26 @@ export const brandColors = {
   lightPurple: '#a168c9'
 };
 
+// Score rating thresholds
+export const scoreRatings = {
+  STRONG: { threshold: 50, label: "Strong", color: brandColors.green },
+  MODERATE: { threshold: 20, label: "Moderate", color: "#f3c01d" }, // Yellow
+  WEAK: { threshold: 0, label: "Weak", color: "#ff9800" }  // Orange
+};
+
+// Maximum possible score (34 questions with max score of 2 each)
+export const MAX_SCORE = 68;
+
+// Enumeration to section mapping
+export const ENUMERATION_TO_SECTION = {
+  "Privacy Document Accessibility": [1, 2, 3, 4],
+  "Privacy Document Scope": [5, 6, 7, 8, 9, 10, 11],
+  "Browser Storage": [12, 13, 14, 15, 16],
+  "Third Party Tracking": [17, 18, 19, 20, 21, 22],
+  "Data Handling": [23, 24, 25, 26, 27, 28, 29],
+  "Health Data Privacy": [30, 31, 32, 33, 34]
+};
+
 // Features data for Key Features section
 export const featuresData = [
   {

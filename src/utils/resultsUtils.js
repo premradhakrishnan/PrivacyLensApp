@@ -1,8 +1,8 @@
 // utils/resultsUtils.js
-import { brandColors } from './constants';
+import { brandColors, scoreRatings, MAX_SCORE, ENUMERATION_TO_SECTION } from './constants';
 
 /**
- * Groups assessment scores by section
+ * Groups assessment scores by section using the enumeration-to-section mapping
  * @param {Array} scores - Assessment scores 
  * @returns {Object} - Scores grouped by section
  */
@@ -10,14 +10,41 @@ export const groupScoresBySection = (scores) => {
   if (!scores || !Array.isArray(scores)) return {};
   
   const groupedScores = {};
+  
+  // Initialize all sections from mapping
+  Object.keys(ENUMERATION_TO_SECTION).forEach(section => {
+    groupedScores[section] = [];
+  });
+  
+  // Add scores to corresponding sections
   scores.forEach(item => {
-    if (!groupedScores[item.section]) {
-      groupedScores[item.section] = [];
+    // Find the section for this enumeration
+    const enumNumber = parseInt(item.enumeration);
+    const section = findSectionByEnumeration(enumNumber);
+    
+    if (section) {
+      if (!groupedScores[section]) {
+        groupedScores[section] = [];
+      }
+      groupedScores[section].push(item);
     }
-    groupedScores[item.section].push(item);
   });
   
   return groupedScores;
+};
+
+/**
+ * Finds the section name for a given enumeration number
+ * @param {number} enumNumber - The enumeration number
+ * @returns {string|null} - Section name or null if not found
+ */
+export const findSectionByEnumeration = (enumNumber) => {
+  for (const [section, enums] of Object.entries(ENUMERATION_TO_SECTION)) {
+    if (enums.includes(enumNumber)) {
+      return section;
+    }
+  }
+  return null;
 };
 
 /**
@@ -31,12 +58,10 @@ export const getScoreColor = (score) => {
     return '#9e9e9e';
   }
   
-  // Color based on score value
-  if (score >= 25) return brandColors.green;
-  if (score >= 20) return "#8cc43f"; // Light green
-  if (score >= 15) return "#f3c01d"; // Yellow
-  if (score >= 10) return "#ff9800"; // Orange
-  return "#f44336"; // Red
+  // Color based on score rating thresholds
+  if (score >= scoreRatings.STRONG.threshold) return scoreRatings.STRONG.color;
+  if (score >= scoreRatings.MODERATE.threshold) return scoreRatings.MODERATE.color;
+  return scoreRatings.WEAK.color;
 };
 
 /**
@@ -50,12 +75,10 @@ export const getScoreRating = (score) => {
     return "Score Not Available";
   }
   
-  // Normal rating logic
-  if (score >= 50) return "Strong";
-  if (score >= 20) return "Moderate";
-  //if (score >= 15) return "Adequate";
-  //if (score >= 10) return "Concerning";
-  return "Weak";
+  // Rating based on thresholds
+  if (score >= scoreRatings.STRONG.threshold) return scoreRatings.STRONG.label;
+  if (score >= scoreRatings.MODERATE.threshold) return scoreRatings.MODERATE.label;
+  return scoreRatings.WEAK.label;
 };
 
 /**
@@ -64,7 +87,7 @@ export const getScoreRating = (score) => {
  * @param {number} maxScore - Maximum possible score
  * @returns {string} - Formatted score text
  */
-export const getScoreDisplay = (score, maxScore = 68) => {
+export const getScoreDisplay = (score, maxScore = MAX_SCORE) => {
   if (score === null || score === undefined || isNaN(score)) {
     return "N/A";
   }
@@ -113,4 +136,41 @@ export const findLowestScore = (sites) => {
   
   if (availableScores.length === 0) return null;
   return Math.min(...availableScores.map(site => site.finalScore));
+};
+
+/**
+ * Calculates the section score from individual items
+ * @param {Array} items - Array of assessment items for a section
+ * @returns {Object} - Object with score, maxPossible, and percentage
+ */
+export const calculateSectionScore = (items) => {
+  if (!items || !Array.isArray(items) || items.length === 0) {
+    return { score: 0, maxPossible: 0, percentage: 0 };
+  }
+  
+  const score = items.reduce((acc, item) => acc + parseInt(item.score || 0), 0);
+  const maxPossible = items.length * 2; // Each item can have a max score of 2
+  const percentage = maxPossible > 0 ? (score / maxPossible) * 100 : 0;
+  
+  return { score, maxPossible, percentage };
+};
+
+/**
+ * Get score level text based on score value (0, 1, or 2)
+ * @param {number} score - The score value (0, 1, or 2)
+ * @returns {Object} - Object with label and color
+ */
+export const getScoreLevelInfo = (score) => {
+  score = parseInt(score);
+  
+  switch(score) {
+    case 2:
+      return { label: "Excellent", color: brandColors.green };
+    case 1:
+      return { label: "Partial", color: "#f3c01d" }; // Yellow
+    case 0:
+      return { label: "Missing", color: "#f44336" }; // Red
+    default:
+      return { label: "N/A", color: "#9e9e9e" }; // Gray
+  }
 };
