@@ -141,7 +141,7 @@ const DetailedScoresTab = ({ results }) => {
         </AccordionSummary>
         <AccordionDetails>
           <Typography variant="body2" paragraph>
-            The Global Health Website Privacy Policy Evaluation Rubric assesses privacy policies across 6 categories with 30 total criteria.
+            The Privacy Lens Evaluation Rubric assesses privacy policies across 6 categories with 34 total criteria.
           </Typography>
           
           <TableContainer component={Paper} sx={{ mb: 2 }}>
