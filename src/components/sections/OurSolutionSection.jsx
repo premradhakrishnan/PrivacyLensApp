@@ -53,40 +53,60 @@ const OurSolutionSection = () => {
                 <Grid item xs={12} md={6}>
                   <Box sx={{ p: 2, bgcolor: `${brandColors.purple}10`, borderRadius: 2 }}>
                     <Typography variant="body2" fontWeight="bold" color={brandColors.purple}>
-                      Data Collection
+                      Privacy Document Accessibility
                     </Typography>
                     <Typography variant="body2">
-                      What personal and health information is being collected
+                      How easy it is to find, access, and understand the policy
                     </Typography>
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <Box sx={{ p: 2, bgcolor: `${brandColors.green}10`, borderRadius: 2 }}>
                     <Typography variant="body2" fontWeight="bold" color={brandColors.green}>
-                      Third-Party Sharing
+                      Privacy Document Scope
                     </Typography>
                     <Typography variant="body2">
-                      Which external entities receive your data and for what purposes
+                      The clarity and depth of the policy's content
                     </Typography>
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <Box sx={{ p: 2, bgcolor: `${brandColors.green}10`, borderRadius: 2 }}>
                     <Typography variant="body2" fontWeight="bold" color={brandColors.green}>
-                      User Control
+                      Browser Storage
                     </Typography>
                     <Typography variant="body2">
-                      Whether you can access, modify, or delete your data
+                      The tracking technologies stored in a user's browser
                     </Typography>
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <Box sx={{ p: 2, bgcolor: `${brandColors.purple}10`, borderRadius: 2 }}>
                     <Typography variant="body2" fontWeight="bold" color={brandColors.purple}>
-                      Data Security
+                      Third-Party Tracking
                     </Typography>
                     <Typography variant="body2">
-                      How the website protects your sensitive information
+                     Website integration with third-party tracking technologies
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ p: 2, bgcolor: `${brandColors.purple}10`, borderRadius: 2 }}>
+                    <Typography variant="body2" fontWeight="bold" color={brandColors.purple}>
+                      Data Handling
+                    </Typography>
+                    <Typography variant="body2">
+                      How the website handles your personal and technical data
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ p: 2, bgcolor: `${brandColors.green}10`, borderRadius: 2 }}>
+                    <Typography variant="body2" fontWeight="bold" color={brandColors.green}>
+                      Health Data Privacy
+                    </Typography>
+                    <Typography variant="body2">
+                      The website's practices for handling and protecting your health data
                     </Typography>
                   </Box>
                 </Grid>
@@ -122,7 +142,7 @@ const OurSolutionSection = () => {
                 </Typography>
                 <Typography variant="body1" paragraph sx={{ display: 'flex', alignItems: 'center' }}>
                   <Box sx={{ mr: 2, width: 8, height: 8, borderRadius: '50%', bgcolor: brandColors.purple }}/>
-                  Displays color-coded privacy ratings (Strong, Moderate, or Weak) next to each result
+                  Displays color-coded privacy ratings (Weak, Moderate, Strong) next to each result
                 </Typography>
                 <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
                   <Box sx={{ mr: 2, width: 8, height: 8, borderRadius: '50%', bgcolor: brandColors.purple }}/>
@@ -158,38 +178,45 @@ const OurSolutionSection = () => {
                   </Grid>
                   
                   <Grid item xs={8}>
-                    <Typography variant="body2">Data Collection Practices</Typography>
+                    <Typography variant="body2">Privacy Document Accessibility</Typography>
                   </Grid>
                   <Grid item xs={4}>
-                    <Typography variant="body2">25%</Typography>
+                    <Typography variant="body2">12%</Typography>
                   </Grid>
                   
                   <Grid item xs={8}>
-                    <Typography variant="body2">Third-Party Sharing</Typography>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Typography variant="body2">30%</Typography>
-                  </Grid>
-                  
-                  <Grid item xs={8}>
-                    <Typography variant="body2">User Control & Rights</Typography>
+                    <Typography variant="body2">Privacy Document Scope</Typography>
                   </Grid>
                   <Grid item xs={4}>
                     <Typography variant="body2">20%</Typography>
                   </Grid>
                   
                   <Grid item xs={8}>
-                    <Typography variant="body2">Data Security Measures</Typography>
+                    <Typography variant="body2">Browser Storage</Typography>
                   </Grid>
                   <Grid item xs={4}>
                     <Typography variant="body2">15%</Typography>
                   </Grid>
                   
                   <Grid item xs={8}>
-                    <Typography variant="body2">Policy Clarity & Accessibility</Typography>
+                    <Typography variant="body2">Third-Party Tracking</Typography>
                   </Grid>
                   <Grid item xs={4}>
-                    <Typography variant="body2">10%</Typography>
+                    <Typography variant="body2">18%</Typography>
+                  </Grid>
+                  
+                  <Grid item xs={8}>
+                    <Typography variant="body2">Data Handling</Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography variant="body2">20%</Typography>
+                  </Grid>
+
+                  <Grid item xs={8}>
+                    <Typography variant="body2">Health Data Policy</Typography>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Typography variant="body2">15%</Typography>
                   </Grid>
                 </Grid>
               </Box>
@@ -200,18 +227,18 @@ const OurSolutionSection = () => {
               
               <Grid container spacing={2} sx={{ mb: 2 }}>
                 <Grid item xs={12} md={4}>
-                  <Box sx={{ 
-                    p: 2, 
-                    bgcolor: 'rgba(46, 125, 50, 0.1)', 
+                  <Box sx={{
+                    p: 2,
+                    bgcolor: 'rgba(198, 40, 40, 0.1)',
                     borderRadius: 2,
-                    border: '1px solid rgba(46, 125, 50, 0.3)'
+                    border: '1px solid rgba(198, 40, 40, 0.3)'
                   }}>
-                    <Typography variant="body1" fontWeight="bold" color="#2e7d32" gutterBottom>
-                      Strong (80-100%)
+                    <Typography variant="body1" fontWeight="bold" color="#c62828" gutterBottom>
+                      Weak (0-29%)
                     </Typography>
                     <Typography variant="body2">
-                      Websites with transparent policies that minimize data collection, limit third-party 
-                      sharing, and give users strong control over their information.
+                      Websites with significant privacy concerns, including excessive data collection,
+                      broad third-party sharing, and limited user control.
                     </Typography>
                   </Box>
                 </Grid>
@@ -223,7 +250,7 @@ const OurSolutionSection = () => {
                     border: '1px solid rgba(249, 168, 37, 0.3)'
                   }}>
                     <Typography variant="body1" fontWeight="bold" color="#f9a825" gutterBottom>
-                      Moderate (50-79%)
+                      Moderate (30-74%)
                     </Typography>
                     <Typography variant="body2">
                       Websites with adequate privacy protections but with some concerning practices 
@@ -232,18 +259,18 @@ const OurSolutionSection = () => {
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <Box sx={{ 
-                    p: 2, 
-                    bgcolor: 'rgba(198, 40, 40, 0.1)', 
+                  <Box sx={{
+                    p: 2,
+                    bgcolor: 'rgba(46, 125, 50, 0.1)',
                     borderRadius: 2,
-                    border: '1px solid rgba(198, 40, 40, 0.3)'
+                    border: '1px solid rgba(46, 125, 50, 0.3)'
                   }}>
-                    <Typography variant="body1" fontWeight="bold" color="#c62828" gutterBottom>
-                      Weak (0-49%)
+                    <Typography variant="body1" fontWeight="bold" color="#2e7d32" gutterBottom>
+                      Strong (75-100%)
                     </Typography>
                     <Typography variant="body2">
-                      Websites with significant privacy concerns, including excessive data collection,
-                      broad third-party sharing, and limited user control.
+                      Websites with transparent policies that minimize data collection, limit third-party
+                      sharing, and give users strong control over their information.
                     </Typography>
                   </Box>
                 </Grid>
