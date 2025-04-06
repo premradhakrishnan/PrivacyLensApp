@@ -476,15 +476,17 @@ const CustomPage = () => {
                                     <figure className="figure">
                                         <p>
                                             <a
-                                                href="repeated_domains.png"
+                                                href="src/pages/pageimages/repeated_domains.png"
                                                 className="lightbox"
                                                 data-gallery="quarto-lightbox-gallery-1"
                                                 title="Grouped domains in Google search results were not stored repeatedly, but domains that appeared multiple (e.g., two) times – even on that same page – were stored as multiple (e.g., two) entries in the data collection process provided that they were not presented in a grouped fashion."
                                             >
                                                 <img
-                                                    src="repeated_domains.png"
+                                                    src="src/pages/pageimages/repeated_domains.png"
                                                     className="img-fluid figure-img"
                                                     alt="Grouped domains in Google search results were not stored repeatedly, but domains that appeared multiple (e.g., two) times – even on that same page – were stored as multiple (e.g., two) entries in the data collection process provided that they were not presented in a grouped fashion."
+                                                    width={672}
+                                                    height={480}
                                                 />
                                             </a>
                                         </p>
@@ -544,13 +546,13 @@ const CustomPage = () => {
                                             <figure className="quarto-float quarto-float-fig figure">
                                                 <div aria-describedby="fig-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
                                                     <a
-                                                        href="index_files/figure-html/fig-dist-1.png"
+                                                        href="src/pages/pageimages/fig-dist-1.png"
                                                         className="lightbox"
                                                         data-gallery="quarto-lightbox-gallery-2"
                                                         title="Figure 1: Privacy score distributions overall (left) and by model (right)"
                                                     >
                                                         <img
-                                                            src="index_files/figure-html/fig-dist-1.png"
+                                                            src="src/pages/pageimages/fig-dist-1.png"
                                                             className="img-fluid figure-img"
                                                             width={672}
                                                         />
@@ -590,13 +592,13 @@ const CustomPage = () => {
                                             <figure className="quarto-float quarto-float-fig figure">
                                                 <div aria-describedby="fig-gemini-version-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
                                                     <a
-                                                        href="index_files/figure-html/fig-gemini-version-1.png"
+                                                        href="src/pages/pageimages/fig-gemini-version-1.png"
                                                         className="lightbox"
                                                         data-gallery="quarto-lightbox-gallery-3"
                                                         title="Figure 2: The plot above shows how each Google Gemini model vesion used here evaluted different domains. Surprisngly, the distribution is not even. Based on these results alone, Gemini 2.5 Pro appears to be the most lenient, while 2.0 Flash Thinking appears the strictest. Still, further study is needed, as the observed results may be attributable to the domains at hand since the same domains were not scored by multiple Gemini model versions."
                                                     >
                                                         <img
-                                                            src="index_files/figure-html/fig-gemini-version-1.png"
+                                                            src="src/pages/pageimages/fig-gemini-version-1.png"
                                                             className="img-fluid figure-img"
                                                             width={672}
                                                         />
@@ -642,13 +644,13 @@ const CustomPage = () => {
                                             <figure className="quarto-float quarto-float-fig figure">
                                                 <div aria-describedby="fig-corr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
                                                     <a
-                                                        href="index_files/figure-html/fig-corr-1.png"
+                                                        href="src/pages/pageimages/fig-corr-1.png"
                                                         className="lightbox"
                                                         data-gallery="quarto-lightbox-gallery-4"
                                                         title="Figure 3: The scores output by both LLMs clearly have non-zero correlation, suggesting a degree of consistency."
                                                     >
                                                         <img
-                                                            src="index_files/figure-html/fig-corr-1.png"
+                                                            src="src/pages/pageimages/fig-corr-1.png"
                                                             className="img-fluid figure-img"
                                                             width={672}
                                                         />
@@ -719,13 +721,13 @@ const CustomPage = () => {
                                             <figure className="quarto-float quarto-float-fig figure">
                                                 <div aria-describedby="fig-domain-vol-pg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
                                                     <a
-                                                        href="index_files/figure-html/fig-domain-vol-pg-1.png"
+                                                        href="src/pages/pageimages/fig-domain-vol-pg-1.png"
                                                         className="lightbox"
                                                         data-gallery="quarto-lightbox-gallery-5"
                                                         title="Figure 4: Domain volume by source across all 10 health queries"
                                                     >
                                                         <img
-                                                            src="index_files/figure-html/fig-domain-vol-pg-1.png"
+                                                            src="src/pages/pageimages/fig-domain-vol-pg-1.png"
                                                             className="img-fluid figure-img"
                                                             width={672}
                                                         />
@@ -763,13 +765,13 @@ const CustomPage = () => {
                                             <figure className="quarto-float quarto-float-fig figure">
                                                 <div aria-describedby="fig-gemini-frequent-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
                                                     <a
-                                                        href="index_files/figure-html/fig-gemini-frequent-1.png"
+                                                        href="src/pages/pageimages/fig-gemini-frequent-1.png"
                                                         className="lightbox"
                                                         data-gallery="quarto-lightbox-gallery-6"
                                                         title="Figure 5: Domains occuring in the first page of organic search results are frequently used in Google Gemini summaries. For instance, half of the 8 domains occuring in the organic results on page 1 for the query ‘How to appeal a denied insurance claim?’ were used to power Gemini’s summary for that query."
                                                     >
                                                         <img
-                                                            src="index_files/figure-html/fig-gemini-frequent-1.png"
+                                                            src="src/pages/pageimages/fig-gemini-frequent-1.png"
                                                             className="img-fluid figure-img"
                                                             width={672}
                                                         />
@@ -802,13 +804,13 @@ const CustomPage = () => {
                                     <figure className="figure">
                                         <p>
                                             <a
-                                                href="venn_diagram.png"
+                                                href="src/pages/pageimages/venn_diagram.png"
                                                 className="lightbox"
                                                 data-gallery="quarto-lightbox-gallery-7"
                                                 title="Domains on the first page can be classified into those appearing in Gemini only, those in Page 1 Organic only, or those domains in both, as the diagram above illustrates."
                                             >
                                                 <img
-                                                    src="venn_diagram.png"
+                                                    src="src/pages/pageimages/venn_diagram.png"
                                                     className="img-fluid figure-img"
                                                     alt="Domains on the first page can be classified into those appearing in Gemini only, those in Page 1 Organic only, or those domains in both, as the diagram above illustrates."
                                                 />
@@ -844,13 +846,13 @@ const CustomPage = () => {
                                             <figure className="quarto-float quarto-float-fig figure">
                                                 <div aria-describedby="fig-score-by-origin-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
                                                     <a
-                                                        href="index_files/figure-html/fig-score-by-origin-1.png"
+                                                        href="src/pages/pageimages/fig-score-by-origin-1.png"
                                                         className="lightbox"
                                                         data-gallery="quarto-lightbox-gallery-8"
                                                         title="Figure 6: As the plot shows, roughly an equal proportion of domains from gemini, page one, and both sources fall into the ‘high’ risk category. However, a noticeably higher proprtion of Page 1 Organic Only results fall into the ‘low’ risk category relative to the proportion from Gemini only. These results suggest that perhaps domains in Page 1 Organic only exhibit lower risk scores than those in the other two categories."
                                                     >
                                                         <img
-                                                            src="index_files/figure-html/fig-score-by-origin-1.png"
+                                                            src="src/pages/pageimages/fig-score-by-origin-1.png"
                                                             className="img-fluid figure-img"
                                                             width={672}
                                                         />
@@ -892,13 +894,13 @@ const CustomPage = () => {
                                             <figure className="quarto-float quarto-float-fig figure">
                                                 <div aria-describedby="fig-score-by-pg-seq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
                                                     <a
-                                                        href="index_files/figure-html/fig-score-by-pg-seq-1.png"
+                                                        href="src/pages/pageimages/fig-score-by-pg-seq-1.png"
                                                         className="lightbox"
                                                         data-gallery="quarto-lightbox-gallery-9"
                                                         title="Figure 7: The proportion of domains belgonging to each risk category by Google search section / page."
                                                     >
                                                         <img
-                                                            src="index_files/figure-html/fig-score-by-pg-seq-1.png"
+                                                            src="src/pages/pageimages/fig-score-by-pg-seq-1.png"
                                                             className="img-fluid figure-img"
                                                             width={672}
                                                         />
@@ -924,15 +926,17 @@ const CustomPage = () => {
                                     <figure className="figure">
                                         <p>
                                             <a
-                                                href="score.gif"
+                                                href="src/pages/pageimages/score.gif"
                                                 className="lightbox"
                                                 data-gallery="quarto-lightbox-gallery-10"
                                                 title="The proprotion of sites from low-risk domains generally tends to increase as we navigate further from the Gemini summary."
                                             >
                                                 <img
-                                                    src="score.gif"
+                                                    src="src/pages/pageimages/score.gif"
                                                     className="img-fluid figure-img"
                                                     alt="The proprotion of sites from low-risk domains generally tends to increase as we navigate further from the Gemini summary."
+                                                    width={520}
+                                                    height={672}
                                                 />
                                             </a>
                                         </p>
@@ -1002,13 +1006,13 @@ const CustomPage = () => {
                                         <figure className="quarto-float quarto-float-fig figure">
                                             <div aria-describedby="fig-tld-risks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
                                                 <a
-                                                    href="index_files/figure-html/fig-tld-risks-1.png"
+                                                    href="src/pages/pageimages/fig-tld-risks-1.png"
                                                     className="lightbox"
                                                     data-gallery="quarto-lightbox-gallery-11"
                                                     title="Figure 8: The distribution of risk score by top-level domain. Interestingly, .gov websites seem to outperform .uk sites."
                                                 >
                                                     <img
-                                                        src="index_files/figure-html/fig-tld-risks-1.png"
+                                                        src="src/pages/pageimages/fig-tld-risks-1.png"
                                                         className="img-fluid figure-img"
                                                         width={672}
                                                     />

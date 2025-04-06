@@ -17,6 +17,7 @@ import CustomPage from './pages/CustomPage'; // Import the CustomPage component
 // Import the theme
 import theme from './theme';
 import './App.css';
+import DetailedResultsSearch from "./components/DetailedResultsSearchPage.jsx";
 
 // Main content component
 const MainContent = ({ activeTab }) => {
@@ -114,6 +115,7 @@ const AppRoutes = () => {
             <Route path="/findings" element={<MainContent activeTab={5} />} /> {/* Add new route */}
             <Route path="/detailed-results" element={<DetailedResults />} />
             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+            <Route path="/detailed-results-search" element={<DetailedResultsSearch />} />
           </Routes>
         </Box>
 
