@@ -204,24 +204,24 @@ const SearchSection = ({
                                                         fontSize: 14,
                                                         marginLeft: "auto",
                                                         backgroundColor:
-                                                            result.finalScore > 50
+                                                            result.finalScore > 56
                                                                 ? "rgba(46, 125, 50, 0.1)"
-                                                                : result.finalScore > 20
+                                                                : result.finalScore > 40
                                                                     ? "rgba(249, 168, 37, 0.1)"
                                                                     : "rgba(198, 40, 40, 0.1)",
                                                         color:
-                                                            result.finalScore > 50
+                                                            result.finalScore > 56
                                                                 ? "#2e7d32"
-                                                                : result.finalScore > 20
+                                                                : result.finalScore > 40
                                                                     ? "#f9a825"
                                                                     : "#c62828",
                                                         fontWeight: "bold",
                                                     }}
                                                 >
                                                     Score:{" "}
-                                                    {result.finalScore > 50
+                                                    {result.finalScore > 56
                                                         ? "Strong"
-                                                        : result.finalScore > 20
+                                                        : result.finalScore > 40
                                                             ? "Moderate"
                                                             : "Weak"}
                                                 </span>
@@ -309,7 +309,7 @@ const SearchSection = ({
                                                                     color:
                                                                         score >= 80
                                                                             ? "#2e7d32"
-                                                                            : score >= 70
+                                                                            : score >= 60
                                                                                 ? "#f9a825"
                                                                                 : "#c62828",
                                                                 }}
