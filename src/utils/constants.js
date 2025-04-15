@@ -18,9 +18,9 @@ export const brandColors = {
 
 // Score rating thresholds
 export const scoreRatings = {
-  STRONG: { threshold: 50, label: "Strong", color: brandColors.green },
-  MODERATE: { threshold: 20, label: "Moderate", color: "#f3c01d" }, // Yellow
-  WEAK: { threshold: 0, label: "Weak", color: "#ff9800" }  // Orange
+  STRONG: { threshold: 54, label: "Strong", color: brandColors.green },
+  MODERATE: { threshold: 40, label: "Moderate", color: "#f3c01d" }, // Yellow
+  WEAK: { threshold: 0, label: "Weak", color: "#ff0000" }  // red
 };
 
 // Maximum possible score (34 questions with max score of 2 each)

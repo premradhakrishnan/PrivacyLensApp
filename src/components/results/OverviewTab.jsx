@@ -34,7 +34,7 @@ const OverviewTab = ({ results, expandedSite, onSiteSelect }) => {
               </Typography>
               <Box sx={{ mt: 2 }}>
                 <Typography variant="body2" paragraph>
-                  {validResultsCount} websites analyzed using the Global Health Website Privacy Policy Evaluation Rubric.
+                  {validResultsCount} websites analyzed using the Privacy Lens Evaluation Rubric.
                 </Typography>
                 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
