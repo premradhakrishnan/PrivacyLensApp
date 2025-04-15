@@ -24,12 +24,12 @@ import { brandColors } from '../../utils/constants';
 import axios from 'axios';
 
 // Stats data for the overview section
-const stats = [
+/*const stats = [
   { label: 'Websites Analyzed', value: '10,000+' },
   { label: 'Active Users', value: '50,000+' },
   { label: 'Privacy Issues Identified', value: '25,000+' },
   { label: 'Average Response Time', value: '2.5s' },
-];
+];*/
 
 // Helper function to create binning data for histogram-style charts
 const createBins = (data, numBins) => {
@@ -196,7 +196,7 @@ const AggregateFindingsSection = () => {
         </Typography>
 
         {/* Statistics Section */}
-        <Grid container spacing={3} sx={{ mb: 6 }}>
+        {/*<Grid container spacing={3} sx={{ mb: 6 }}>
           {stats.map((stat, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
                 <Paper elevation={2} sx={{ p: 3, textAlign: 'center' }}>
@@ -207,7 +207,7 @@ const AggregateFindingsSection = () => {
                 </Paper>
               </Grid>
           ))}
-        </Grid>
+        </Grid>*/}
 
         {/* Charts Section */}
         <Card sx={{ mb: 5, p: 3 }}>

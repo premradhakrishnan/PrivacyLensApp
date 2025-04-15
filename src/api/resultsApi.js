@@ -11,7 +11,7 @@ export const fetchDetailedResults = async (domains) => {
       const apiUrl = import.meta.env.VITE_API_URL;
       console.log('App apiUrl: ' + apiUrl);
       // Call backend API
-      const response = await fetch(`${apiUrl}/detailedResults`, {
+      const response = await fetch(`http://127.0.0.1:8000/detailedResults`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

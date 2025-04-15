@@ -74,7 +74,8 @@ export const navItems = [
   { label: "Problem Background", value: 1, path: "/problem-background" },
   { label: "Our Solution", value: 2, path: "/our-solution" },
   { label: "Search", value: 3, path: "/search" },
-  { label: "Aggregate Findings", value: 4, path: "/aggregate-findings" }
+  { label: "Aggregate Findings", value: 4, path: "/aggregate-findings" },
+  { label: 'Comparative Analysis', value: 5 }
 ];
 
 // Getting started steps

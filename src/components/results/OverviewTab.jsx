@@ -116,7 +116,7 @@ const OverviewTab = ({ results, expandedSite, onSiteSelect }) => {
       </Grid>
       
       <Typography variant="h5" sx={{ mt: 4, mb: 2, ...textStyles.headingLeft }}>
-        Individual Site Assessments
+        Individual Site Details
       </Typography>
       
       {results.map(site => (
